@@ -1,11 +1,14 @@
 import { Button, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import userApi from "../../../api/userApi";
 import { IUser } from "../../../models/user";
 import { debounce } from "lodash";
 import { useHistory } from "react-router";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../app/store";
+import { setShowSearch } from "../../../reduxSlice/UISlice";
 
 const useStyles = makeStyles({
   input: {
@@ -41,23 +44,24 @@ const useStyles = makeStyles({
     lineHeight: "4vh",
     textAlign: "start",
     display: "flex !important",
-    justifyContent: "left-start ",
+    justifyContent: "left-start",
   },
   searchItem: {
     display: "flex",
-    height: "6vh",
+    height: "6vh !important",
     width: "100%",
-    justifyContent: "left",
-    borderRadius: "0",
-    backgroundColor: "rgba(30, 30, 30, 0.8)",
-    color: "white",
+    justifyContent: "left !important",
+    borderRadius: "0 !important",
+    backgroundColor: "rgba(30, 30, 30, 0.8) !important",
+    color: "white !important",
     "&:hover": {
-      backgroundColor: "gray",
+      backgroundColor: "gray !important",
     },
   },
 });
 
 const SearchField = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [searchResult, setSearchResult] = useState<IUser[]>([]);
   const history = useHistory();
   const style = useStyles();
@@ -77,7 +81,12 @@ const SearchField = () => {
   };
 
   return (
-    <React.Fragment>
+    <div
+      style={{
+        height: "100%",
+      }}
+      onBlur={() => dispatch(setShowSearch(false))}
+    >
       <Box sx={{ overflow: "hidden", width: "100%", height: "100%" }}>
         <input className={style.input} onChange={submitSearch} />
       </Box>
@@ -86,16 +95,24 @@ const SearchField = () => {
           <Button
             key={item._id}
             className={style.searchItem}
-            onClick={() => history.push(`/stories/${item._id}`)}
+            onClick={() => history.push(`/${item._id}`)}
           >
             <img alt="" src={item.avatarUri} className={style.searchAvatar} />
-            <Typography className={style.searchTitle}>
+            <Typography
+              sx={{
+                height: "4vh",
+                lineHeight: "4vh",
+                textAlign: "start",
+                display: "flex",
+                justifyContent: "left-start",
+              }}
+            >
               {item.fullname}
             </Typography>
           </Button>
         ))}
       </Box>
-    </React.Fragment>
+    </div>
   );
 };
 

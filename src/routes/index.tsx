@@ -8,7 +8,7 @@ const RoutesComponent = () => (
   <BrowserRouter>
     <Switch>
       <AuthRoute path="/auth" component={AuthFeature} />
-      <PrivateRoute path="/stories" component={StoryRepositoryFeature} />
+      <PrivateRoute path="/" component={StoryRepositoryFeature} />
     </Switch>
   </BrowserRouter>
 );

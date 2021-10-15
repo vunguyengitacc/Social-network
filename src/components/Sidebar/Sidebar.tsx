@@ -2,14 +2,17 @@ import { IconButton } from "@mui/material";
 import Box from "@mui/material/Box";
 import Taskbar from "./TaskBar/TaskBar";
 import SearchIcon from "@mui/icons-material/Search";
-import { useState } from "react";
 import SearchField from "./SearchField/SearchField";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../app/store";
+import { setShowSearch } from "../../reduxSlice/UISlice";
 
 const Sidebar = () => {
-  const [openSearch, setOpenSearch] = useState<boolean>(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const isShowSearch = useSelector((state: RootState) => state.ui.isShowSearch);
 
   const toggleSearchField = () => {
-    setOpenSearch(!openSearch);
+    dispatch(setShowSearch(!isShowSearch));
   };
 
   return (
@@ -34,7 +37,7 @@ const Sidebar = () => {
         <IconButton onClick={toggleSearchField} sx={{ width: "10%" }}>
           <SearchIcon />
         </IconButton>
-        {openSearch && (
+        {isShowSearch && (
           <Box sx={{ width: "90%" }}>
             <SearchField />
           </Box>

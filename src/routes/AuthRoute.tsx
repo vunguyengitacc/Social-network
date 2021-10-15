@@ -15,7 +15,7 @@ const AuthRoute: React.FC<AuthRouteProps> = ({
   const isAuth = useSelector((state: RootState) => state.auth.isAuth);
 
   return isAuth ? (
-    <Redirect to="/stories/me" />
+    <Redirect to="/me" />
   ) : (
     <Route {...rest} render={(props) => <Component {...props} />} />
   );

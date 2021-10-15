@@ -4,10 +4,9 @@ import axiosClient from "./axiosClient";
 
 const userApi = {
   search(payload: string): Promise<IResponseList<IUser>> {
-    return axiosClient.get(`/users/search/${payload}`);
+    return axiosClient.get(`/users/search?term=${payload}`);
   },
   getById(payload: string): Promise<IResponse<IUser>> {
-    console.log(payload);
     return axiosClient.get(`/users/${payload}`);
   },
 };

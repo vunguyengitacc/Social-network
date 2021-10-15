@@ -1,11 +1,10 @@
-import { Route, Switch, useRouteMatch } from "react-router";
+import { Route, Switch } from "react-router";
 import UserRepository from "../pages/UserRepo";
 
 const StoryRepositoryFeature = () => {
-  const match = useRouteMatch();
   return (
     <Switch>
-      <Route exact path={`${match.url}/:user`} component={UserRepository} />
+      <Route exact path={"/:user"} component={UserRepository} />
     </Switch>
   );
 };
