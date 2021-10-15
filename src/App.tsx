@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import "./App.css";
+import { AppDispatch } from "./app/store";
+import { getMe } from "./reduxSlice/authSlice";
+import RoutesComponent from "./routes";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const dispatch = useDispatch<AppDispatch>();
+  const [start, setStart] = useState<boolean>(true);
+
+  useEffect(() => {
+    dispatch(getMe()).then(() => setStart(false));
+  }, [dispatch]);
+
+  return <div className="App">{!start && <RoutesComponent />}</div>;
 }
 
 export default App;
