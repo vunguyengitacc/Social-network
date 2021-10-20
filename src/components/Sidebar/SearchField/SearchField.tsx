@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import React, { useState } from "react";
 import userApi from "../../../api/userApi";
 import { IUser } from "../../../models/user";
-import { debounce } from "lodash";
+import _, { debounce } from "lodash";
 import { useHistory } from "react-router";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
@@ -85,12 +85,15 @@ const SearchField = () => {
       style={{
         height: "100%",
       }}
-      onBlur={() => dispatch(setShowSearch(false))}
     >
       <Box sx={{ overflow: "hidden", width: "100%", height: "100%" }}>
         <input className={style.input} onChange={submitSearch} />
       </Box>
-      <Box className={style.searchResult}>
+      <Box
+        className={style.searchResult}
+        component="div"
+        onBlur={() => dispatch(setShowSearch(false))}
+      >
         {searchResult.map((item) => (
           <Button
             key={item._id}
@@ -107,7 +110,7 @@ const SearchField = () => {
                 justifyContent: "left-start",
               }}
             >
-              {item.fullname}
+              {_.truncate(item.fullname, { length: 15 })}
             </Typography>
           </Button>
         ))}

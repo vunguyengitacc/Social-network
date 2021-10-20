@@ -24,6 +24,14 @@ export const getStoriesByUserId = createAsyncThunk(
   }
 );
 
+export const addStory = createAsyncThunk(
+  "story/createOne",
+  async (payload: FormData) => {
+    const response = await storyApi.addNewStories(payload);
+    console.log(payload);
+  }
+);
+
 const initialState = storyAdapter.getInitialState();
 
 const storySlice = createSlice({
@@ -48,6 +56,12 @@ const storySlice = createSlice({
         storyAdapter.removeAll(state);
         storyAdapter.setAll(state, actions.payload);
       }
+    );
+    builder.addCase(addStory.pending, (state) => {});
+    builder.addCase(addStory.rejected, (state) => {});
+    builder.addCase(
+      addStory.fulfilled,
+      (state, actions: PayloadAction<any>) => {}
     );
   },
 });
