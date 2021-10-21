@@ -5,6 +5,8 @@ import { makeStyles } from "@mui/styles";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
+import React from "react";
+import dateUtil from "../../utillity/dateUtils";
 
 const Wrapper = styled("div")(({ theme }) => ({
   backgroundColor: "#F1EDED",
@@ -42,7 +44,13 @@ const useStyle = makeStyles({
   },
 });
 
-const Story = () => {
+interface IPropsStory {
+  createdAt: Date;
+  imageUrl: string;
+  content: string;
+}
+
+const Story: React.FC<IPropsStory> = ({ createdAt, imageUrl, content }) => {
   const style = useStyle();
 
   return (
@@ -58,29 +66,49 @@ const Story = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography
-              sx={{
-                display: "flex",
-                lineHeight: "40px",
-                backgroundImage: "linear-gradient(#89f7fe, #66a6ff)",
-                fontWeight: "bolder",
-                textAlign: "center",
-                paddingLeft: "20px",
-                paddingRight: "20px",
-                borderRadius: "20px",
-              }}
-            >
-              12/2/2021
-            </Typography>
+            <Box sx={{ display: "flex" }}>
+              <Typography
+                sx={{
+                  display: "flex",
+                  lineHeight: "40px",
+                  backgroundImage: "linear-gradient(#89f7fe, #66a6ff)",
+                  fontWeight: "bolder",
+                  textAlign: "center",
+                  paddingLeft: "20px",
+                  paddingRight: "20px",
+                  borderRadius: "20px",
+                  marginRight: "20px",
+                }}
+              >
+                {dateUtil.getFullDate(createdAt)}
+              </Typography>
+              <Typography
+                sx={{
+                  display: "flex",
+                  lineHeight: "40px",
+                  backgroundImage: "linear-gradient(#D38312, #A83279)",
+                  fontWeight: "bolder",
+                  textAlign: "center",
+                  paddingLeft: "20px",
+                  paddingRight: "20px",
+                  borderRadius: "20px",
+                }}
+              >
+                {dateUtil.getFullHours(createdAt)}
+              </Typography>
+            </Box>
             <IconButton className={style.taskBtn}>
               <MoreVertIcon />
             </IconButton>
+          </Box>
+          <Box sx={{ display: "flex", margin: "0 2.5% 0 2.5% " }}>
+            {content}
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center" }}>
             <img
               alt="Internet error"
               className={style.image}
-              src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg"
+              src={imageUrl}
             ></img>
           </Box>
           <Box className={style.groupTask}>

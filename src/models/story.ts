@@ -2,7 +2,7 @@ import { IUser } from "./user";
 
 export interface IStory {
   _id: string;
-  imageUri: string;
+  imageUrl: string;
   content: string;
   owner: IUser | undefined;
   createdAt: Date;

@@ -5,9 +5,10 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Typography,
 } from "@mui/material";
 import * as yup from "yup";
-import React from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -15,9 +16,11 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { addStory } from "../../reduxSlice/storySlice";
+import { throwAlert } from "../../reduxSlice/UISlice";
 
 interface IPropsDialog {
-  open: Boolean;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const scheme = yup
@@ -41,9 +44,10 @@ interface IFormAddImageValues {
   files: any;
 }
 
-const AddImageDialog: React.FC<IPropsDialog> = ({ open }) => {
+const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
   const style = useStyles();
   const dispatch = useDispatch<AppDispatch>();
+  const [files, setFiles] = useState<any>("");
   const form = useForm<IFormAddImageValues>({
     mode: "onSubmit",
     reValidateMode: "onChange",
@@ -56,13 +60,39 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open }) => {
 
   const submitForm = (data: IFormAddImageValues) => {
     const formData = new FormData();
-    formData.append("content", data.content);
-    formData.append("files", data.files);
-    dispatch(addStory(formData));
+    const file = data.files[0];
+    console.log(data.files);
+    if (file && file.type.match(/(png|jpg|jpge)/)) {
+      formData.append("content", data.content);
+      formData.append("file", data.files[0]);
+      dispatch(addStory(formData));
+      setOpen(false);
+    } else {
+      form.reset();
+      setFiles(null);
+      dispatch(
+        throwAlert({
+          isShow: true,
+          message: "Please choose image file",
+          type: "error",
+        })
+      );
+    }
+  };
+
+  // const addFilesToClipboard = (e: React.FormEvent<HTMLInputElement>) => {
+  //   if (!e.currentTarget.value) return;
+  //   const file = e.currentTarget.value ?? "";
+  //   setFiles(file.split(`\\`).pop());
+  // };
+
+  const clearImage = (e: React.FormEvent<HTMLButtonElement>) => {
+    form.reset();
+    setFiles(null);
   };
 
   return (
-    <Dialog open={true}>
+    <Dialog open={open}>
       <form onSubmit={form.handleSubmit(submitForm)}>
         <DialogTitle sx={{ width: "40vw" }}>Add New</DialogTitle>
         <DialogContent>
@@ -79,6 +109,7 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open }) => {
             multiple
             {...form.register("files")}
             type="file"
+            //onChange={addFilesToClipboard}
           />
           <label htmlFor="contained-button-file">
             <Button
@@ -90,9 +121,29 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open }) => {
             </Button>
           </label>
         </DialogContent>
+        {files && (
+          <DialogContent
+            sx={{ display: "flex", justifyContent: "space-between" }}
+          >
+            <Typography sx={{ height: "40px", lineHeight: "40px" }}>
+              {files}
+            </Typography>
+            <Button color="error" sx={{ height: "40px" }} onClick={clearImage}>
+              x
+            </Button>
+          </DialogContent>
+        )}
         <DialogActions>
-          <Button>Cancel</Button>
-          <Button type="submit">Send</Button>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button variant="outlined" color="success" type="submit">
+            Send
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

@@ -5,10 +5,14 @@ import {
   createEntityAdapter,
 } from "@reduxjs/toolkit";
 import storyApi from "../api/storyApi";
+import { RootState } from "../app/store";
 import { IStory } from "../models/story";
+import { throwAlert } from "./UISlice";
 
 export const storyAdapter = createEntityAdapter({
   selectId: (story: IStory) => story._id,
+  sortComparer: (a, b) =>
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
 });
 
 export const getMyStories = createAsyncThunk("story/getMyStories", async () => {
@@ -26,10 +30,17 @@ export const getStoriesByUserId = createAsyncThunk(
 
 export const addStory = createAsyncThunk(
   "story/createOne",
-  async (payload: FormData) => {
+  async (payload: FormData, thunkApi) => {
     const response = await storyApi.addNewStories(payload);
-    console.log(payload);
+    await thunkApi.dispatch(
+      throwAlert({ isShow: true, message: "Send sucessfully", type: "success" })
+    );
+    return response.data.story;
   }
+);
+
+export const storiesSelector = storyAdapter.getSelectors(
+  (state: RootState) => state.story
 );
 
 const initialState = storyAdapter.getInitialState();
@@ -61,7 +72,9 @@ const storySlice = createSlice({
     builder.addCase(addStory.rejected, (state) => {});
     builder.addCase(
       addStory.fulfilled,
-      (state, actions: PayloadAction<any>) => {}
+      (state, actions: PayloadAction<IStory>) => {
+        storyAdapter.addOne(state, actions.payload);
+      }
     );
   },
 });

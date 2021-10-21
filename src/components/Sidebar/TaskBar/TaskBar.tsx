@@ -50,7 +50,7 @@ const Taskbar = () => {
   const { user } = useParams<IStoryPageParams>();
   const me = useSelector((state: RootState) => state.auth.currentUser);
   const [userInfor, setUserInfor] = useState<IUser>(initialUser);
-  const [isShowAdd, setIsShowAdd] = useState<Boolean>(false);
+  const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
 
   useEffect(() => {
     (async () => {
@@ -70,18 +70,14 @@ const Taskbar = () => {
   return (
     <Wrapper>
       <Box className={style.taskField}>
-        <AddImageDialog open={isShowAdd} />
+        <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />
         <Box
           sx={{
             width: "90%",
             padding: "5%",
           }}
         >
-          <img
-            alt="Internet Error"
-            className={style.avatar}
-            src={userInfor.avatarUri}
-          ></img>
+          <img alt="" className={style.avatar} src={userInfor.avatarUri} />
         </Box>
         <Box>
           <Typography sx={{ paddingBottom: "30px" }} variant="h5">

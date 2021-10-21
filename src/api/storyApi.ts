@@ -1,7 +1,6 @@
-import { IResponseList } from "../models/common";
+import { IResponse, IResponseList } from "../models/common";
 import { IStory } from "../models/story";
 import axiosClient from "./axiosClient";
-import axiosFileSender from "./axiosFileSender";
 
 const storyApi = {
   getMySories(): Promise<IResponseList<IStory>> {
@@ -10,8 +9,9 @@ const storyApi = {
   getByUserId(payload: string): Promise<IResponseList<IStory>> {
     return axiosClient.get(`/stories/${payload}`);
   },
-  addNewStories(payload: FormData): Promise<any> {
-    return axiosFileSender.post(`/stories/me`, payload);
+  addNewStories(payload: FormData): Promise<IResponse<IStory>> {
+    console.log((payload.get("file") as File).type);
+    return axiosClient.post(`/stories/me`, payload);
   },
 };
 
