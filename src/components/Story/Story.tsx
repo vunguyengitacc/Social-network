@@ -1,12 +1,18 @@
-import { Button, IconButton, Typography } from "@mui/material";
+import { Button, IconButton, Typography, Menu } from "@mui/material";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
-import React from "react";
+import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import React, { useState } from "react";
 import dateUtil from "../../utillity/dateUtils";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { removeStory, update } from "../../reduxSlice/storySlice";
+import LockIcon from "@mui/icons-material/Lock";
 
 const Wrapper = styled("div")(({ theme }) => ({
   backgroundColor: "#F1EDED",
@@ -45,18 +51,80 @@ const useStyle = makeStyles({
 });
 
 interface IPropsStory {
+  _id: string;
   createdAt: Date;
   imageUrl: string;
   content: string;
+  isPrivate: boolean;
 }
 
-const Story: React.FC<IPropsStory> = ({ createdAt, imageUrl, content }) => {
+const Story: React.FC<IPropsStory> = ({
+  _id,
+  createdAt,
+  imageUrl,
+  content,
+  isPrivate,
+}) => {
+  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+  const [open, setOpen] = useState<boolean>(Boolean(anchor));
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const handleOpenMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchor(e.currentTarget);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setAnchor(null);
+    setOpen(false);
+    console.log(isPrivate);
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchor(null);
+    setOpen(false);
+    dispatch(removeStory(_id));
+  };
+
+  const handleTogglePrivate = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchor(null);
+    setOpen(false);
+    dispatch(update({ _id, isPrivate: !isPrivate, url: imageUrl }));
+  };
+
   const style = useStyle();
 
   return (
     <Wrapper>
       <Box>
         <Box>
+          <Menu open={open} anchorEl={anchor} onClose={handleClose}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                minWidth: "200px",
+              }}
+            >
+              <Button
+                sx={{ display: "flex", justifyContent: "flex-start" }}
+                startIcon={<DeleteForeverIcon />}
+                color="error"
+                onClick={handleDelete}
+              >
+                Delete this story
+              </Button>
+              <Button
+                sx={{ display: "flex", justifyContent: "flex-start" }}
+                startIcon={<VerifiedUserIcon />}
+                color="primary"
+                onClick={handleTogglePrivate}
+              >
+                {isPrivate === true ? "Set to public" : "Set to privite"}
+              </Button>
+            </Box>
+          </Menu>
           <Box
             className={style.titleField}
             sx={{
@@ -96,8 +164,20 @@ const Story: React.FC<IPropsStory> = ({ createdAt, imageUrl, content }) => {
               >
                 {dateUtil.getFullHours(createdAt)}
               </Typography>
+              {isPrivate && (
+                <Typography
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    marginLeft: "30px",
+                  }}
+                >
+                  <LockIcon />
+                </Typography>
+              )}
             </Box>
-            <IconButton className={style.taskBtn}>
+            <IconButton onClick={handleOpenMenu} className={style.taskBtn}>
               <MoreVertIcon />
             </IconButton>
           </Box>

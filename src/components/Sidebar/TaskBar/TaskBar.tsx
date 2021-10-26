@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import userApi from "../../../api/userApi";
 import { initialUser, IUser } from "../../../models/user";
 import AddImageDialog from "../../AddImageDialog/AddImageDialog";
+import GroupsIcon from "@mui/icons-material/Groups";
 
 const Wrapper = styled("div")(({ theme }) => ({
   height: "100%",
@@ -96,7 +97,14 @@ const Taskbar = () => {
                 Get your ID
               </Button>
             </CopyToClipboard>
-
+            <Button
+              className={style.taskBtn}
+              variant="text"
+              color="warning"
+              startIcon={<GroupsIcon />}
+            >
+              Friends
+            </Button>
             <Button
               className={style.taskBtn}
               variant="text"

@@ -20,6 +20,53 @@ export const getMyStories = createAsyncThunk("story/getMyStories", async () => {
   return response.data.stories;
 });
 
+export const removeStory = createAsyncThunk(
+  "story/remove",
+  async (payload: string, thunkApi) => {
+    try {
+      await storyApi.removeStory(payload);
+      await thunkApi.dispatch(
+        throwAlert({
+          isShow: true,
+          message: "Remove successfully",
+          type: "success",
+        })
+      );
+      return payload;
+    } catch (err) {
+      thunkApi.dispatch(
+        throwAlert({ type: "error", message: "failed to remove", isShow: true })
+      );
+      throw Error("failed");
+    }
+  }
+);
+
+export const update = createAsyncThunk(
+  "story/update",
+  async (
+    payload: { _id: string; url: string; isPrivate: boolean },
+    thunkApi
+  ) => {
+    try {
+      const response = await storyApi.updateOne(payload);
+      await thunkApi.dispatch(
+        throwAlert({
+          isShow: true,
+          message: "Update successfully",
+          type: "success",
+        })
+      );
+      return response.data.story;
+    } catch (err) {
+      thunkApi.dispatch(
+        throwAlert({ type: "error", message: "failed to update", isShow: true })
+      );
+      throw Error("failed");
+    }
+  }
+);
+
 export const getStoriesByUserId = createAsyncThunk(
   "story/getStoriesByUserId",
   async (payload: string) => {
@@ -74,6 +121,25 @@ const storySlice = createSlice({
       addStory.fulfilled,
       (state, actions: PayloadAction<IStory>) => {
         storyAdapter.addOne(state, actions.payload);
+      }
+    );
+    builder.addCase(removeStory.pending, (state) => {});
+    builder.addCase(removeStory.rejected, (state) => {});
+    builder.addCase(
+      removeStory.fulfilled,
+      (state, actions: PayloadAction<string>) => {
+        storyAdapter.removeOne(state, actions.payload);
+      }
+    );
+    builder.addCase(update.pending, (state) => {});
+    builder.addCase(update.rejected, (state) => {});
+    builder.addCase(
+      update.fulfilled,
+      (state, actions: PayloadAction<IStory>) => {
+        storyAdapter.updateOne(state, {
+          id: actions.payload._id,
+          changes: actions.payload,
+        });
       }
     );
   },

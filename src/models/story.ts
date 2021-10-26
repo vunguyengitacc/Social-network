@@ -6,4 +6,5 @@ export interface IStory {
   content: string;
   owner: IUser | undefined;
   createdAt: Date;
+  isPrivate: boolean;
 }

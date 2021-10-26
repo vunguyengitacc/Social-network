@@ -14,30 +14,32 @@ const RoutesComponent = () => {
 
   return (
     <BrowserRouter>
-      <Snackbar
-        open={alert.isShow}
-        autoHideDuration={2000}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        sx={{
-          position: "fixed",
-          margin: "20px",
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "flex-end",
-        }}
-        onClose={() => dispatch(closeAlert())}
-      >
-        <Alert
-          variant="filled"
-          severity={alert.type}
+      {alert.type !== "info" && (
+        <Snackbar
+          open={alert.isShow}
+          autoHideDuration={500}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           sx={{
-            marginRight: "20px",
+            position: "fixed",
+            margin: "20px",
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
           }}
+          onClose={() => dispatch(closeAlert())}
         >
-          <AlertTitle sx={{ display: "flex" }}>{alert.type}</AlertTitle>
-          {alert.message}
-        </Alert>
-      </Snackbar>
+          <Alert
+            variant="filled"
+            severity={alert.type}
+            sx={{
+              marginRight: "20px",
+            }}
+          >
+            <AlertTitle sx={{ display: "flex" }}>{alert.type}</AlertTitle>
+            {alert.message}
+          </Alert>
+        </Snackbar>
+      )}
       <Switch>
         <AuthRoute path="/auth" component={AuthFeature} />
         <PrivateRoute path="/" component={StoryRepositoryFeature} />

@@ -13,6 +13,16 @@ const storyApi = {
     console.log((payload.get("file") as File).type);
     return axiosClient.post(`/stories/me`, payload);
   },
+  removeStory(payload: string): Promise<IResponse<any>> {
+    return axiosClient.delete(`/stories/me/${payload}`);
+  },
+  updateOne(payload: {
+    _id: string;
+    isPrivate: boolean;
+    url: string;
+  }): Promise<IResponse<IStory>> {
+    return axiosClient.put(`/stories/me/${payload._id}`, payload);
+  },
 };
 
 export default storyApi;

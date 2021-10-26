@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { addStory } from "../../reduxSlice/storySlice";
 import { throwAlert } from "../../reduxSlice/UISlice";
+import SelectField from "../InputField/SelectField/SelectField";
 
 interface IPropsDialog {
   open: boolean;
@@ -27,7 +28,7 @@ const scheme = yup
   .object()
   .shape({
     content: yup.string().max(35, "Please enter at mosts 35 characters"),
-    files: yup.mixed().required("Please choose a file"),
+    isPrivate: yup.bool(),
   })
   .required();
 
@@ -41,35 +42,36 @@ const useStyles = makeStyles({
 
 interface IFormAddImageValues {
   content: string;
-  files: any;
+  isPrivate: boolean;
 }
 
 const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
   const style = useStyles();
   const dispatch = useDispatch<AppDispatch>();
-  const [files, setFiles] = useState<any>("");
+  const [fileName, setFileName] = useState<any>("");
+  const [file, setFile] = useState<any>(null);
   const form = useForm<IFormAddImageValues>({
     mode: "onSubmit",
     reValidateMode: "onChange",
     defaultValues: {
       content: "",
-      files: [],
+      isPrivate: false,
     },
     resolver: yupResolver(scheme),
   });
 
   const submitForm = (data: IFormAddImageValues) => {
     const formData = new FormData();
-    const file = data.files[0];
-    console.log(data.files);
     if (file && file.type.match(/(png|jpg|jpge)/)) {
       formData.append("content", data.content);
-      formData.append("file", data.files[0]);
+      formData.append("isPrivate", String(data.isPrivate));
+      formData.append("file", file);
       dispatch(addStory(formData));
       setOpen(false);
     } else {
       form.reset();
-      setFiles(null);
+      setFileName(null);
+      setFile(null);
       dispatch(
         throwAlert({
           isShow: true,
@@ -80,15 +82,17 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
     }
   };
 
-  // const addFilesToClipboard = (e: React.FormEvent<HTMLInputElement>) => {
-  //   if (!e.currentTarget.value) return;
-  //   const file = e.currentTarget.value ?? "";
-  //   setFiles(file.split(`\\`).pop());
-  // };
+  const addFilesToClipboard = (e: React.FormEvent<HTMLInputElement>) => {
+    if (!e.currentTarget.value) return;
+    const file = e.currentTarget.value ?? "";
+    const data = e.currentTarget.files?.item(0);
+    setFileName(file.split(`\\`).pop());
+    setFile(data);
+  };
 
   const clearImage = (e: React.FormEvent<HTMLButtonElement>) => {
     form.reset();
-    setFiles(null);
+    setFileName(null);
   };
 
   return (
@@ -107,9 +111,8 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
             accept="image/png, image/gif, image/jpeg"
             id="contained-button-file"
             multiple
-            {...form.register("files")}
             type="file"
-            //onChange={addFilesToClipboard}
+            onChange={addFilesToClipboard}
           />
           <label htmlFor="contained-button-file">
             <Button
@@ -121,18 +124,24 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
             </Button>
           </label>
         </DialogContent>
-        {files && (
+        {fileName && (
           <DialogContent
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
             <Typography sx={{ height: "40px", lineHeight: "40px" }}>
-              {files}
+              {fileName}
             </Typography>
             <Button color="error" sx={{ height: "40px" }} onClick={clearImage}>
               x
             </Button>
           </DialogContent>
         )}
+        <DialogContent>
+          <SelectField form={form} name="isPrivate">
+            <Button value={"false"}>Public</Button>
+            <Button value={"true"}>Private</Button>
+          </SelectField>
+        </DialogContent>
         <DialogActions>
           <Button
             variant="outlined"

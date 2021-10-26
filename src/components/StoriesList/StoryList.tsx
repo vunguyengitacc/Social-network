@@ -20,9 +20,11 @@ const StoryList = () => {
         return (
           <Story
             key={item._id}
+            _id={item._id}
             imageUrl={item.imageUrl}
             createdAt={date}
             content={item.content}
+            isPrivate={item.isPrivate ?? false}
           />
         );
       })}
