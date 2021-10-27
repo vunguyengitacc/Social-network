@@ -100,6 +100,7 @@ const theme = createTheme({
           alignItems: "center",
           display: "flex",
           justifyContent: "flex-start",
+          textAlign: "start",
         },
       },
     },
@@ -117,9 +118,14 @@ const theme = createTheme({
         root: {
           borderRadius: "8px",
           fontSize: "12px",
-          "&:hover": {
-            border: "none",
-          },
+        },
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          height: "40px",
+          borderRadius: "0",
         },
       },
     },
@@ -127,6 +133,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           height: "40px",
+          borderRadius: "0",
         },
       },
     },

@@ -4,6 +4,8 @@ import { ILoginFormValues } from "../components/Login/Login";
 import { IResponse } from "../models/common";
 import { initialUser, IUser } from "../models/user";
 import { IRegisterFormValues } from "../components/Register/Register";
+import userApi from "../api/userApi";
+import { throwAlert } from "./UISlice";
 
 interface IAuthState {
   currentUser: IUser;
@@ -14,6 +16,24 @@ export const getMe = createAsyncThunk("auth/getMe", async () => {
   const response = await authApi.getMe();
   return response;
 });
+
+export const updateMe = createAsyncThunk(
+  "auth/updateMe",
+  async (payload: Partial<IUser>, thunkAPI) => {
+    try {
+      const response = await userApi.updateMe(payload);
+      await thunkAPI.dispatch(
+        throwAlert({ isShow: true, message: "successfully", type: "success" })
+      );
+      return response.data.user;
+    } catch (error) {
+      await thunkAPI.dispatch(
+        throwAlert({ isShow: true, message: "failed to update", type: "error" })
+      );
+      throw error;
+    }
+  }
+);
 
 export const login = createAsyncThunk(
   "auth/login",
@@ -74,6 +94,14 @@ const authSlice = createSlice({
     builder.addCase(register.fulfilled, (state) => {
       state.isAuth = true;
     });
+    builder.addCase(updateMe.pending, (state) => {});
+    builder.addCase(updateMe.rejected, (state) => {});
+    builder.addCase(
+      updateMe.fulfilled,
+      (state, actions: PayloadAction<IUser>) => {
+        state.currentUser = actions.payload;
+      }
+    );
   },
 });
 

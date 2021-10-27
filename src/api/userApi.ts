@@ -9,6 +9,9 @@ const userApi = {
   getById(payload: string): Promise<IResponse<IUser>> {
     return axiosClient.get(`/users/${payload}`);
   },
+  updateMe(payload: Partial<IUser>): Promise<IResponse<IUser>> {
+    return axiosClient.put("/users/me", payload);
+  },
 };
 
 export default userApi;

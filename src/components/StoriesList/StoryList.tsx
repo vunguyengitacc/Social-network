@@ -1,17 +1,26 @@
 import Box from "@mui/material/Box";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
 import { AppDispatch } from "../../app/store";
-import { getMyStories, storiesSelector } from "../../reduxSlice/storySlice";
+import { IStoryPageParams } from "../../pages/UserRepo";
+import {
+  getMyStories,
+  getStoriesByUserId,
+  storiesSelector,
+} from "../../reduxSlice/storySlice";
 import Story from "../Story/Story";
 
 const StoryList = () => {
   const stories = useSelector(storiesSelector.selectAll);
   const dispatch = useDispatch<AppDispatch>();
+  const { user } = useParams<IStoryPageParams>();
 
   useEffect(() => {
-    dispatch(getMyStories());
-  }, [dispatch]);
+    console.log(user);
+    if (user && user !== "me") dispatch(getStoriesByUserId(user));
+    else dispatch(getMyStories());
+  }, [dispatch, user]);
 
   return (
     <Box>

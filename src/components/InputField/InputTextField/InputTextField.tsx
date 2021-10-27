@@ -1,7 +1,9 @@
-import { FormHelperText } from "@mui/material";
+import { FormHelperText, Typography } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import { makeStyles } from "@mui/styles";
 import { SxProps } from "@mui/system";
+import { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 
 interface InputFieldProps {
@@ -14,13 +16,31 @@ interface InputFieldProps {
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
   autoComplete?: string;
-  sxValue?: SxProps | undefined;
+  sxWrap?: SxProps;
+  sxInput?: SxProps;
+  sxText?: SxProps;
+  isUnshowInput?: boolean;
 }
 
+const defaultStyle = makeStyles({
+  text: {
+    padding: "10px",
+    backgroundColor: "transparent",
+    border: "solid 2px transparent",
+  },
+  input: {},
+});
+
 const InputTextField: React.FC<InputFieldProps> = (props) => {
+  const [switchForm, setSwitchForm] = useState<boolean>(
+    !props.isUnshowInput ?? true
+  );
+
   const { form, name, disabled, placeholder } = props;
   const { errors } = form.formState;
   const hasError = !!errors[name];
+
+  const style = defaultStyle();
 
   return (
     <Controller
@@ -28,17 +48,38 @@ const InputTextField: React.FC<InputFieldProps> = (props) => {
       control={form.control}
       render={({ field }) => (
         <FormControl
-          sx={props.sxValue}
+          sx={props.sxWrap}
           fullWidth
           variant="outlined"
           error={hasError}
         >
-          <OutlinedInput
-            {...field}
-            disabled={disabled}
-            placeholder={placeholder}
-            id={name}
-          />
+          {props.isUnshowInput && switchForm === false && !hasError && (
+            <Typography
+              className={style.text}
+              sx={props.sxText}
+              component="button"
+              onClick={() => setSwitchForm(true)}
+            >
+              {form.getValues()[name]}
+            </Typography>
+          )}
+          {(!props.isUnshowInput || switchForm === true || hasError) && (
+            <OutlinedInput
+              className={style.input}
+              sx={props.sxInput}
+              {...field}
+              disabled={disabled}
+              placeholder={placeholder}
+              id={name}
+              onChange={(e) => {
+                form.setValue(name, e.currentTarget.value);
+              }}
+              autoFocus
+              onBlur={() => {
+                if (props.isUnshowInput === true) setSwitchForm(false);
+              }}
+            />
+          )}
           <FormHelperText>{errors[name]?.message}</FormHelperText>
         </FormControl>
       )}

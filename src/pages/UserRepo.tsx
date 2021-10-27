@@ -6,7 +6,7 @@ import StoryList from "../components/StoriesList/StoryList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useSelector } from "react-redux";
 import { RootState } from "../app/store";
-import { IUser } from "../models/user";
+import { initialUser, IUser } from "../models/user";
 import { useHistory, useParams } from "react-router";
 import userApi from "../api/userApi";
 
@@ -18,7 +18,7 @@ export interface IStoryPageParams {
 const UserRepository = () => {
   const [isMe, setIsMe] = useState<boolean>(false);
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
-  const [userInfor, setUserInfor] = useState<IUser>();
+  const [userInfor, setUserInfor] = useState<IUser>(initialUser);
   const history = useHistory();
 
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
