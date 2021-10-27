@@ -1,4 +1,4 @@
-import { Button, IconButton, Typography, Menu } from "@mui/material";
+import { Button, IconButton, Typography, Menu, Avatar } from "@mui/material";
 import Box from "@mui/material/Box";
 import { styled } from "@mui/material/styles";
 import { makeStyles } from "@mui/styles";
@@ -13,9 +13,11 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../app/store";
 import { removeStory, update } from "../../reduxSlice/storySlice";
 import LockIcon from "@mui/icons-material/Lock";
+import { IUser } from "../../models/user";
+import { useHistory } from "react-router";
 
 const Wrapper = styled("div")(({ theme }) => ({
-  backgroundColor: "#F1EDED",
+  backgroundColor: "white",
   minHeight: "100px",
   borderRadius: "10px",
   [theme.breakpoints.down("md")]: {
@@ -56,6 +58,7 @@ interface IPropsStory {
   imageUrl: string;
   content: string;
   isPrivate: boolean;
+  owner: IUser | undefined;
 }
 
 const Story: React.FC<IPropsStory> = ({
@@ -64,7 +67,9 @@ const Story: React.FC<IPropsStory> = ({
   imageUrl,
   content,
   isPrivate,
+  owner,
 }) => {
+  const history = useHistory();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(Boolean(anchor));
 
@@ -134,7 +139,17 @@ const Story: React.FC<IPropsStory> = ({
               justifyContent: "space-between",
             }}
           >
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar
+                src={owner?.avatarUri}
+                sx={{
+                  marginRight: "20px",
+                  "&:hover": {
+                    cursor: "pointer",
+                  },
+                }}
+                onClick={() => history.push(`/personal/stories/${owner?._id}`)}
+              />
               <Typography
                 sx={{
                   display: "flex",
@@ -181,10 +196,17 @@ const Story: React.FC<IPropsStory> = ({
               <MoreVertIcon />
             </IconButton>
           </Box>
-          <Box sx={{ display: "flex", margin: "0 2.5% 0 2.5% " }}>
+          <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>
             {content}
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Box
+            sx={{
+              width: "100%  ",
+              display: "flex",
+              justifyContent: "center",
+              backgroundColor: "rgb(239 233 233)",
+            }}
+          >
             <img
               alt="Internet error"
               className={style.image}

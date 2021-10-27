@@ -25,6 +25,7 @@ const StoryList = () => {
             createdAt={date}
             content={item.content}
             isPrivate={item.isPrivate ?? false}
+            owner={item.owner}
           />
         );
       })}

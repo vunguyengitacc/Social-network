@@ -1,6 +1,7 @@
 import { FormHelperText } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
+import { SxProps } from "@mui/system";
 import { Controller, UseFormReturn } from "react-hook-form";
 
 interface InputFieldProps {
@@ -13,6 +14,7 @@ interface InputFieldProps {
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
   autoComplete?: string;
+  sxValue?: SxProps | undefined;
 }
 
 const InputTextField: React.FC<InputFieldProps> = (props) => {
@@ -25,9 +27,13 @@ const InputTextField: React.FC<InputFieldProps> = (props) => {
       name={name}
       control={form.control}
       render={({ field }) => (
-        <FormControl fullWidth variant="outlined" error={hasError}>
+        <FormControl
+          sx={props.sxValue}
+          fullWidth
+          variant="outlined"
+          error={hasError}
+        >
           <OutlinedInput
-            sx={{ marginTop: "40px" }}
             {...field}
             disabled={disabled}
             placeholder={placeholder}

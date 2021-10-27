@@ -3,10 +3,16 @@ export interface IUser {
   fullname: string;
   username?: string;
   avatarUri: string;
+  job: string;
+  address: string;
+  education: string[];
 }
 
 export const initialUser: IUser = {
   fullname: "",
   _id: "",
   avatarUri: "",
+  address: "",
+  job: "",
+  education: [],
 };

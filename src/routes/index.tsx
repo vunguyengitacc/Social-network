@@ -42,7 +42,10 @@ const RoutesComponent = () => {
       )}
       <Switch>
         <AuthRoute path="/auth" component={AuthFeature} />
-        <PrivateRoute path="/" component={StoryRepositoryFeature} />
+        <PrivateRoute
+          path="/personal/:option/:user"
+          component={StoryRepositoryFeature}
+        />
       </Switch>
     </BrowserRouter>
   );

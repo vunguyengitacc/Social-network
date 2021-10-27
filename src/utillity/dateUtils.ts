@@ -4,7 +4,7 @@ const getTwoChar = (input: Number) => {
 };
 
 const getFullHours = (date: Date) => {
-  return `${getTwoChar(date.getHours())}: ${getTwoChar(
+  return `${getTwoChar(date.getHours())}:${getTwoChar(
     date.getMinutes()
   )}:${getTwoChar(date.getSeconds())}`;
 };

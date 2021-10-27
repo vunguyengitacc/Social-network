@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import authApi from "../api/authApi";
 import { ILoginFormValues } from "../components/Login/Login";
 import { IResponse } from "../models/common";
-import { IUser } from "../models/user";
+import { initialUser, IUser } from "../models/user";
 import { IRegisterFormValues } from "../components/Register/Register";
 
 interface IAuthState {
@@ -34,12 +34,7 @@ export const register = createAsyncThunk(
 );
 
 const initialState: IAuthState = {
-  currentUser: {
-    _id: "",
-    avatarUri: "",
-    fullname: "",
-    username: "",
-  },
+  currentUser: { ...initialUser },
   isAuth: false,
 };
 const authSlice = createSlice({
