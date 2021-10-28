@@ -70,7 +70,7 @@ const UserRepository = () => {
                 Upload Image
               </Button>
             )}
-            <StoryList />
+            <StoryList isMe={isMe} />
           </Box>
         </Box>
       </Hidden>

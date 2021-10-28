@@ -9,8 +9,18 @@ const userApi = {
   getById(payload: string): Promise<IResponse<IUser>> {
     return axiosClient.get(`/users/${payload}`);
   },
-  updateMe(payload: Partial<IUser>): Promise<IResponse<IUser>> {
+  updateMe(
+    payload: Pick<IUser, "fullname" | "address" | "education" | "job">
+  ): Promise<IResponse<IUser>> {
     return axiosClient.put("/users/me", payload);
+  },
+  updateAvatar(payload: FormData): Promise<IResponse<IUser>> {
+    console.log((payload.get("file") as File).type);
+    return axiosClient.put(`/users/avatar/me`, payload);
+  },
+  updateBackground(payload: FormData): Promise<IResponse<IUser>> {
+    console.log((payload.get("file") as File).type);
+    return axiosClient.put(`/users/background/me`, payload);
   },
 };
 

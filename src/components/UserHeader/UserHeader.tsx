@@ -27,14 +27,47 @@ const UserHeader: React.FC<IProps> = ({ userInfor, isMe }) => {
         justifyContent: "center",
       }}
     >
-      <Box sx={{ height: "50vh" }}>
-        <Avatar
-          sx={{ width: "150px", height: "150px", zIndex: 1 }}
-          src={userInfor?.avatarUri}
+      <Box
+        sx={{
+          height: "50vh",
+        }}
+      >
+        <img
+          style={{
+            maskImage:
+              "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%) !important",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%) !important",
+            width: "80vw",
+            height: "100%",
+          }}
+          src={userInfor?.backgroundUrl}
+          alt=""
         />
-        <Typography sx={{ justifyContent: "center", height: "50px" }}>
-          {userInfor?.fullname}
-        </Typography>
+        <Box
+          sx={{
+            position: "absolute",
+            marginTop: "-230px",
+            marginLeft: "calc(40vw - 75px)",
+          }}
+        >
+          <Avatar
+            sx={{
+              width: "150px",
+              height: "150px",
+              zIndex: 1,
+            }}
+            src={userInfor?.avatarUri}
+          />
+          <Typography
+            sx={{
+              justifyContent: "center",
+              height: "50px",
+            }}
+          >
+            {userInfor?.fullname}
+          </Typography>
+        </Box>
       </Box>
 
       <Divider sx={{ width: "80vw" }} variant="middle" />

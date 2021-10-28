@@ -59,6 +59,7 @@ interface IPropsStory {
   content: string;
   isPrivate: boolean;
   owner: IUser | undefined;
+  isMe: boolean;
 }
 
 const Story: React.FC<IPropsStory> = ({
@@ -68,6 +69,7 @@ const Story: React.FC<IPropsStory> = ({
   content,
   isPrivate,
   owner,
+  isMe,
 }) => {
   const history = useHistory();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
@@ -192,9 +194,11 @@ const Story: React.FC<IPropsStory> = ({
                 </Typography>
               )}
             </Box>
-            <IconButton onClick={handleOpenMenu} className={style.taskBtn}>
-              <MoreVertIcon />
-            </IconButton>
+            {isMe && (
+              <IconButton onClick={handleOpenMenu} className={style.taskBtn}>
+                <MoreVertIcon />
+              </IconButton>
+            )}
           </Box>
           <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>
             {content}

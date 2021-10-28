@@ -33,7 +33,11 @@ const InputListTextField: React.FC<InputListTextProps> = (props) => {
   const [switchForm, setSwitchForm] = useState<boolean>(false);
 
   const addToList = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && e.currentTarget.value?.length > 0) {
+    if (
+      e.key === "Enter" &&
+      e.currentTarget.value?.length > 0 &&
+      form.getValues()[name]
+    ) {
       form.setValue(
         name,
         _.uniqWith([...form.getValues()[name], e.currentTarget.value])
@@ -43,14 +47,14 @@ const InputListTextField: React.FC<InputListTextProps> = (props) => {
   };
 
   useEffect(() => {
-    setList(_.uniqWith([...form.getValues()[name]]));
+    form.getValues()[name] && setList(_.uniqWith([...form.getValues()[name]]));
     // eslint-disable-next-line
   }, [form.getValues()[name]]);
 
   const removeValue = (value: string) => {
     let temp = list.filter((i) => i !== value);
     setList(list.filter((i) => i !== value));
-    form.setValue(name, temp);
+    form.getValues()[name] && form.setValue(name, temp);
   };
 
   return (

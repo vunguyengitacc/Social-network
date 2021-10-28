@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { AppDispatch } from "../../app/store";
@@ -11,16 +11,23 @@ import {
 } from "../../reduxSlice/storySlice";
 import Story from "../Story/Story";
 
-const StoryList = () => {
+interface IProps {
+  isMe: boolean;
+}
+
+const StoryList: React.FC<IProps> = (props) => {
   const stories = useSelector(storiesSelector.selectAll);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useParams<IStoryPageParams>();
 
   useEffect(() => {
-    console.log(user);
     if (user && user !== "me") dispatch(getStoriesByUserId(user));
     else dispatch(getMyStories());
   }, [dispatch, user]);
+
+  useEffect(() => {
+    console.log(stories);
+  }, [stories]);
 
   return (
     <Box>
@@ -30,6 +37,7 @@ const StoryList = () => {
           <Story
             key={item._id}
             _id={item._id}
+            isMe={props.isMe}
             imageUrl={item.imageUrl}
             createdAt={date}
             content={item.content}

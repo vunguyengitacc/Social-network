@@ -71,6 +71,7 @@ export const getStoriesByUserId = createAsyncThunk(
   "story/getStoriesByUserId",
   async (payload: string) => {
     const response = await storyApi.getByUserId(payload);
+    console.log(response.data);
     return response.data.stories;
   }
 );

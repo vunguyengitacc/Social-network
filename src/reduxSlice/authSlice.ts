@@ -19,7 +19,10 @@ export const getMe = createAsyncThunk("auth/getMe", async () => {
 
 export const updateMe = createAsyncThunk(
   "auth/updateMe",
-  async (payload: Partial<IUser>, thunkAPI) => {
+  async (
+    payload: Pick<IUser, "fullname" | "address" | "education" | "job">,
+    thunkAPI
+  ) => {
     try {
       const response = await userApi.updateMe(payload);
       await thunkAPI.dispatch(
@@ -32,6 +35,30 @@ export const updateMe = createAsyncThunk(
       );
       throw error;
     }
+  }
+);
+
+export const updateAvatar = createAsyncThunk(
+  "story/updateAvatar",
+  async (payload: FormData, thunkApi) => {
+    const response = await userApi.updateAvatar(payload);
+    await thunkApi.dispatch(
+      throwAlert({ isShow: true, message: "Send sucessfully", type: "success" })
+    );
+    console.log(response);
+    return response.data.user;
+  }
+);
+
+export const updateBackground = createAsyncThunk(
+  "story/updateBackground",
+  async (payload: FormData, thunkApi) => {
+    const response = await userApi.updateBackground(payload);
+    await thunkApi.dispatch(
+      throwAlert({ isShow: true, message: "Send sucessfully", type: "success" })
+    );
+    console.log(response);
+    return response.data.user;
   }
 );
 
@@ -99,6 +126,24 @@ const authSlice = createSlice({
     builder.addCase(
       updateMe.fulfilled,
       (state, actions: PayloadAction<IUser>) => {
+        state.currentUser = actions.payload;
+      }
+    );
+    builder.addCase(updateAvatar.pending, (state) => {});
+    builder.addCase(updateAvatar.rejected, (state) => {});
+    builder.addCase(
+      updateAvatar.fulfilled,
+      (state, actions: PayloadAction<IUser>) => {
+        console.log(actions.payload);
+        state.currentUser = actions.payload;
+      }
+    );
+    builder.addCase(updateBackground.pending, (state) => {});
+    builder.addCase(updateBackground.rejected, (state) => {});
+    builder.addCase(
+      updateBackground.fulfilled,
+      (state, actions: PayloadAction<IUser>) => {
+        console.log(actions.payload);
         state.currentUser = actions.payload;
       }
     );

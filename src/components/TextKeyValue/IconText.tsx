@@ -31,7 +31,7 @@ const IconText: React.FC<IProps> = (props) => {
         {props.listValue &&
           props.listValue.length > 1 &&
           props.listValue.map((i) => (
-            <Box sx={{ display: "flex", flexDirection: "row" }}>
+            <Box key={i} sx={{ display: "flex", flexDirection: "row" }}>
               <FiberManualRecordIcon
                 sx={{ fontSize: ".75rem", marginRight: "10px", height: "20px" }}
               />

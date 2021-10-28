@@ -1,6 +1,6 @@
 import { Alert, AlertTitle, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { BrowserRouter, Switch } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { AppDispatch, RootState } from "../app/store";
 import AuthFeature from "../feature/Auth";
 import StoryRepositoryFeature from "../feature/StoryRepo";
@@ -46,6 +46,7 @@ const RoutesComponent = () => {
           path="/personal/:option/:user"
           component={StoryRepositoryFeature}
         />
+        <Route component={AuthFeature} />
       </Switch>
     </BrowserRouter>
   );

@@ -3,6 +3,7 @@ export interface IUser {
   fullname: string;
   username?: string;
   avatarUri: string;
+  backgroundUrl: string;
   job: string;
   address: string;
   education: string[];
@@ -14,5 +15,6 @@ export const initialUser: IUser = {
   avatarUri: "",
   address: "",
   job: "",
+  backgroundUrl: "",
   education: [],
 };
