@@ -1,12 +1,12 @@
 import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
-import InputTextField from "../InputField/InputTextField/InputTextField";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import InputPassworldField from "../InputField/InputPasswordField/InputPasswordField";
 import React from "react";
 import { Button } from "@mui/material";
+import InputPassworldField from "../../../../components/InputField/InputPasswordField/InputPasswordField";
+import InputTextField from "../../../../components/InputField/InputTextField/InputTextField";
 
 const useStyle = makeStyles({
   form: {

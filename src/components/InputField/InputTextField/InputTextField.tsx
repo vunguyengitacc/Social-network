@@ -1,10 +1,17 @@
-import { FormHelperText, Typography } from "@mui/material";
+import {
+  Button,
+  FormHelperText,
+  Typography,
+  Box,
+  IconButton,
+} from "@mui/material";
 import FormControl from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { makeStyles } from "@mui/styles";
 import { SxProps } from "@mui/system";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
+import EditIcon from "@mui/icons-material/Edit";
 
 interface InputFieldProps {
   form: UseFormReturn<any>;
@@ -20,6 +27,7 @@ interface InputFieldProps {
   sxInput?: SxProps;
   sxText?: SxProps;
   isUnshowInput?: boolean;
+  focusComponent?: JSX.Element;
 }
 
 const defaultStyle = makeStyles({
@@ -54,14 +62,17 @@ const InputTextField: React.FC<InputFieldProps> = (props) => {
           error={hasError}
         >
           {props.isUnshowInput && switchForm === false && !hasError && (
-            <Typography
-              className={style.text}
-              sx={props.sxText}
-              component="button"
-              onClick={() => setSwitchForm(true)}
-            >
-              {form.getValues()[name]}
-            </Typography>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography className={style.text} sx={props.sxText}>
+                {form.getValues()[name]}
+              </Typography>
+              <IconButton
+                sx={{ padding: "10px" }}
+                onClick={() => setSwitchForm(true)}
+              >
+                <EditIcon />
+              </IconButton>
+            </Box>
           )}
           {(!props.isUnshowInput || switchForm === true || hasError) && (
             <OutlinedInput

@@ -25,10 +25,6 @@ const StoryList: React.FC<IProps> = (props) => {
     else dispatch(getMyStories());
   }, [dispatch, user]);
 
-  useEffect(() => {
-    console.log(stories);
-  }, [stories]);
-
   return (
     <Box>
       {stories.map((item) => {
@@ -43,6 +39,8 @@ const StoryList: React.FC<IProps> = (props) => {
             content={item.content}
             isPrivate={item.isPrivate ?? false}
             owner={item.owner}
+            likeById={item.likeById}
+            dislikeById={item.dislikeById}
           />
         );
       })}

@@ -49,7 +49,7 @@ const Header = () => {
       <Box sx={{ marginRight: "20px" }}>
         <IconButton
           sx={{ borderRadius: "0" }}
-          onClick={() => history.push("/personal/stories/me")}
+          onClick={() => history.push("/personal/me")}
         >
           <Avatar
             sx={{

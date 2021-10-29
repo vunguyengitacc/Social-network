@@ -84,12 +84,35 @@ const theme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            color: "blue",
+          },
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
           fontWeight: 700,
           paddingLeft: "40px",
           paddingRight: "40px",
+          boxShadow: "none",
+          "&:hover": {
+            boxShadow: "none",
+          },
+        },
+      },
+    },
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          boxShadow: "none",
+          "&:focus": {
+            boxShadow: "none",
+          },
         },
       },
     },

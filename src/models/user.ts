@@ -4,9 +4,13 @@ export interface IUser {
   username?: string;
   avatarUri: string;
   backgroundUrl: string;
-  job: string;
+  job: string[];
   address: string;
   education: string[];
+  phone: string;
+  friendId: string[];
+  friendRequestId: string[];
+  friendWaitingId: string[];
 }
 
 export const initialUser: IUser = {
@@ -14,7 +18,11 @@ export const initialUser: IUser = {
   _id: "",
   avatarUri: "",
   address: "",
-  job: "",
+  job: [],
   backgroundUrl: "",
   education: [],
+  phone: "",
+  friendId: [],
+  friendRequestId: [],
+  friendWaitingId: [],
 };

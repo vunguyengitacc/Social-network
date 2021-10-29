@@ -7,4 +7,6 @@ export interface IStory {
   owner: IUser | undefined;
   createdAt: Date;
   isPrivate: boolean;
+  likeById: string[];
+  dislikeById: string[];
 }

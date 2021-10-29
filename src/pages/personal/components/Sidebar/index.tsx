@@ -1,10 +1,10 @@
 import { Box, Divider, Typography } from "@mui/material";
 import React from "react";
-import { IUser } from "../../models/user";
-import IconText from "../TextKeyValue/IconText";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import WorkIcon from "@mui/icons-material/Work";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import { IUser } from "../../../../models/user";
+import IconText from "../../../../components/TextKeyValue/IconText";
 
 interface IProps {
   userInfor: IUser;
@@ -33,23 +33,25 @@ const Sidebar: React.FC<IProps> = (props) => {
           Profile Information
         </Typography>
         <Divider variant="middle" />
-        {props.userInfor?.fullname && (
-          <IconText
-            startIcon={<AccountCircleIcon />}
-            value={`${props.userInfor?.fullname}`}
-          />
-        )}
         {props.userInfor?.address && (
           <IconText
             startIcon={<HomeIcon />}
-            value={`Living in ${props.userInfor?.address}`}
+            text="Living in"
+            values={[props.userInfor?.address]}
           />
         )}
         {props.userInfor?.education?.length > 0 && (
           <IconText
             startIcon={<MenuBookIcon />}
-            value="Studied in"
-            listValue={props.userInfor?.education}
+            text="Studied in"
+            values={props.userInfor?.education}
+          />
+        )}
+        {props.userInfor?.job.length > 0 && (
+          <IconText
+            startIcon={<WorkIcon />}
+            text="Work at "
+            values={props.userInfor?.job}
           />
         )}
       </Box>

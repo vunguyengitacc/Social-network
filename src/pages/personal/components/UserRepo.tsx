@@ -7,8 +7,8 @@ import { initialUser, IUser } from "../../../models/user";
 import { RootState } from "../../../app/store";
 import userApi from "../../../api/userApi";
 import AddImageDialog from "../../../components/AddImageDialog/AddImageDialog";
-import Sidebar from "../../../components/Sidebar/Sidebar";
 import StoryList from "../../../components/StoriesList/StoryList";
+import Sidebar from "./Sidebar";
 
 export interface IStoryPageParams {
   user: string;

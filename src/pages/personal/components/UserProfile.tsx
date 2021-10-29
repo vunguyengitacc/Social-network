@@ -1,256 +1,233 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Tab, Box, Typography, Tabs } from "@mui/material";
+import CustomTabPanel from "./CustomTabPanel";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../app/store";
 import { IUser } from "../../../models/user";
 import * as yup from "yup";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputTextField from "../../../components/InputField/InputTextField/InputTextField";
-import { makeStyles } from "@mui/styles";
+import { updateMe } from "../../../reduxSlice/authSlice";
 import InputListTextField from "../../../components/InputField/InputListTextField/InputListTextField";
-import React from "react";
-import {
-  updateAvatar,
-  updateBackground,
-  updateMe,
-} from "../../../reduxSlice/authSlice";
-import { throwAlert } from "../../../reduxSlice/UISlice";
+import { withStyles } from "@mui/styles";
 
-const schema = yup
-  .object()
-  .shape({
-    fullname: yup
-      .string()
-      .required("Please enter your full name")
-      .min(6, "Please enter at least 6 characters.")
-      .max(35, "Please enter at most 35 characters"),
-    address: yup.string().max(100, "Please enter at most 100 characters"),
-    job: yup.string().max(100, "Please enter at most 100 characters"),
-    education: yup.array().min(0).max(10).of(yup.string()),
-  })
-  .required();
+const StyledListTab = withStyles({
+  indicator: {
+    backgroundColor: "#e7f3ff",
+    opacity: ".6",
+    color: "red",
+    width: "100%",
+    borderRadius: "10px",
+  },
+  "& .Mui-selected": {
+    color: "black",
+  },
+})(TabList);
 
-const useStyle = makeStyles({
-  form: {
-    padding: "20px",
-    margin: "3vh 10vh 3vh 10vh",
-    backgroundColor: "white",
-    boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
-  },
-  formInputField: {
-    justifyContent: "space-between !important",
-    display: "flex !important",
-    padding: "10px",
-    width: "80vw",
-  },
+const basicScheme = yup.object().shape({
+  fullname: yup
+    .string()
+    .required()
+    .max(100, "Please input at most 100 characters")
+    .min(6, "Please input at least 6 characters"),
+  address: yup
+    .string()
+    .max(100, "Please input at most 100 characters")
+    .min(6, "Please input at least 6 characters"),
 });
 
-const UserProfile: React.FC = () => {
+const contactScheme = yup.object().shape({
+  phone: yup
+    .string()
+    .matches(
+      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+      "invalid phone number"
+    ),
+});
+
+const workScheme = yup.object().shape({
+  job: yup.array().of(yup.string()).max(10),
+  education: yup.array().of(yup.string()).max(10),
+});
+
+const UserProfile = () => {
+  const [panel, setPanel] = useState("profile-1");
+
   const dispatch = useDispatch<AppDispatch>();
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
-  const style = useStyle();
-  const form = useForm<
-    Pick<IUser, "fullname" | "address" | "education" | "job">
-  >({
+
+  const basicForm = useForm<Pick<IUser, "fullname" | "address">>({
     mode: "onSubmit",
-    reValidateMode: "onChange",
     defaultValues: {
       fullname: me.fullname,
       address: me.address,
-      education: me.education,
-      job: me.job,
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(basicScheme),
   });
 
-  const handleSubmit = (
-    data: Pick<IUser, "fullname" | "address" | "education" | "job">
-  ) => {
+  const contactForm = useForm<Pick<IUser, "phone">>({
+    mode: "onSubmit",
+    defaultValues: {
+      phone: me.phone,
+    },
+    resolver: yupResolver(contactScheme),
+  });
+
+  const workAndEduForm = useForm<Pick<IUser, "job" | "education">>({
+    mode: "onChange",
+    defaultValues: {
+      job: me.job,
+      education: me.education,
+    },
+    resolver: yupResolver(workScheme),
+  });
+
+  const swicthPanel = (event: React.SyntheticEvent, newValue: string) => {
+    setPanel(newValue);
+  };
+
+  const updateInfor = (data: Partial<IUser>) => {
     dispatch(updateMe(data));
   };
 
-  const handleChangeAvatar = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.currentTarget.files?.item(0);
-    if (file && file.type.match(/(png|jpg|jpge)/)) {
-      const payload = new FormData();
-      payload.append("file", file);
-      dispatch(updateAvatar(payload));
-    } else {
-      dispatch(
-        throwAlert({
-          isShow: true,
-          message: "Please choose image file",
-          type: "error",
-        })
-      );
-    }
-  };
-
-  const handleChangeBackground = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.currentTarget.files?.item(0);
-    if (file && file.type.match(/(png|jpg|jpge)/)) {
-      const payload = new FormData();
-      payload.append("file", file);
-      dispatch(updateBackground(payload));
-    } else {
-      dispatch(
-        throwAlert({
-          isShow: true,
-          message: "Please choose image file",
-          type: "error",
-        })
-      );
-    }
-  };
-
   return (
-    <Box>
-      <Box className={style.form}>
-        <Box className={style.formInputField} sx={{ alignItems: "center" }}>
-          <Typography sx={{ padding: "10px", width: "10%" }} variant="h6">
-            Avatar
-          </Typography>
-          <Box sx={{ width: "60%", display: "flex", alignItems: "flex-end" }}>
-            <img
-              src={me.avatarUri}
-              style={{
-                width: "300px",
-                minHeight: "30px",
-                maxHeight: "300px",
-                border: ".5px solid gray",
-              }}
-              alt=""
+    <React.Fragment>
+      <TabContext value={panel}>
+        <Box
+          sx={{
+            width: "80%",
+            margin: "3vh 10% 10% 10%",
+            padding: "10px",
+            backgroundColor: "white",
+            display: "flex",
+            flexDirection: "row",
+            borderRadius: "5px",
+            boxShadow:
+              "rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px",
+          }}
+        >
+          <StyledListTab
+            orientation="vertical"
+            sx={{ width: "35%" }}
+            onChange={swicthPanel}
+          >
+            <Tab label={<CustomTabPanel text="General" />} value="profile-1" />
+            <Tab label={<CustomTabPanel text="Basic" />} value="profile-2" />
+            <Tab
+              label={<CustomTabPanel text="Job and education" />}
+              value="profile-3"
             />
-
-            <input
-              style={{ display: "none" }}
-              accept="image/png, image/gif, image/jpeg"
-              id="avatar-input"
-              multiple
-              type="file"
-              onChange={handleChangeAvatar}
-            />
-            <label htmlFor="avatar-input">
-              <Button
-                variant="contained"
-                component="span"
-                sx={{ height: "40px", width: "302px", marginLeft: "-302px" }}
-              >
-                Change Avatar
-              </Button>
-            </label>
+            <Tab label={<CustomTabPanel text="Contact" />} value="profile-4" />
+          </StyledListTab>
+          <Box sx={{ width: "65%" }}>
+            <TabPanel value="profile-1">
+              <Box>
+                <Typography
+                  sx={{ margin: " 0 10px 10px 10px " }}
+                  variant="bold6"
+                >
+                  Fullname
+                </Typography>
+                <Typography sx={{ margin: " 0 10px 10px 10px " }}>
+                  {me.fullname}
+                </Typography>
+              </Box>
+              {me.education.length > 0 && (
+                <Box>
+                  <Typography
+                    sx={{ margin: " 0 10px 10px 10px " }}
+                    variant="bold6"
+                  >
+                    Education
+                  </Typography>
+                  <Typography sx={{ margin: " 0 10px 10px 10px " }}>
+                    Studying in{" "}
+                    <b style={{ marginLeft: "10px" }}>{me.education[0]}</b>
+                  </Typography>
+                </Box>
+              )}
+            </TabPanel>
+            <TabPanel value="profile-2">
+              <form onSubmit={basicForm.handleSubmit(updateInfor)}>
+                <Box>
+                  <Typography
+                    sx={{ margin: " 0 10px 10px 10px " }}
+                    variant="bold6"
+                  >
+                    Fullname
+                  </Typography>
+                  <InputTextField
+                    isUnshowInput={true}
+                    form={basicForm}
+                    name="fullname"
+                  />
+                </Box>
+                <Box>
+                  <Typography
+                    sx={{ margin: " 0 10px 10px 10px " }}
+                    variant="bold6"
+                  >
+                    Address
+                  </Typography>
+                  <InputTextField
+                    form={basicForm}
+                    name="address"
+                    isUnshowInput={true}
+                  />
+                </Box>
+              </form>
+            </TabPanel>
+            <TabPanel value="profile-3">
+              <form onSubmit={workAndEduForm.handleSubmit(updateInfor)}>
+                <Box>
+                  <Typography
+                    sx={{ margin: " 0 10px 10px 10px " }}
+                    variant="bold6"
+                  >
+                    Jobs
+                  </Typography>
+                  <InputListTextField
+                    sxItem={{ marginTop: "10px", backgroundColor: "#e9e9e9" }}
+                    name="job"
+                    form={workAndEduForm}
+                  />
+                </Box>
+                <Box sx={{ marginTop: "20px" }}>
+                  <Typography
+                    sx={{ margin: " 0 10px 10px 10px " }}
+                    variant="bold6"
+                  >
+                    Educations
+                  </Typography>
+                  <InputListTextField
+                    sxItem={{ marginTop: "10px", backgroundColor: "#e9e9e9" }}
+                    name="education"
+                    form={workAndEduForm}
+                  />
+                </Box>
+              </form>
+            </TabPanel>
+            <TabPanel value="profile-4">
+              <form onSubmit={contactForm.handleSubmit(updateInfor)}>
+                <Typography
+                  sx={{ margin: " 0 10px 10px 10px " }}
+                  variant="bold6"
+                >
+                  Phone
+                </Typography>
+                <InputTextField
+                  isUnshowInput={true}
+                  form={contactForm}
+                  name="phone"
+                />
+              </form>
+            </TabPanel>
           </Box>
         </Box>
-      </Box>
-      <Box className={style.form}>
-        <Box className={style.formInputField} sx={{ alignItems: "center" }}>
-          <Typography sx={{ padding: "10px", width: "10%" }} variant="h6">
-            Background
-          </Typography>
-          <Box sx={{ width: "60%", display: "flex", alignItems: "flex-end" }}>
-            <img
-              src={me.backgroundUrl}
-              style={{
-                width: "300px",
-                minHeight: "30px",
-                maxHeight: "300px",
-                border: ".5px solid gray",
-              }}
-              alt=""
-            />
-
-            <input
-              style={{ display: "none" }}
-              accept="image/png, image/gif, image/jpeg"
-              id="background-input"
-              multiple
-              type="file"
-              onChange={handleChangeBackground}
-            />
-            <label htmlFor="background-input">
-              <Button
-                variant="contained"
-                component="span"
-                sx={{ height: "40px", width: "302px", marginLeft: "-302px" }}
-              >
-                Change Background
-              </Button>
-            </label>
-          </Box>
-        </Box>
-      </Box>
-      <Box className={style.form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <Box className={style.formInputField}>
-            <Typography sx={{ padding: "10px", width: "10%" }} variant="h6">
-              Fullname
-            </Typography>
-            <InputTextField
-              sxWrap={{ width: "80%" }}
-              name="fullname"
-              placeholder="Type your fullname here"
-              form={form}
-              isUnshowInput={true}
-            />
-          </Box>
-
-          <Divider />
-          <Box className={style.formInputField}>
-            <Typography sx={{ padding: "10px", width: "10%" }} variant="h6">
-              Address
-            </Typography>
-            <InputTextField
-              sxWrap={{ width: "80%" }}
-              name="address"
-              placeholder="Type your address here"
-              form={form}
-              isUnshowInput={true}
-            />
-          </Box>
-          <Box className={style.formInputField}>
-            <Typography sx={{ padding: "10px", width: "10%" }} variant="h6">
-              Education
-            </Typography>
-            <InputListTextField
-              sxWrap={{ width: "80% !important" }}
-              sxItem={{
-                marginTop: "10px",
-                backgroundColor: "#e5e4e4",
-                height: "40px",
-              }}
-              name="education"
-              placeholder="Type your schools"
-              form={form}
-            />
-          </Box>
-          <Box className={style.formInputField}>
-            <Typography sx={{ padding: "10px", width: "10%" }} variant="h6">
-              Job
-            </Typography>
-            <InputTextField
-              sxWrap={{ width: "80%" }}
-              name="job"
-              placeholder="Type your job"
-              form={form}
-              isUnshowInput={true}
-            />
-          </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" type="submit">
-              Save
-            </Button>
-            <Button
-              variant="contained"
-              color="warning"
-              sx={{ marginLeft: "20px" }}
-              onClick={() => form.reset()}
-            >
-              Reset
-            </Button>
-          </Box>
-        </form>
-      </Box>
-    </Box>
+      </TabContext>
+    </React.Fragment>
   );
 };
 

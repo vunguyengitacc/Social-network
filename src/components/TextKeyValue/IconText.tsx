@@ -3,8 +3,8 @@ import React from "react";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 interface IProps {
-  value: any;
-  listValue?: string[] | undefined;
+  text: any;
+  values: string[];
   startIcon: JSX.Element;
 }
 
@@ -20,24 +20,15 @@ const IconText: React.FC<IProps> = (props) => {
         margin: "20px 0  20px 0",
       }}
     >
-      <Box sx={{ marginRight: "10px", marginTop: "5px" }}>
+      <Box sx={{ marginRight: "10px", marginTop: "0px", color: "gray" }}>
         {props.startIcon && <Icon />}
       </Box>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Typography variant="h6">
-          {props.value}{" "}
-          {props.listValue?.length === 1 ? props.listValue[0] : ""}{" "}
-        </Typography>
-        {props.listValue &&
-          props.listValue.length > 1 &&
-          props.listValue.map((i) => (
-            <Box key={i} sx={{ display: "flex", flexDirection: "row" }}>
-              <FiberManualRecordIcon
-                sx={{ fontSize: ".75rem", marginRight: "10px", height: "20px" }}
-              />
-              <Typography> {i}</Typography>
-            </Box>
-          ))}
+        <p style={{ margin: 0, alignItems: "start !important" }}>
+          {props.text}
+          <span style={{ width: "5px" }} />
+          <b> {props.values[0]}</b>
+        </p>
       </Box>
     </Box>
   );

@@ -14,7 +14,7 @@ const OAuth = () => {
   useEffect(() => {
     localStorage.setItem("access_token", access_token);
     dispatch(getMe());
-    history.push("/personal/stories/me");
+    history.push("/personal/me");
     //eslint-disable-next-line
   }, [access_token]);
 

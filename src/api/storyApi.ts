@@ -23,6 +23,13 @@ const storyApi = {
   }): Promise<IResponse<IStory>> {
     return axiosClient.put(`/stories/me/${payload._id}`, payload);
   },
+  reactToStory(payload: {
+    _id: string;
+    like?: boolean;
+    dislike?: boolean;
+  }): Promise<IResponse<IStory>> {
+    return axiosClient.put(`/stories/${payload._id}`, payload);
+  },
 };
 
 export default storyApi;

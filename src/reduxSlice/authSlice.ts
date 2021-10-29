@@ -1,11 +1,11 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import authApi from "../api/authApi";
-import { ILoginFormValues } from "../components/Login/Login";
 import { IResponse } from "../models/common";
 import { initialUser, IUser } from "../models/user";
-import { IRegisterFormValues } from "../components/Register/Register";
 import userApi from "../api/userApi";
 import { throwAlert } from "./UISlice";
+import { ILoginFormValues } from "../pages/auth/components/Login";
+import { IRegisterFormValues } from "../pages/auth/components/Register";
 
 interface IAuthState {
   currentUser: IUser;
@@ -19,10 +19,7 @@ export const getMe = createAsyncThunk("auth/getMe", async () => {
 
 export const updateMe = createAsyncThunk(
   "auth/updateMe",
-  async (
-    payload: Pick<IUser, "fullname" | "address" | "education" | "job">,
-    thunkAPI
-  ) => {
+  async (payload: Partial<IUser>, thunkAPI) => {
     try {
       const response = await userApi.updateMe(payload);
       await thunkAPI.dispatch(
@@ -35,6 +32,22 @@ export const updateMe = createAsyncThunk(
       );
       throw error;
     }
+  }
+);
+
+export const addFriend = createAsyncThunk(
+  "auth/addFriend",
+  async (payload: string) => {
+    const response = await userApi.addFriend(payload);
+    return response.data.user;
+  }
+);
+
+export const removeFriend = createAsyncThunk(
+  "auth/removeFriend",
+  async (payload: string) => {
+    const response = await userApi.removeFriend(payload);
+    return response.data.user;
   }
 );
 
@@ -142,6 +155,24 @@ const authSlice = createSlice({
     builder.addCase(updateBackground.rejected, (state) => {});
     builder.addCase(
       updateBackground.fulfilled,
+      (state, actions: PayloadAction<IUser>) => {
+        console.log(actions.payload);
+        state.currentUser = actions.payload;
+      }
+    );
+    builder.addCase(addFriend.pending, (state) => {});
+    builder.addCase(addFriend.rejected, (state) => {});
+    builder.addCase(
+      addFriend.fulfilled,
+      (state, actions: PayloadAction<IUser>) => {
+        console.log(actions.payload);
+        state.currentUser = actions.payload;
+      }
+    );
+    builder.addCase(removeFriend.pending, (state) => {});
+    builder.addCase(removeFriend.rejected, (state) => {});
+    builder.addCase(
+      removeFriend.fulfilled,
       (state, actions: PayloadAction<IUser>) => {
         console.log(actions.payload);
         state.currentUser = actions.payload;

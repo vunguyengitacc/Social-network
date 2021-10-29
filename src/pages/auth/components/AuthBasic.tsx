@@ -4,11 +4,9 @@ import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import LoginForm, { ILoginFormValues } from "../../../components/Login/Login";
-import RegisterForm, {
-  IRegisterFormValues,
-} from "../../../components/Register/Register";
 import { login, register } from "../../../reduxSlice/authSlice";
+import LoginForm, { ILoginFormValues } from "./Login";
+import RegisterForm, { IRegisterFormValues } from "./Register";
 
 const useStyle = makeStyles({
   authForm: {
@@ -35,7 +33,7 @@ const useStyle = makeStyles({
   },
 });
 
-const Auth = () => {
+const AuthBasic = () => {
   const style = useStyle();
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
@@ -82,4 +80,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default AuthBasic;

@@ -71,7 +71,7 @@ const SearchField = () => {
         <Button
           key={item._id}
           className={style.searchItem}
-          onClick={() => history.push(`/personal/stories/${item._id}`)}
+          onClick={() => history.push(`/personal/${item._id}`)}
         >
           <img alt="" src={item.avatarUri} className={style.searchAvatar} />
           <Typography

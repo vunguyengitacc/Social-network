@@ -9,9 +9,9 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React, { useState } from "react";
 import dateUtil from "../../utillity/dateUtils";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../app/store";
-import { removeStory, update } from "../../reduxSlice/storySlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../app/store";
+import { reactToStory, removeStory, update } from "../../reduxSlice/storySlice";
 import LockIcon from "@mui/icons-material/Lock";
 import { IUser } from "../../models/user";
 import { useHistory } from "react-router";
@@ -60,20 +60,28 @@ interface IPropsStory {
   isPrivate: boolean;
   owner: IUser | undefined;
   isMe: boolean;
+  likeById: string[];
+  dislikeById: string[];
 }
 
-const Story: React.FC<IPropsStory> = ({
-  _id,
-  createdAt,
-  imageUrl,
-  content,
-  isPrivate,
-  owner,
-  isMe,
-}) => {
+const Story: React.FC<IPropsStory> = (props) => {
+  const {
+    _id,
+    createdAt,
+    imageUrl,
+    content,
+    isPrivate,
+    owner,
+    isMe,
+    likeById,
+    dislikeById,
+  } = props;
   const history = useHistory();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [open, setOpen] = useState<boolean>(Boolean(anchor));
+  const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
+  let islike = likeById.filter((i) => i === me._id).length > 0;
+  let isDislike = dislikeById.filter((i) => i === me._id).length > 0;
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -85,7 +93,6 @@ const Story: React.FC<IPropsStory> = ({
   const handleClose = () => {
     setAnchor(null);
     setOpen(false);
-    console.log(isPrivate);
   };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -101,6 +108,14 @@ const Story: React.FC<IPropsStory> = ({
   };
 
   const style = useStyle();
+
+  const handleToogleLike = () => {
+    dispatch(reactToStory({ like: !islike, storyId: _id }));
+  };
+
+  const handleToggleDislike = () => {
+    dispatch(reactToStory({ storyId: _id, dislike: !isDislike }));
+  };
 
   return (
     <Wrapper>
@@ -150,7 +165,7 @@ const Story: React.FC<IPropsStory> = ({
                     cursor: "pointer",
                   },
                 }}
-                onClick={() => history.push(`/personal/stories/${owner?._id}`)}
+                onClick={() => history.push(`/personal/${owner?._id}`)}
               />
               <Typography
                 sx={{
@@ -218,11 +233,23 @@ const Story: React.FC<IPropsStory> = ({
             ></img>
           </Box>
           <Box className={style.groupTask}>
-            <Button className={style.feelingBtn}>
-              <ThumbUpAltIcon />
+            <Button
+              className={style.feelingBtn}
+              sx={{
+                color: `${islike ? "#667eea" : "gray"}`,
+              }}
+              onClick={handleToogleLike}
+            >
+              <ThumbUpAltIcon /> {likeById.length || ""}
             </Button>
-            <Button className={style.feelingBtn}>
-              <ThumbDownAltIcon />
+            <Button
+              className={style.feelingBtn}
+              sx={{
+                color: `${isDislike ? "#667eea" : "gray"}`,
+              }}
+              onClick={handleToggleDislike}
+            >
+              <ThumbDownAltIcon /> {dislikeById.length || ""}
             </Button>
           </Box>
         </Box>
