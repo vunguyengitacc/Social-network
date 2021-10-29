@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Route, Switch, useHistory, useParams } from "react-router";
-import userApi from "../api/userApi";
-import { RootState } from "../app/store";
-import AddImageDialog from "../components/AddImageDialog/AddImageDialog";
-import Header from "../components/Header/Header";
-import UserHeader from "../components/UserHeader/UserHeader";
-import { IUser } from "../models/user";
-import UserProfile from "../pages/UserProfile";
-import UserRepository, { IStoryPageParams } from "../pages/UserRepo";
+import userApi from "../../api/userApi";
+import { RootState } from "../../app/store";
+import AddImageDialog from "../../components/AddImageDialog/AddImageDialog";
+import Header from "../../components/Header/Header";
+import UserHeader from "../../components/UserHeader/UserHeader";
+import { IUser } from "../../models/user";
+import UserProfile from "./components/UserProfile";
+import UserRepository, { IStoryPageParams } from "./components/UserRepo";
 
-const StoryRepositoryFeature = () => {
+const PersonalPage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isMe, setIsMe] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<IUser>();
@@ -51,4 +51,4 @@ const StoryRepositoryFeature = () => {
   );
 };
 
-export default StoryRepositoryFeature;
+export default PersonalPage;

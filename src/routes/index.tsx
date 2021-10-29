@@ -2,8 +2,8 @@ import { Alert, AlertTitle, Snackbar } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { AppDispatch, RootState } from "../app/store";
-import AuthFeature from "../feature/Auth";
-import StoryRepositoryFeature from "../feature/StoryRepo";
+import AuthPage from "../pages/auth";
+import PersonalPage from "../pages/personal";
 import { closeAlert } from "../reduxSlice/UISlice";
 import AuthRoute from "./AuthRoute";
 import PrivateRoute from "./PrivateRoute";
@@ -41,12 +41,9 @@ const RoutesComponent = () => {
         </Snackbar>
       )}
       <Switch>
-        <AuthRoute path="/auth" component={AuthFeature} />
-        <PrivateRoute
-          path="/personal/:option/:user"
-          component={StoryRepositoryFeature}
-        />
-        <Route component={AuthFeature} />
+        <AuthRoute path="/auth" component={AuthPage} />
+        <PrivateRoute path="/personal/:option/:user" component={PersonalPage} />
+        <Route component={AuthPage} />
       </Switch>
     </BrowserRouter>
   );

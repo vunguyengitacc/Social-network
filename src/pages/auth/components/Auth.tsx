@@ -3,12 +3,12 @@ import Box from "@mui/material/Box";
 import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../app/store";
-import LoginForm, { ILoginFormValues } from "../components/Login/Login";
+import { AppDispatch } from "../../../app/store";
+import LoginForm, { ILoginFormValues } from "../../../components/Login/Login";
 import RegisterForm, {
   IRegisterFormValues,
-} from "../components/Register/Register";
-import { login, register } from "../reduxSlice/authSlice";
+} from "../../../components/Register/Register";
+import { login, register } from "../../../reduxSlice/authSlice";
 
 const useStyle = makeStyles({
   authForm: {
@@ -35,7 +35,7 @@ const useStyle = makeStyles({
   },
 });
 
-const AuthPage = () => {
+const Auth = () => {
   const style = useStyle();
   const [isLogin, setIsLogin] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
@@ -82,4 +82,4 @@ const AuthPage = () => {
   );
 };
 
-export default AuthPage;
+export default Auth;

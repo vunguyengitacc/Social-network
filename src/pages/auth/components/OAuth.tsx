@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router";
-import { AppDispatch } from "../app/store";
-import { getMe } from "../reduxSlice/authSlice";
+import { AppDispatch } from "../../../app/store";
+import { getMe } from "../../../reduxSlice/authSlice";
 export interface IParamsOAuth {
   access_token: string;
 }
@@ -14,7 +14,7 @@ const OAuth = () => {
   useEffect(() => {
     localStorage.setItem("access_token", access_token);
     dispatch(getMe());
-    history.push("/me");
+    history.push("/personal/stories/me");
     //eslint-disable-next-line
   }, [access_token]);
 

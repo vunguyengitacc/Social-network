@@ -1,20 +1,20 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../app/store";
-import { IUser } from "../models/user";
+import { AppDispatch, RootState } from "../../../app/store";
+import { IUser } from "../../../models/user";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InputTextField from "../components/InputField/InputTextField/InputTextField";
+import InputTextField from "../../../components/InputField/InputTextField/InputTextField";
 import { makeStyles } from "@mui/styles";
-import InputListTextField from "../components/InputField/InputListTextField/InputListTextField";
+import InputListTextField from "../../../components/InputField/InputListTextField/InputListTextField";
 import React from "react";
 import {
   updateAvatar,
   updateBackground,
   updateMe,
-} from "../reduxSlice/authSlice";
-import { throwAlert } from "../reduxSlice/UISlice";
+} from "../../../reduxSlice/authSlice";
+import { throwAlert } from "../../../reduxSlice/UISlice";
 
 const schema = yup
   .object()

@@ -1,14 +1,14 @@
 import { Hidden, Button, Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import AddImageDialog from "../components/AddImageDialog/AddImageDialog";
-import Sidebar from "../components/Sidebar/Sidebar";
-import StoryList from "../components/StoriesList/StoryList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useSelector } from "react-redux";
-import { RootState } from "../app/store";
-import { initialUser, IUser } from "../models/user";
 import { useHistory, useParams } from "react-router";
-import userApi from "../api/userApi";
+import { initialUser, IUser } from "../../../models/user";
+import { RootState } from "../../../app/store";
+import userApi from "../../../api/userApi";
+import AddImageDialog from "../../../components/AddImageDialog/AddImageDialog";
+import Sidebar from "../../../components/Sidebar/Sidebar";
+import StoryList from "../../../components/StoriesList/StoryList";
 
 export interface IStoryPageParams {
   user: string;

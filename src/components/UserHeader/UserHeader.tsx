@@ -3,7 +3,7 @@ import React from "react";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import { IUser } from "../../models/user";
-import { IStoryPageParams } from "../../pages/UserRepo";
+import { IStoryPageParams } from "../../pages/personal/components/UserRepo";
 
 interface IProps {
   userInfor: IUser | undefined;

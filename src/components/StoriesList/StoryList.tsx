@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { AppDispatch } from "../../app/store";
-import { IStoryPageParams } from "../../pages/UserRepo";
+import { IStoryPageParams } from "../../pages/personal/components/UserRepo";
 import {
   getMyStories,
   getStoriesByUserId,
