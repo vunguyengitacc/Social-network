@@ -6,8 +6,9 @@ const AuthPage = () => {
   const match = useRouteMatch();
   return (
     <Switch>
-      <Route exact path={`${match.url}/`} component={AuthBasic} />
-      <Route path={`${match.url}/oauth/:access_token`} component={OAuth} />
+      asdad
+      <Route exact path={`${match.path}/`} component={AuthBasic} />
+      <Route path={`${match.path}/oauth/:access_token`} component={OAuth} />
     </Switch>
   );
 };

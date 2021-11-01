@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { AppDispatch } from "../../app/store";
+import { IStory } from "../../models/story";
 import { IStoryPageParams } from "../../pages/personal/components/UserRepo";
 import {
   getMyStories,
@@ -13,21 +14,13 @@ import Story from "../Story/Story";
 
 interface IProps {
   isMe: boolean;
+  stories: IStory[];
 }
 
 const StoryList: React.FC<IProps> = (props) => {
-  const stories = useSelector(storiesSelector.selectAll);
-  const dispatch = useDispatch<AppDispatch>();
-  const { user } = useParams<IStoryPageParams>();
-
-  useEffect(() => {
-    if (user && user !== "me") dispatch(getStoriesByUserId(user));
-    else dispatch(getMyStories());
-  }, [dispatch, user]);
-
   return (
     <Box>
-      {stories.map((item) => {
+      {props.stories.map((item) => {
         let date = new Date(item.createdAt);
         return (
           <Story

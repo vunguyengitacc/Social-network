@@ -15,7 +15,22 @@ import UserProfile from "./components/UserProfile";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveAlt1Icon from "@mui/icons-material/PersonRemoveAlt1";
 import UserRepository, { IStoryPageParams } from "./components/UserRepo";
-import { addFriend, removeFriend } from "../../reduxSlice/authSlice";
+import { addFriend, getMe, removeFriend } from "../../reduxSlice/authSlice";
+import { withStyles } from "@mui/styles";
+import UserFriend from "./components/UserFriend";
+
+const StyledListTab = withStyles({
+  indicator: {
+    backgroundColor: "#1876f2",
+    opacity: ".6",
+    color: "red",
+    width: "100%",
+    borderRadius: "10px",
+  },
+  "& .Mui-selected": {
+    color: "black",
+  },
+})(TabList);
 
 const PersonalPage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
@@ -27,13 +42,14 @@ const PersonalPage = () => {
   const history = useHistory();
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   const { user } = useParams<IStoryPageParams>();
+  const [isFriend, setIsFriend] = useState<boolean>(
+    [...(me.friendId ?? [])].filter((i) => i === userInfor?._id).length > 0
+  );
 
-  let isFriend =
-    [...(me.friendId ?? [])].filter((i) => i === userInfor?._id).length > 0;
-
-  let isRequest =
+  const [isRequest, setIsRequest] = useState<boolean>(
     [...(me.friendWaitingId ?? [])].filter((i) => i === userInfor?._id).length >
-    0;
+      0
+  );
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
@@ -51,14 +67,24 @@ const PersonalPage = () => {
         else setIsMe(false);
       }
     })();
-    console.log(isMe, isRequest, isFriend);
   }, [user, me, history]);
+
+  useEffect(() => {
+    setIsFriend(
+      [...(me.friendId ?? [])].filter((i) => i === userInfor?._id).length > 0
+    );
+    setIsRequest(
+      [...(me.friendWaitingId ?? [])].filter((i) => i === userInfor?._id)
+        .length > 0
+    );
+  }, [userInfor, me]);
 
   const toggleFriend = () => {
     if (userInfor === undefined) return;
 
     if (isFriend || isRequest) dispatch(removeFriend(userInfor?._id));
     else if (!isFriend && !isRequest) dispatch(addFriend(userInfor._id));
+    dispatch(getMe());
   };
 
   return (
@@ -82,9 +108,9 @@ const PersonalPage = () => {
             <img
               style={{
                 maskImage:
-                  "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%) !important",
+                  "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 30%, transparent 100%)",
                 WebkitMaskImage:
-                  "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 50%, transparent 100%) !important",
+                  "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 30%, transparent 100%)",
                 width: "80vw",
                 height: "100%",
               }}
@@ -128,11 +154,11 @@ const PersonalPage = () => {
               width: "80vw",
             }}
           >
-            <TabList onChange={handleChange} aria-label="lab API tabs example">
+            <StyledListTab onChange={handleChange} aria-label="">
               <Tab label="Stories" value="1" />
               <Tab label="Friends" value="2" />
               {isMe && <Tab label="Profile" value="3" />}
-            </TabList>
+            </StyledListTab>
             <Box>
               {!isMe &&
                 !isRequest &&
@@ -181,7 +207,7 @@ const PersonalPage = () => {
           <UserRepository />
         </TabPanel>
         <TabPanel value="2">
-          friend <span>{me.friendId.length}</span>
+          <UserFriend userInfor={userInfor} />
         </TabPanel>
         {isMe && (
           <TabPanel value="3">

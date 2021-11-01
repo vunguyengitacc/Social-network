@@ -15,6 +15,12 @@ export const storyAdapter = createEntityAdapter({
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
 });
 
+export const getStories = createAsyncThunk("story/getStories", async () => {
+  const response = await storyApi.getStories();
+  console.log(response);
+  return response.data.stories;
+});
+
 export const getMyStories = createAsyncThunk("story/getMyStories", async () => {
   const response = await storyApi.getMySories();
   return response.data.stories;
@@ -110,6 +116,15 @@ const storySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
+    builder.addCase(getStories.pending, (state) => {});
+    builder.addCase(getStories.rejected, (state) => {});
+    builder.addCase(
+      getStories.fulfilled,
+      (state, { payload }: PayloadAction<IStory[]>) => {
+        storyAdapter.removeAll(state);
+        storyAdapter.setAll(state, payload);
+      }
+    );
     builder.addCase(getMyStories.pending, (state) => {});
     builder.addCase(getMyStories.rejected, (state) => {});
     builder.addCase(

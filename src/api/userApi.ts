@@ -1,4 +1,5 @@
 import { IResponse, IResponseList } from "../models/common";
+import { INotification } from "../models/notification";
 import { IUser } from "../models/user";
 import axiosClient from "./axiosClient";
 
@@ -23,6 +24,12 @@ const userApi = {
   },
   removeFriend(payload: string): Promise<IResponse<IUser>> {
     return axiosClient.delete(`/users/me/friend/${payload}`);
+  },
+  denyRequest(payload: string): Promise<IResponse<INotification>> {
+    return axiosClient.delete(`/users/me/friend/${payload}/answer`);
+  },
+  acceptRequest(payload: string): Promise<IResponse<INotification>> {
+    return axiosClient.post(`/users/me/friend/${payload}/answer`);
   },
 };
 

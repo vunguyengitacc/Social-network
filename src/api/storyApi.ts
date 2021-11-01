@@ -3,6 +3,9 @@ import { IStory } from "../models/story";
 import axiosClient from "./axiosClient";
 
 const storyApi = {
+  getStories(): Promise<IResponseList<IStory>> {
+    return axiosClient.get("/stories");
+  },
   getMySories(): Promise<IResponseList<IStory>> {
     return axiosClient.get("/stories/me");
   },

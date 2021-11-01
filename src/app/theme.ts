@@ -88,7 +88,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "&.Mui-selected": {
-            color: "blue",
+            color: "#1876f2",
           },
         },
       },

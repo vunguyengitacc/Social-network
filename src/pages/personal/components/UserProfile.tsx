@@ -97,8 +97,8 @@ const UserProfile = () => {
       <TabContext value={panel}>
         <Box
           sx={{
-            width: "80%",
-            margin: "3vh 10% 10% 10%",
+            width: "80vw",
+            margin: "3vh 10vw 0 10vw",
             padding: "10px",
             backgroundColor: "white",
             display: "flex",
