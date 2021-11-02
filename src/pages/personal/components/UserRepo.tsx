@@ -29,6 +29,7 @@ const UserRepository = () => {
   const stories = useSelector(storiesSelector.selectAll);
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   const { user } = useParams<IStoryPageParams>();
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     (async () => {
@@ -45,9 +46,7 @@ const UserRepository = () => {
         dispatch(getStoriesByUserId(user));
       }
     })();
-  }, [user, me, history]);
-
-  const dispatch = useDispatch<AppDispatch>();
+  }, [user, me, history, dispatch]);
 
   return (
     <Box

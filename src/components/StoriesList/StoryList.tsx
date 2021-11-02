@@ -1,15 +1,6 @@
 import Box from "@mui/material/Box";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { AppDispatch } from "../../app/store";
+import React from "react";
 import { IStory } from "../../models/story";
-import { IStoryPageParams } from "../../pages/personal/components/UserRepo";
-import {
-  getMyStories,
-  getStoriesByUserId,
-  storiesSelector,
-} from "../../reduxSlice/storySlice";
 import Story from "../Story/Story";
 
 interface IProps {

@@ -4,17 +4,17 @@ import AddImageDialog from "../../components/AddImageDialog/AddImageDialog";
 import Header from "../../components/Header/Header";
 import StoryList from "../../components/StoriesList/StoryList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { IStory } from "../../models/story";
 import { getStories, storiesSelector } from "../../reduxSlice/storySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
+import homePageStyle from "./style";
 
 const HomePage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
 
   const stories = useSelector(storiesSelector.selectAll);
   const dispatch = useDispatch<AppDispatch>();
-  // const { user } = useParams<IStoryPageParams>();
+  const style = homePageStyle();
 
   useEffect(() => {
     dispatch(getStories());
@@ -26,14 +26,7 @@ const HomePage = () => {
       <Box>
         <Header />
       </Box>
-      <Box
-        sx={{
-          marginTop: "60px",
-          display: "flex",
-          width: "80vw",
-          marginLeft: "10vw",
-        }}
-      >
+      <Box className={style.surface}>
         <Box sx={{ width: "60%" }}>
           <Button
             variant="contained"

@@ -1,6 +1,5 @@
 import { Avatar, Box, Divider, Paper, Typography, Button } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
 import React, { useEffect, useState } from "react";
@@ -16,21 +15,8 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveAlt1Icon from "@mui/icons-material/PersonRemoveAlt1";
 import UserRepository, { IStoryPageParams } from "./components/UserRepo";
 import { addFriend, getMe, removeFriend } from "../../reduxSlice/authSlice";
-import { withStyles } from "@mui/styles";
-import UserFriend from "./components/UserFriend";
-
-const StyledListTab = withStyles({
-  indicator: {
-    backgroundColor: "#1876f2",
-    opacity: ".6",
-    color: "red",
-    width: "100%",
-    borderRadius: "10px",
-  },
-  "& .Mui-selected": {
-    color: "black",
-  },
-})(TabList);
+import personalPageStyle, { StyledListTab } from "./style";
+import UserFriends from "./components/UserFriends";
 
 const PersonalPage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
@@ -38,6 +24,7 @@ const PersonalPage = () => {
   const [userInfor, setUserInfor] = useState<IUser>();
   const [value, setValue] = React.useState("1");
   const dispatch = useDispatch<AppDispatch>();
+  const style = personalPageStyle();
 
   const history = useHistory();
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
@@ -92,52 +79,21 @@ const PersonalPage = () => {
       <TabContext value={value}>
         {isMe && <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />}
         <Header />
-        <Paper
-          sx={{
-            height: "60vh",
-            zIndex: 98,
-            flexDirection: "column",
-            justifyContent: "center",
-          }}
-        >
-          <Box
-            sx={{
-              height: "50vh",
-            }}
-          >
+        <Paper className={style.userHeaderSurface}>
+          <Box height="50vh">
             <img
-              style={{
-                maskImage:
-                  "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 30%, transparent 100%)",
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, rgba(0, 0, 0, 1.0) 30%, transparent 100%)",
-                width: "80vw",
-                height: "100%",
-              }}
+              className={style.image}
               src={userInfor?.backgroundUrl}
               alt=""
             />
-            <Box
-              sx={{
-                position: "absolute",
-                marginTop: "-230px",
-                marginLeft: "calc(40vw - 75px)",
-              }}
-            >
+            <Box className={style.avatarSurface}>
               <Avatar
-                sx={{
-                  width: "150px",
-                  height: "150px",
-                  zIndex: 1,
-                }}
+                className={style.avatar}
                 src={userInfor?.avatarUri}
+                component="div"
+                onClick={() => alert("Change")}
               />
-              <Typography
-                sx={{
-                  justifyContent: "center",
-                  height: "50px",
-                }}
-              >
+              <Typography className={style.fullname}>
                 {userInfor?.fullname}
               </Typography>
             </Box>
@@ -145,15 +101,7 @@ const PersonalPage = () => {
 
           <Divider sx={{ width: "80vw" }} variant="middle" />
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
-          <Box
-            sx={{
-              height: "10vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "80vw",
-            }}
-          >
+          <Box className={style.taskSurface}>
             <StyledListTab onChange={handleChange} aria-label="">
               <Tab label="Stories" value="1" />
               <Tab label="Friends" value="2" />
@@ -207,7 +155,7 @@ const PersonalPage = () => {
           <UserRepository />
         </TabPanel>
         <TabPanel value="2">
-          <UserFriend userInfor={userInfor} />
+          <UserFriends userInfor={userInfor} />
         </TabPanel>
         {isMe && (
           <TabPanel value="3">

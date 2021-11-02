@@ -22,10 +22,12 @@ import { logout } from "../../reduxSlice/authSlice";
 import notificationApi from "../../api/notificationApi";
 import { INotification } from "../../models/notification";
 import NotificationItem from "../NotificationItem";
+import headerStyles from "./style";
 
 const Header = () => {
   const [search, setSearch] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
+  const style = headerStyles();
   const [openNotification, setOpenNotification] = useState<boolean>(false);
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [notifications, setNotifications] = useState<INotification[]>([]);
@@ -51,18 +53,9 @@ const Header = () => {
   const history = useHistory();
 
   return (
-    <Paper
-      sx={{
-        height: "50px",
-        justifyContent: "space-between",
-        position: "fixed",
-        top: "0",
-        width: "100%",
-        zIndex: 99,
-      }}
-    >
+    <Paper className={style.surface}>
       <Menu open={openNotification} anchorEl={anchor} onClose={handleClose}>
-        {notifications.length == 0 && (
+        {notifications.length === 0 && (
           <MenuItem key={"null"}>
             <Typography>Nothing new !!!</Typography>
           </MenuItem>

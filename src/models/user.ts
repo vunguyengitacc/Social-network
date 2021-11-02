@@ -9,6 +9,7 @@ export interface IUser {
   education: string[];
   phone: string;
   friendId: string[];
+  friends: IUser[];
   friendRequestId: string[];
   friendWaitingId: string[];
 }
@@ -23,6 +24,7 @@ export const initialUser: IUser = {
   education: [],
   phone: "",
   friendId: [],
+  friends: [],
   friendRequestId: [],
   friendWaitingId: [],
 };

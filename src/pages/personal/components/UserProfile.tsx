@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab, Box, Typography, Tabs } from "@mui/material";
+import { Tab, Box, Typography } from "@mui/material";
 import CustomTabPanel from "./CustomTabPanel";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../app/store";
@@ -39,12 +39,11 @@ const basicScheme = yup.object().shape({
 });
 
 const contactScheme = yup.object().shape({
-  phone: yup
-    .string()
-    .matches(
-      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
-      "invalid phone number"
-    ),
+  phone: yup.string().matches(
+    // eslint-disable-next-line
+    /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+    "invalid phone number"
+  ),
 });
 
 const workScheme = yup.object().shape({
