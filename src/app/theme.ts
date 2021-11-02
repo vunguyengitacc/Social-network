@@ -84,15 +84,6 @@ const theme = createTheme({
         },
       },
     },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          "&.Mui-selected": {
-            color: "#1876f2",
-          },
-        },
-      },
-    },
     MuiButton: {
       styleOverrides: {
         root: {

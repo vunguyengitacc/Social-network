@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { Tab, Box, Typography } from "@mui/material";
-import CustomTabPanel from "./CustomTabPanel";
+import CustomTabPanel from "../CustomTabPanel";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../app/store";
-import { IUser } from "../../../models/user";
+import { AppDispatch, RootState } from "app/store";
+import { IUser } from "models/user";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import InputTextField from "../../../components/InputField/InputTextField/InputTextField";
-import { updateMe } from "../../../reduxSlice/authSlice";
-import InputListTextField from "../../../components/InputField/InputListTextField/InputListTextField";
+import InputTextField from "components/InputField/InputTextField/InputTextField";
+import { updateMe } from "reduxSlice/authSlice";
+import InputListTextField from "components/InputField/InputListTextField/InputListTextField";
 import { withStyles } from "@mui/styles";
+import userProfileStyles from "./style";
+import theme from "app/theme";
 
 const StyledListTab = withStyles({
   indicator: {
@@ -56,6 +58,7 @@ const UserProfile = () => {
 
   const dispatch = useDispatch<AppDispatch>();
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
+  const style = userProfileStyles(theme);
 
   const basicForm = useForm<Pick<IUser, "fullname" | "address">>({
     mode: "onSubmit",
@@ -94,19 +97,7 @@ const UserProfile = () => {
   return (
     <React.Fragment>
       <TabContext value={panel}>
-        <Box
-          sx={{
-            width: "80vw",
-            margin: "3vh 10vw 0 10vw",
-            padding: "10px",
-            backgroundColor: "white",
-            display: "flex",
-            flexDirection: "row",
-            borderRadius: "5px",
-            boxShadow:
-              "rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px",
-          }}
-        >
+        <Box className={style.surface}>
           <StyledListTab
             orientation="vertical"
             sx={{ width: "35%" }}

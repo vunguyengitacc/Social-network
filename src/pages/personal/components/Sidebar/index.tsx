@@ -3,16 +3,17 @@ import React from "react";
 import WorkIcon from "@mui/icons-material/Work";
 import HomeIcon from "@mui/icons-material/Home";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import { IUser } from "../../../../models/user";
-import IconText from "../../../../components/TextKeyValue/IconText";
+import { IUser } from "models/user";
+import IconText from "components/TextKeyValue/IconText";
 import sidebarStyle from "./style";
+import theme from "app/theme";
 
 interface IProps {
   userInfor: IUser;
 }
 
 const Sidebar: React.FC<IProps> = (props) => {
-  const style = sidebarStyle();
+  const style = sidebarStyle(theme);
   return (
     <Box className={style.surface}>
       <Box className={style.contentSurface}>

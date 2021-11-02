@@ -3,13 +3,14 @@ import { Box, Typography, Grid } from "@mui/material";
 import { IUser } from "models/user";
 import FriendItem from "../FriendItem";
 import userFriendsStyle from "./style";
+import theme from "app/theme";
 
 interface IProps {
   userInfor?: IUser;
 }
 
 const UserFriends: React.FC<IProps> = (props) => {
-  const style = userFriendsStyle();
+  const style = userFriendsStyle(theme);
 
   useEffect(() => {}, [props.userInfor]);
 
@@ -20,18 +21,8 @@ const UserFriends: React.FC<IProps> = (props) => {
       </Box>
       <Grid container spacing={1}>
         {props.userInfor?.friends?.map((item) => (
-          <Grid item xs={6}>
-            <FriendItem key={item._id} value={item} />
-          </Grid>
-        ))}
-        {props.userInfor?.friends?.map((item) => (
-          <Grid item xs={6}>
-            <FriendItem key={item._id} value={item} />
-          </Grid>
-        ))}
-        {props.userInfor?.friends?.map((item) => (
-          <Grid item xs={6}>
-            <FriendItem key={item._id} value={item} />
+          <Grid key={item._id} item xs={12} sm={6}>
+            <FriendItem value={item} />
           </Grid>
         ))}
       </Grid>

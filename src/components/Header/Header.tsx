@@ -7,8 +7,8 @@ import {
   Typography,
   Menu,
   MenuItem,
+  Button,
 } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchField from "../SearchField/SearchField";
 import { useEffect, useState } from "react";
@@ -23,6 +23,7 @@ import notificationApi from "../../api/notificationApi";
 import { INotification } from "../../models/notification";
 import NotificationItem from "../NotificationItem";
 import headerStyles from "./style";
+import logo from "images/Logo.png";
 
 const Header = () => {
   const [search, setSearch] = useState<boolean>(false);
@@ -67,9 +68,12 @@ const Header = () => {
         ))}
       </Menu>
       <Box sx={{ display: "flex", justifyContent: "flex-start" }}>
-        <IconButton onClick={() => history.push("/home")}>
-          <HomeIcon />
-        </IconButton>
+        <Button
+          sx={{ width: "70px", height: "50px" }}
+          onClick={() => history.push("/home")}
+        >
+          <img style={{ width: "50px", height: "50px" }} src={logo} alt="" />
+        </Button>
         <IconButton onClick={() => setSearch(!search)}>
           <SearchIcon />
         </IconButton>

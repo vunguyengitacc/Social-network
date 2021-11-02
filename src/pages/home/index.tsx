@@ -7,14 +7,19 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { getStories, storiesSelector } from "../../reduxSlice/storySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../app/store";
-import homePageStyle from "./style";
+import homePageStyles from "./style";
+import FriendList from "./components/FriendList";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import theme from "app/theme";
 
 const HomePage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
 
   const stories = useSelector(storiesSelector.selectAll);
   const dispatch = useDispatch<AppDispatch>();
-  const style = homePageStyle();
+  const style = homePageStyles(theme);
+  const match = useMediaQuery(theme.breakpoints.up("sm"));
+  console.log(match);
 
   useEffect(() => {
     dispatch(getStories());
@@ -27,7 +32,7 @@ const HomePage = () => {
         <Header />
       </Box>
       <Box className={style.surface}>
-        <Box sx={{ width: "60%" }}>
+        <Box className={style.storiesSurface}>
           <Button
             variant="contained"
             color="primary"
@@ -40,7 +45,11 @@ const HomePage = () => {
           </Button>
           <StoryList isMe={true} stories={stories} />
         </Box>
-        <Box sx={{ width: "40%" }}>Friend</Box>
+        {match && (
+          <Box sx={{ width: "37%", marginLeft: "3%" }}>
+            <FriendList />
+          </Box>
+        )}
       </Box>
     </>
   );

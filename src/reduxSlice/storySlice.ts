@@ -17,7 +17,6 @@ export const storyAdapter = createEntityAdapter({
 
 export const getStories = createAsyncThunk("story/getStories", async () => {
   const response = await storyApi.getStories();
-  console.log(response);
   return response.data.stories;
 });
 

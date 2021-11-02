@@ -10,13 +10,13 @@ import { AppDispatch, RootState } from "../../app/store";
 import AddImageDialog from "../../components/AddImageDialog/AddImageDialog";
 import Header from "../../components/Header/Header";
 import { IUser } from "../../models/user";
-import UserProfile from "./components/UserProfile";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveAlt1Icon from "@mui/icons-material/PersonRemoveAlt1";
-import UserRepository, { IStoryPageParams } from "./components/UserRepo";
 import { addFriend, getMe, removeFriend } from "../../reduxSlice/authSlice";
 import personalPageStyle, { StyledListTab } from "./style";
 import UserFriends from "./components/UserFriends";
+import UserProfile from "./components/UserProfile";
+import UserRepository, { IStoryPageParams } from "./components/UserRepository";
 
 const PersonalPage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
@@ -93,7 +93,7 @@ const PersonalPage = () => {
                 component="div"
                 onClick={() => alert("Change")}
               />
-              <Typography className={style.fullname}>
+              <Typography variant="bold6" className={style.fullname}>
                 {userInfor?.fullname}
               </Typography>
             </Box>
@@ -151,14 +151,14 @@ const PersonalPage = () => {
             </Box>
           </Box>
         </Paper>
-        <TabPanel value="1">
+        <TabPanel sx={{ padding: "0" }} value="1">
           <UserRepository />
         </TabPanel>
-        <TabPanel value="2">
+        <TabPanel sx={{ padding: "0" }} value="2">
           <UserFriends userInfor={userInfor} />
         </TabPanel>
         {isMe && (
-          <TabPanel value="3">
+          <TabPanel sx={{ padding: "0" }} value="3">
             <UserProfile />
           </TabPanel>
         )}
