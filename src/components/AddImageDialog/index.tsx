@@ -14,10 +14,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../app/store";
-import { addStory } from "../../reduxSlice/storySlice";
-import { throwAlert } from "../../reduxSlice/UISlice";
-import SelectField from "../InputField/SelectField/SelectField";
+import { AppDispatch } from "app/store";
+import { addStory } from "reduxSlice/storySlice";
+import { throwAlert } from "reduxSlice/UISlice";
+import SelectField from "../InputField/SelectField";
 
 interface IPropsDialog {
   open: boolean;

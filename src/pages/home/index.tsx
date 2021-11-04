@@ -1,12 +1,12 @@
 import { Box, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import AddImageDialog from "../../components/AddImageDialog/AddImageDialog";
-import Header from "../../components/Header/Header";
-import StoryList from "../../components/StoriesList/StoryList";
+import AddImageDialog from "components/AddImageDialog";
+import Header from "components/Header";
+import StoryList from "components/StoriesList/StoryList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import { getStories, storiesSelector } from "../../reduxSlice/storySlice";
+import { getStories, storiesSelector } from "reduxSlice/storySlice";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "../../app/store";
+import { AppDispatch } from "app/store";
 import homePageStyles from "./style";
 import FriendList from "./components/FriendList";
 import useMediaQuery from "@mui/material/useMediaQuery";

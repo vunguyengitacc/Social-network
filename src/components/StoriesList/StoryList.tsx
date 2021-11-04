@@ -1,7 +1,7 @@
 import Box from "@mui/material/Box";
 import React from "react";
 import { IStory } from "../../models/story";
-import Story from "../Story/Story";
+import Story from "../Story";
 
 interface IProps {
   isMe: boolean;

@@ -6,7 +6,7 @@ import { useHistory, useParams } from "react-router";
 import { initialUser, IUser } from "models/user";
 import { AppDispatch, RootState } from "app/store";
 import userApi from "api/userApi";
-import AddImageDialog from "components/AddImageDialog/AddImageDialog";
+import AddImageDialog from "components/AddImageDialog";
 import StoryList from "components/StoriesList/StoryList";
 import {
   getMyStories,

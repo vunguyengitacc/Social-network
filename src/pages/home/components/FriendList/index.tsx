@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { RootState } from "app/store";
 import FriendItem from "pages/home/components/FriendItem";
-import React from "react";
 import { useSelector } from "react-redux";
 import friendListStyle from "./style";
 
