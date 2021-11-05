@@ -13,14 +13,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import SearchField from "../SearchField";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../app/store";
-import { IUser } from "../../models/user";
+import { AppDispatch, RootState } from "app/store";
 import { useHistory } from "react-router";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { logout } from "../../reduxSlice/authSlice";
-import notificationApi from "../../api/notificationApi";
-import { INotification } from "../../models/notification";
+import { logout } from "reduxSlice/authSlice";
+import notificationApi from "api/notificationApi";
+import { INotification } from "models/notification";
 import NotificationItem from "../NotificationItem";
 import headerStyles from "./style";
 import logo from "images/Logo.png";
@@ -29,28 +28,31 @@ const Header = () => {
   const [search, setSearch] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const style = headerStyles();
+  const me = useSelector((state: RootState) => state.auth.currentUser);
   const [openNotification, setOpenNotification] = useState<boolean>(false);
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [notifications, setNotifications] = useState<INotification[]>([]);
 
   useEffect(() => {
-    (async () => {
-      const response = await notificationApi.getAllToMe();
-      setNotifications(response.data.notifications);
-    })();
+    fetchNotification();
   }, []);
+
+  const fetchNotification = async () => {
+    const response = await notificationApi.getAllToMe();
+    setNotifications(response.data.notifications);
+  };
 
   const handleClose = () => {
     setAnchor(null);
     setOpenNotification(false);
   };
 
-  const handleOpenMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenMenu = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(e.currentTarget);
-    setOpenNotification(true);
+    await fetchNotification();
+    await setOpenNotification(true);
   };
 
-  const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   const history = useHistory();
 
   return (
@@ -63,7 +65,7 @@ const Header = () => {
         )}
         {notifications.map((item) => (
           <MenuItem key={item._id}>
-            <NotificationItem notification={item} />
+            <NotificationItem reset={fetchNotification} notification={item} />
           </MenuItem>
         ))}
       </Menu>

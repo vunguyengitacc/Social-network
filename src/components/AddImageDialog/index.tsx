@@ -11,13 +11,14 @@ import * as yup from "yup";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
 import { addStory } from "reduxSlice/storySlice";
-import { throwAlert } from "reduxSlice/UISlice";
 import SelectField from "../InputField/SelectField";
+import toast from "react-hot-toast";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 interface IPropsDialog {
   open: boolean;
@@ -60,25 +61,27 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
     resolver: yupResolver(scheme),
   });
 
-  const submitForm = (data: IFormAddImageValues) => {
+  const submitForm: SubmitHandler<IFormAddImageValues> = async (
+    data: IFormAddImageValues
+  ) => {
     const formData = new FormData();
-    if (file && file.type.match(/(png|jpg|jpge)/)) {
-      formData.append("content", data.content);
-      formData.append("isPrivate", String(data.isPrivate));
-      formData.append("file", file);
-      dispatch(addStory(formData));
-      setOpen(false);
-    } else {
-      form.reset();
-      setFileName(null);
-      setFile(null);
-      dispatch(
-        throwAlert({
-          isShow: true,
-          message: "Please choose image file",
-          type: "error",
-        })
-      );
+    const toastId = toast.loading("Loading");
+    try {
+      if (file && file.type.match(/(png|jpg|jpge)/)) {
+        formData.append("content", data.content);
+        formData.append("isPrivate", String(data.isPrivate));
+        formData.append("file", file);
+        dispatch(addStory(formData)).then(unwrapResult);
+        setOpen(false);
+        toast.success("Success", { id: toastId });
+      } else {
+        form.reset();
+        setFileName(null);
+        setFile(null);
+        toast.error("Please choose image file", { id: toastId });
+      }
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
     }
   };
 

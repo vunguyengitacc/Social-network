@@ -2,7 +2,7 @@ import { Avatar, Box, Divider, Paper, Typography, Button } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import userApi from "api/userApi";
@@ -12,11 +12,19 @@ import Header from "components/Header";
 import { IUser } from "models/user";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveAlt1Icon from "@mui/icons-material/PersonRemoveAlt1";
-import { addFriend, getMe, removeFriend } from "reduxSlice/authSlice";
+import {
+  addFriend,
+  getMe,
+  removeFriend,
+  updateAvatar,
+  updateBackground,
+} from "reduxSlice/authSlice";
 import personalPageStyle, { StyledListTab } from "./style";
 import UserFriends from "./components/UserFriends";
 import UserProfile from "./components/UserProfile";
 import UserRepository, { IStoryPageParams } from "./components/UserRepository";
+import toast from "react-hot-toast";
+import { unwrapResult } from "@reduxjs/toolkit";
 
 const PersonalPage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
@@ -54,7 +62,13 @@ const PersonalPage = () => {
         else setIsMe(false);
       }
     })();
+    // eslint-disable-next-line
   }, [user, me, history]);
+
+  useEffect(() => {
+    dispatch(getMe());
+    // eslint-disable-next-line
+  }, [user]);
 
   useEffect(() => {
     setIsFriend(
@@ -64,14 +78,38 @@ const PersonalPage = () => {
       [...(me.friendWaitingId ?? [])].filter((i) => i === userInfor?._id)
         .length > 0
     );
-  }, [userInfor, me]);
+  }, [me, userInfor]);
 
   const toggleFriend = () => {
-    if (userInfor === undefined) return;
+    (async () => {
+      if (userInfor === undefined) return;
+      if (isFriend || isRequest) dispatch(removeFriend(userInfor?._id));
+      else if (!isFriend && !isRequest) dispatch(addFriend(userInfor._id));
+      dispatch(getMe());
+    })();
+  };
 
-    if (isFriend || isRequest) dispatch(removeFriend(userInfor?._id));
-    else if (!isFriend && !isRequest) dispatch(addFriend(userInfor._id));
-    dispatch(getMe());
+  const changeAvatar = async (e: ChangeEvent<HTMLInputElement>) => {
+    let file = e.currentTarget.files?.item(0);
+    const toastId = toast.loading("Loading");
+    try {
+      await dispatch(updateAvatar(file)).then(unwrapResult);
+
+      toast.success("Success", { id: toastId });
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
+    }
+  };
+
+  const changeBackground = async (e: ChangeEvent<HTMLInputElement>) => {
+    let file = e.currentTarget.files?.item(0);
+    const toastId = toast.loading("Loading");
+    try {
+      await dispatch(updateBackground(file)).then(unwrapResult);
+      toast.success("Success", { id: toastId });
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
+    }
   };
 
   return (
@@ -87,16 +125,39 @@ const PersonalPage = () => {
               alt=""
             />
             <Box className={style.avatarSurface}>
+              <input
+                onChange={changeAvatar}
+                type="file"
+                style={{ display: "none" }}
+                id="avatarFile"
+              />
               <Avatar
                 className={style.avatar}
                 src={userInfor?.avatarUri}
-                component="div"
-                onClick={() => alert("Change")}
+                component="label"
+                htmlFor={`${isMe && "avatarFile"}`}
               />
               <Typography variant="bold6" className={style.fullname}>
                 {userInfor?.fullname}
               </Typography>
             </Box>
+
+            {isMe && (
+              <Box>
+                <Button
+                  variant="contained"
+                  className={style.btnChangeBackground}
+                >
+                  <label htmlFor="backgroundFile">Change Background</label>
+                </Button>
+                <input
+                  onChange={changeBackground}
+                  type="file"
+                  style={{ display: "none" }}
+                  id="backgroundFile"
+                />
+              </Box>
+            )}
           </Box>
 
           <Divider sx={{ width: "80vw" }} variant="middle" />
@@ -107,10 +168,9 @@ const PersonalPage = () => {
               <Tab label="Friends" value="2" />
               {isMe && <Tab label="Profile" value="3" />}
             </StyledListTab>
-            <Box>
-              {!isMe &&
-                !isRequest &&
-                (isFriend === true ? (
+            {!isMe && (
+              <Box>
+                {!isRequest && isFriend && (
                   <Button
                     color="error"
                     variant="contained"
@@ -119,18 +179,8 @@ const PersonalPage = () => {
                   >
                     Remove friend
                   </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    onClick={toggleFriend}
-                    startIcon={<PersonAddAlt1Icon />}
-                  >
-                    Add friend
-                  </Button>
-                ))}
-              {!isMe &&
-                isRequest &&
-                (isFriend === false ? (
+                )}
+                {isRequest && !isFriend && (
                   <Button
                     color="info"
                     variant="contained"
@@ -139,7 +189,8 @@ const PersonalPage = () => {
                   >
                     Wating for accept
                   </Button>
-                ) : (
+                )}
+                {!isRequest && !isFriend && (
                   <Button
                     variant="contained"
                     onClick={toggleFriend}
@@ -147,8 +198,9 @@ const PersonalPage = () => {
                   >
                     Add friend
                   </Button>
-                ))}
-            </Box>
+                )}
+              </Box>
+            )}
           </Box>
         </Paper>
         <TabPanel sx={{ padding: "0" }} value="1">

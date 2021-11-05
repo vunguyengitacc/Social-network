@@ -1,4 +1,3 @@
-import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,30 +6,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import InputPassworldField from "components/InputField/InputPasswordField";
 import InputTextField from "components/InputField/InputTextField";
-
-const useStyle = makeStyles({
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    width: "80%",
-    marginLeft: "10%",
-  },
-  label: {
-    textAlign: "left",
-  },
-  submitButton: {
-    height: "50px",
-    marginTop: "40px !important",
-    marginBottom: "30px !important",
-    backgroundImage: "linear-gradient(#89f7fe, #66a6ff)",
-  },
-  facebookAuth: {
-    height: "50px",
-    marginBottom: "30px !important",
-    backgroundImage: "linear-gradient(#89f7fe, #66a6ff)",
-  },
-});
+import useLoginStyles from "./style";
 
 const schema = yup
   .object()
@@ -58,7 +34,7 @@ interface ILoginProp {
 }
 
 const LoginForm: React.FC<ILoginProp> = ({ onSubmit }) => {
-  const style = useStyle();
+  const style = useLoginStyles();
 
   const form = useForm<any>({
     mode: "onSubmit",

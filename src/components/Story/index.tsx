@@ -14,6 +14,8 @@ import LockIcon from "@mui/icons-material/Lock";
 import { IUser } from "../../models/user";
 import { useHistory } from "react-router";
 import useStoryStyles, { Wrapper } from "./style";
+import { unwrapResult } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 interface IPropsStory {
   _id: string;
@@ -61,13 +63,27 @@ const Story: React.FC<IPropsStory> = (props) => {
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(null);
     setOpen(false);
-    dispatch(removeStory(_id));
+    const toastId = toast.loading("Loading");
+    try {
+      dispatch(removeStory(_id)).then(unwrapResult);
+      toast.success("Success", { id: toastId });
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
+    }
   };
 
   const handleTogglePrivate = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(null);
     setOpen(false);
-    dispatch(update({ _id, isPrivate: !isPrivate, url: imageUrl }));
+    const toastId = toast.loading("Loading");
+    try {
+      dispatch(update({ _id, isPrivate: !isPrivate, url: imageUrl })).then(
+        unwrapResult
+      );
+      toast.success("success", { id: toastId });
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
+    }
   };
 
   const style = useStoryStyles();
@@ -148,7 +164,7 @@ const Story: React.FC<IPropsStory> = (props) => {
             <Button
               className={style.feelingBtn}
               sx={{
-                color: `${isDislike ? "#667eea" : "gray"}`,
+                color: `${isDislike ? "#f32b2b" : "gray"}`,
               }}
               onClick={handleToggleDislike}
             >

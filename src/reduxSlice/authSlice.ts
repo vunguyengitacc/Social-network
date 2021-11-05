@@ -3,7 +3,6 @@ import authApi from "../api/authApi";
 import { IResponse } from "../models/common";
 import { initialUser, IUser } from "../models/user";
 import userApi from "../api/userApi";
-import { throwAlert } from "./UISlice";
 import { ILoginFormValues } from "../pages/auth/components/Login";
 import { IRegisterFormValues } from "../pages/auth/components/Register";
 
@@ -19,19 +18,9 @@ export const getMe = createAsyncThunk("auth/getMe", async () => {
 
 export const updateMe = createAsyncThunk(
   "auth/updateMe",
-  async (payload: Partial<IUser>, thunkAPI) => {
-    try {
-      const response = await userApi.updateMe(payload);
-      await thunkAPI.dispatch(
-        throwAlert({ isShow: true, message: "successfully", type: "success" })
-      );
-      return response.data.user;
-    } catch (error) {
-      await thunkAPI.dispatch(
-        throwAlert({ isShow: true, message: "failed to update", type: "error" })
-      );
-      throw error;
-    }
+  async (payload: Partial<IUser>) => {
+    const response = await userApi.updateMe(payload);
+    return response.data.user;
   }
 );
 
@@ -53,25 +42,30 @@ export const removeFriend = createAsyncThunk(
 
 export const updateAvatar = createAsyncThunk(
   "story/updateAvatar",
-  async (payload: FormData, thunkApi) => {
-    const response = await userApi.updateAvatar(payload);
-    await thunkApi.dispatch(
-      throwAlert({ isShow: true, message: "Send sucessfully", type: "success" })
-    );
-    console.log(response);
-    return response.data.user;
+  async (payload: File | null | undefined) => {
+    if (payload && payload.type.match(/(png|jpg|jpge)/)) {
+      let data = new FormData();
+      data.append("file", payload);
+      const response = await userApi.updateAvatar(data);
+      return response.data.user;
+    } else {
+      throw Error("Please choose image file");
+    }
   }
 );
 
 export const updateBackground = createAsyncThunk(
   "story/updateBackground",
-  async (payload: FormData, thunkApi) => {
-    const response = await userApi.updateBackground(payload);
-    await thunkApi.dispatch(
-      throwAlert({ isShow: true, message: "Send sucessfully", type: "success" })
-    );
-    console.log(response);
-    return response.data.user;
+  async (payload: File | null | undefined) => {
+    if (payload && payload.type.match(/(png|jpg|jpge)/)) {
+      let data = new FormData();
+      data.append("file", payload);
+      console.log(payload);
+      const response = await userApi.updateBackground(data);
+      return response.data.user;
+    } else {
+      throw new Error("Please choose image file");
+    }
   }
 );
 

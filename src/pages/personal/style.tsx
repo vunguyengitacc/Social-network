@@ -24,12 +24,26 @@ const personalPageStyle = makeStyles({
     position: "absolute",
     marginTop: "-230px",
     marginLeft: "calc(40vw - 75px)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   avatar: {
     width: "150px !important",
     height: "150px !important",
     zIndex: 1,
     cursor: "pointer",
+    "&:hover ": {
+      maskImage:
+        "linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.6))",
+      WebkitMaskImage:
+        "linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.6))",
+    },
+  },
+  btnChangeBackground: {
+    marginLeft: "80% !important",
+    marginTop: "-220px !important",
+    width: "300px !important",
   },
   taskSurface: {
     height: "10vh",

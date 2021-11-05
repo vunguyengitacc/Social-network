@@ -39,48 +39,17 @@ export const reactToStory = createAsyncThunk(
 
 export const removeStory = createAsyncThunk(
   "story/remove",
-  async (payload: string, thunkApi) => {
-    try {
-      await storyApi.removeStory(payload);
-      await thunkApi.dispatch(
-        throwAlert({
-          isShow: true,
-          message: "Remove successfully",
-          type: "success",
-        })
-      );
-      return payload;
-    } catch (err) {
-      thunkApi.dispatch(
-        throwAlert({ type: "error", message: "failed to remove", isShow: true })
-      );
-      throw Error("failed");
-    }
+  async (payload: string) => {
+    await storyApi.removeStory(payload);
+    return payload;
   }
 );
 
 export const update = createAsyncThunk(
   "story/update",
-  async (
-    payload: { _id: string; url: string; isPrivate: boolean },
-    thunkApi
-  ) => {
-    try {
-      const response = await storyApi.updateOne(payload);
-      await thunkApi.dispatch(
-        throwAlert({
-          isShow: true,
-          message: "Update successfully",
-          type: "success",
-        })
-      );
-      return response.data.story;
-    } catch (err) {
-      thunkApi.dispatch(
-        throwAlert({ type: "error", message: "failed to update", isShow: true })
-      );
-      throw Error("failed");
-    }
+  async (payload: { _id: string; url: string; isPrivate: boolean }) => {
+    const response = await storyApi.updateOne(payload);
+    return response.data.story;
   }
 );
 
@@ -88,7 +57,6 @@ export const getStoriesByUserId = createAsyncThunk(
   "story/getStoriesByUserId",
   async (payload: string) => {
     const response = await storyApi.getByUserId(payload);
-    console.log(response.data);
     return response.data.stories;
   }
 );

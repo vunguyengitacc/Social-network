@@ -8,18 +8,21 @@ import { getMe } from "../../reduxSlice/authSlice";
 
 interface IProps {
   notification: INotification;
+  reset: () => void;
 }
 
-const NotificationItem: React.FC<IProps> = ({ notification }) => {
+const NotificationItem: React.FC<IProps> = ({ notification, reset }) => {
   const dispatch = useDispatch<AppDispatch>();
   const handleDeny = async () => {
     await userApi.denyRequest(notification.from._id);
-    dispatch(getMe());
+    await dispatch(getMe());
+    await reset();
   };
 
   const handleAccept = async () => {
     await userApi.acceptRequest(notification.from._id);
-    dispatch(getMe());
+    await dispatch(getMe());
+    await reset();
   };
 
   return (

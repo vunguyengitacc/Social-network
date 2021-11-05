@@ -13,7 +13,7 @@ export default function FriendList() {
         Friends
       </Typography>
       <Box>
-        {me.friends.map((item) => (
+        {me?.friends?.map((item) => (
           <FriendItem key={item._id} value={item} />
         ))}
       </Box>
