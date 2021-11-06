@@ -14,7 +14,7 @@ import theme from "app/theme";
 
 const HomePage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
-
+  const [seed, setSeed] = useState<number>(0);
   const stories = useSelector(storiesSelector.selectAll);
   const dispatch = useDispatch<AppDispatch>();
   const style = homePageStyles(theme);
@@ -22,7 +22,7 @@ const HomePage = () => {
   console.log(match);
 
   useEffect(() => {
-    dispatch(getStories());
+    dispatch(getStories(seed));
   }, [dispatch]);
 
   return (
@@ -43,7 +43,7 @@ const HomePage = () => {
           >
             Upload Image
           </Button>
-          <StoryList isMe={true} stories={stories} />
+          <StoryList stories={stories} />
         </Box>
         {match && (
           <Box sx={{ width: "37%", marginLeft: "3%" }}>

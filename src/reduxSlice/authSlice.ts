@@ -4,7 +4,7 @@ import { IResponse } from "../models/common";
 import { initialUser, IUser } from "../models/user";
 import userApi from "../api/userApi";
 import { ILoginFormValues } from "../pages/auth/components/Login";
-import { IRegisterFormValues } from "../pages/auth/components/Register";
+import { IRegisterFormValues } from "../pages/auth/components/Register/form";
 
 interface IAuthState {
   currentUser: IUser;

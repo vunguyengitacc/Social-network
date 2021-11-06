@@ -1,7 +1,7 @@
 import { IResponse } from "../models/common";
 import { IUser } from "../models/user";
 import { ILoginFormValues } from "../pages/auth/components/Login";
-import { IRegisterFormValues } from "../pages/auth/components/Register";
+import { IRegisterFormValues } from "../pages/auth/components/Register/form";
 import axiosClient from "./axiosClient";
 
 const authApi = {

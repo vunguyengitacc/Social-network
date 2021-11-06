@@ -3,11 +3,11 @@ import { IStory } from "../models/story";
 import axiosClient from "./axiosClient";
 
 const storyApi = {
-  getStories(): Promise<IResponseList<IStory>> {
-    return axiosClient.get("/stories");
+  getStories(seed: number): Promise<IResponseList<IStory>> {
+    return axiosClient.get(`/stories/${seed}`);
   },
-  getMySories(): Promise<IResponseList<IStory>> {
-    return axiosClient.get("/stories/me");
+  getMySories(seed: number): Promise<IResponseList<IStory>> {
+    return axiosClient.get(`/stories/me/${seed}`);
   },
   getByUserId(payload: string): Promise<IResponseList<IStory>> {
     return axiosClient.get(`/stories/${payload}`);

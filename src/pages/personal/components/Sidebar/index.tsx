@@ -42,6 +42,13 @@ const Sidebar: React.FC<IProps> = (props) => {
             values={props.userInfor?.job}
           />
         )}
+        {props.userInfor?.phone && (
+          <IconText
+            startIcon={<MenuBookIcon />}
+            text="Phone number"
+            values={[props.userInfor?.phone]}
+          />
+        )}
       </Box>
     </Box>
   );

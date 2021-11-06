@@ -1,69 +1,19 @@
-import { makeStyles } from "@mui/styles";
 import Box from "@mui/material/Box";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import React from "react";
 import { Button } from "@mui/material";
 import InputTextField from "components/InputField/InputTextField";
 import InputPassworldField from "components/InputField/InputPasswordField";
-
-const useStyle = makeStyles({
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-around",
-    width: "80%",
-    marginLeft: "10%",
-  },
-  label: {
-    textAlign: "left",
-  },
-  submitButton: {
-    height: "50px",
-    marginTop: "40px !important",
-    marginBottom: "30px !important",
-    backgroundImage: "linear-gradient(#89f7fe, #66a6ff)",
-  },
-});
-
-const schema = yup
-  .object()
-  .shape({
-    username: yup
-      .string()
-      .required("Please enter username.")
-      .min(6, "Please enter at least 6 characters.")
-      .max(35, "Please enter at most 35 characters"),
-    password: yup
-      .string()
-      .required("Please enter your password")
-      .min(6, "Please enter at least 6 characters.")
-      .max(30, "Please enter at most 30 characters"),
-    passwordConfirm: yup
-      .string()
-      .oneOf([yup.ref("password")], "Confirm password must match password"),
-    fullname: yup
-      .string()
-      .required("Please enter your full name")
-      .min(6, "Please enter at least 6 characters.")
-      .max(35, "Please enter at most 35 characters"),
-  })
-  .required();
-
-export interface IRegisterFormValues {
-  username: string;
-  password: string;
-  fullname: string;
-  passwordConfirm: string;
-}
+import useRegisterStyles from "./style";
+import { registerSchema, IRegisterFormValues } from "./form";
 
 interface IRegisterProp {
   onSubmit: (data: IRegisterFormValues) => void;
 }
 
 const RegisterForm: React.FC<IRegisterProp> = ({ onSubmit }) => {
-  const style = useStyle();
+  const style = useRegisterStyles();
 
   const form = useForm<any>({
     mode: "onSubmit",
@@ -74,7 +24,7 @@ const RegisterForm: React.FC<IRegisterProp> = ({ onSubmit }) => {
       fullname: "",
       passwordConfirm: "",
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(registerSchema),
   });
 
   return (
@@ -86,6 +36,7 @@ const RegisterForm: React.FC<IRegisterProp> = ({ onSubmit }) => {
           form={form}
         />
         <InputTextField
+          sxInput={{ marginTop: "40px" }}
           name="username"
           placeholder="Please enter your username"
           form={form}

@@ -72,6 +72,13 @@ const theme = createTheme({
     fontFamily: ["Poppins", "sans-serif"].join(","),
   },
   components: {
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: "10px",
+        },
+      },
+    },
     MuiPaper: {
       styleOverrides: {
         root: {
@@ -80,7 +87,7 @@ const theme = createTheme({
           backgroundColor: "white",
           padding: "0 10px 0 10px",
           borderRadius: "0",
-          boxShadow: "rgba(0, 0, 0, 0.1) 0px 4px 12px",
+          boxShadow: "0 3px 10px rgb(0 0 0 / 10%), 0 3px 3px rgb(0 0 0 / 5%)",
         },
       },
     },

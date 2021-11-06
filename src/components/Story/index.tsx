@@ -24,7 +24,6 @@ interface IPropsStory {
   content: string;
   isPrivate: boolean;
   owner: IUser | undefined;
-  isMe: boolean;
   likeById: string[];
   dislikeById: string[];
 }
@@ -37,7 +36,6 @@ const Story: React.FC<IPropsStory> = (props) => {
     content,
     isPrivate,
     owner,
-    isMe,
     likeById,
     dislikeById,
   } = props;
@@ -47,6 +45,7 @@ const Story: React.FC<IPropsStory> = (props) => {
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   let islike = likeById.filter((i) => i === me._id).length > 0;
   let isDislike = dislikeById.filter((i) => i === me._id).length > 0;
+  let isMe = owner?._id !== me._id ? false : true;
 
   const dispatch = useDispatch<AppDispatch>();
 

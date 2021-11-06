@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Tab, Box, Typography } from "@mui/material";
+import { Tab, Box, Typography, Button } from "@mui/material";
 import CustomTabPanel from "../CustomTabPanel";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
@@ -14,6 +14,9 @@ import InputListTextField from "components/InputField/InputListTextField";
 import { withStyles } from "@mui/styles";
 import userProfileStyles from "./style";
 import theme from "app/theme";
+import { unwrapResult } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
+import { debounce } from "lodash";
 
 const StyledListTab = withStyles({
   indicator: {
@@ -90,8 +93,19 @@ const UserProfile = () => {
     setPanel(newValue);
   };
 
+  const debounceCall = debounce(
+    (data: Partial<IUser>) => updateInfor(data),
+    1000
+  );
+
   const updateInfor = (data: Partial<IUser>) => {
-    dispatch(updateMe(data));
+    const toastId = toast.loading("Loading");
+    try {
+      dispatch(updateMe(data)).then(unwrapResult);
+      toast.success("Success", { id: toastId });
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
+    }
   };
 
   return (
@@ -140,7 +154,7 @@ const UserProfile = () => {
               )}
             </TabPanel>
             <TabPanel value="profile-2">
-              <form onSubmit={basicForm.handleSubmit(updateInfor)}>
+              <form onChange={basicForm.handleSubmit(debounceCall)}>
                 <Box>
                   <Typography
                     sx={{ margin: " 0 10px 10px 10px " }}
@@ -170,7 +184,7 @@ const UserProfile = () => {
               </form>
             </TabPanel>
             <TabPanel value="profile-3">
-              <form onSubmit={workAndEduForm.handleSubmit(updateInfor)}>
+              <form onSubmit={workAndEduForm.handleSubmit(debounceCall)}>
                 <Box>
                   <Typography
                     sx={{ margin: " 0 10px 10px 10px " }}
@@ -184,6 +198,7 @@ const UserProfile = () => {
                     form={workAndEduForm}
                   />
                 </Box>
+
                 <Box sx={{ marginTop: "20px" }}>
                   <Typography
                     sx={{ margin: " 0 10px 10px 10px " }}
@@ -197,10 +212,19 @@ const UserProfile = () => {
                     form={workAndEduForm}
                   />
                 </Box>
+                <Box className={style.saveField}>
+                  <Button
+                    color="warning"
+                    onClick={() => workAndEduForm.reset()}
+                  >
+                    Recover
+                  </Button>
+                  <Button type="submit">Save</Button>
+                </Box>
               </form>
             </TabPanel>
             <TabPanel value="profile-4">
-              <form onSubmit={contactForm.handleSubmit(updateInfor)}>
+              <form onChange={contactForm.handleSubmit(debounceCall)}>
                 <Typography
                   sx={{ margin: " 0 10px 10px 10px " }}
                   variant="bold6"

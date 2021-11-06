@@ -4,12 +4,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField,
   Typography,
 } from "@mui/material";
 import * as yup from "yup";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { makeStyles } from "@mui/styles";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm, SubmitHandler } from "react-hook-form";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
@@ -19,6 +17,10 @@ import { addStory } from "reduxSlice/storySlice";
 import SelectField from "../InputField/SelectField";
 import toast from "react-hot-toast";
 import { unwrapResult } from "@reduxjs/toolkit";
+import InputTextField from "components/InputField/InputTextField";
+import useAddImageDialogStyles from "./style";
+import PublicIcon from "@mui/icons-material/Public";
+import PrivacyTipIcon from "@mui/icons-material/PrivacyTip";
 
 interface IPropsDialog {
   open: boolean;
@@ -33,21 +35,13 @@ const scheme = yup
   })
   .required();
 
-const useStyles = makeStyles({
-  fileButton: {
-    width: "100%",
-    marginTop: "20px",
-    height: "50px",
-  },
-});
-
 interface IFormAddImageValues {
   content: string;
   isPrivate: boolean;
 }
 
 const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
-  const style = useStyles();
+  const style = useAddImageDialogStyles();
   const dispatch = useDispatch<AppDispatch>();
   const [fileName, setFileName] = useState<any>("");
   const [file, setFile] = useState<any>(null);
@@ -96,6 +90,7 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
   const clearImage = (e: React.FormEvent<HTMLButtonElement>) => {
     form.reset();
     setFileName(null);
+    setFile(null);
   };
 
   return (
@@ -103,12 +98,12 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
       <form onSubmit={form.handleSubmit(submitForm)}>
         <DialogTitle sx={{ width: "40vw" }}>Add New</DialogTitle>
         <DialogContent>
-          <TextField
-            {...form.register("content")}
-            margin="dense"
-            fullWidth
-            label="Content"
-          ></TextField>
+          <InputTextField
+            sxInput={{ margin: "10px 0 10px 0" }}
+            name="content"
+            placeholder="Enter your content"
+            form={form}
+          />
           <input
             style={{ display: "none" }}
             accept="image/png, image/gif, image/jpeg"
@@ -131,18 +126,21 @@ const AddImageDialog: React.FC<IPropsDialog> = ({ open, setOpen }) => {
           <DialogContent
             sx={{ display: "flex", justifyContent: "space-between" }}
           >
-            <Typography sx={{ height: "40px", lineHeight: "40px" }}>
-              {fileName}
-            </Typography>
+            <Typography className={style.fileName}>{fileName}</Typography>
             <Button color="error" sx={{ height: "40px" }} onClick={clearImage}>
               x
             </Button>
           </DialogContent>
         )}
-        <DialogContent>
+        <DialogContent className={style.selectType}>
+          <Typography variant="bold6">Type</Typography>
           <SelectField form={form} name="isPrivate">
-            <Button value={"false"}>Public</Button>
-            <Button value={"true"}>Private</Button>
+            <Button startIcon={<PublicIcon />} value={"false"}>
+              Public
+            </Button>
+            <Button startIcon={<PrivacyTipIcon />} value={"true"} color="error">
+              Private
+            </Button>
           </SelectField>
         </DialogContent>
         <DialogActions>

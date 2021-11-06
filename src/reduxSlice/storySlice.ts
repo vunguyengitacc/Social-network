@@ -15,15 +15,21 @@ export const storyAdapter = createEntityAdapter({
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
 });
 
-export const getStories = createAsyncThunk("story/getStories", async () => {
-  const response = await storyApi.getStories();
-  return response.data.stories;
-});
+export const getStories = createAsyncThunk(
+  "story/getStories",
+  async (seed: number) => {
+    const response = await storyApi.getStories(seed);
+    return response.data.stories;
+  }
+);
 
-export const getMyStories = createAsyncThunk("story/getMyStories", async () => {
-  const response = await storyApi.getMySories();
-  return response.data.stories;
-});
+export const getMyStories = createAsyncThunk(
+  "story/getMyStories",
+  async (seed: number) => {
+    const response = await storyApi.getMySories(seed);
+    return response.data.stories;
+  }
+);
 
 export const reactToStory = createAsyncThunk(
   "story/reactToStory",

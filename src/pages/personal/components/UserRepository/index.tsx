@@ -26,6 +26,7 @@ const UserRepository = () => {
   const [isMe, setIsMe] = useState<boolean>(false);
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<IUser>(initialUser);
+  const [seed, setSeed] = useState<number>(0);
   const history = useHistory();
 
   const stories = useSelector(storiesSelector.selectAll);
@@ -40,7 +41,7 @@ const UserRepository = () => {
       if (user === "me") {
         setUserInfor(me);
         setIsMe(true);
-        dispatch(getMyStories());
+        dispatch(getMyStories(seed));
       } else {
         const response = await userApi.getById(user);
         setUserInfor(response.data.user);
@@ -90,7 +91,7 @@ const UserRepository = () => {
                   Upload Image
                 </Button>
               )}
-              <StoryList stories={stories} isMe={isMe} />
+              <StoryList stories={stories} />
             </Box>
           </Grid>
         </Grid>

@@ -4,7 +4,6 @@ import { IStory } from "../../models/story";
 import Story from "../Story";
 
 interface IProps {
-  isMe: boolean;
   stories: IStory[];
 }
 
@@ -17,7 +16,6 @@ const StoryList: React.FC<IProps> = (props) => {
           <Story
             key={item._id}
             _id={item._id}
-            isMe={props.isMe}
             imageUrl={item.imageUrl}
             createdAt={date}
             content={item.content}
