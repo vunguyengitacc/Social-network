@@ -5,8 +5,8 @@ const userRepositoryStyles = makeStyles((theme: Theme) =>
   createStyles({
     surface: {
       [theme.breakpoints.up("sm")]: {
-        width: "80vw",
-        paddingLeft: "10vw",
+        width: "70vw",
+        paddingLeft: "15vw",
       },
       [theme.breakpoints.down("sm")]: {},
 

@@ -7,7 +7,7 @@ import { initialUser, IUser } from "models/user";
 import { AppDispatch, RootState } from "app/store";
 import userApi from "api/userApi";
 import AddImageDialog from "components/AddImageDialog";
-import StoryList from "components/StoriesList/StoryList";
+
 import {
   getMyStories,
   getStoriesByUserId,
@@ -16,6 +16,8 @@ import {
 import userRepositoryStyles from "./style";
 import theme from "app/theme";
 import Sidebar from "../Sidebar";
+import StoryLoadingEffect from "components/skeletons/Story";
+import StoryList from "components/StoryList";
 
 export interface IStoryPageParams {
   user: string;
@@ -27,6 +29,7 @@ const UserRepository = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<IUser>(initialUser);
   const [seed, setSeed] = useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const history = useHistory();
 
   const stories = useSelector(storiesSelector.selectAll);
@@ -38,18 +41,20 @@ const UserRepository = () => {
 
   useEffect(() => {
     (async () => {
+      await setIsLoading(true);
       if (user === "me") {
         setUserInfor(me);
         setIsMe(true);
-        dispatch(getMyStories(seed));
+        await dispatch(getMyStories(seed));
       } else {
         const response = await userApi.getById(user);
         setUserInfor(response.data.user);
         if (response.data.user?._id === me._id)
           history.push("/personal/stories/me");
         setIsMe(false);
-        dispatch(getStoriesByUserId(user));
+        await dispatch(getStoriesByUserId(user));
       }
+      await setIsLoading(false);
     })();
   }, [user, me, history, dispatch]);
 
@@ -61,7 +66,7 @@ const UserRepository = () => {
     >
       {isMe && <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />}
       <Box className={style.surface}>
-        <Grid container={match} spacing={match === true ? 12 : undefined}>
+        <Grid container={match} spacing={match === true ? 4 : undefined}>
           <Grid
             item
             className={style.grid}
@@ -91,7 +96,11 @@ const UserRepository = () => {
                   Upload Image
                 </Button>
               )}
-              <StoryList stories={stories} />
+              {isLoading === true ? (
+                <StoryLoadingEffect />
+              ) : (
+                <StoryList stories={stories} />
+              )}
             </Box>
           </Grid>
         </Grid>

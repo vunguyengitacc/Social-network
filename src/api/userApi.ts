@@ -31,6 +31,9 @@ const userApi = {
   acceptRequest(payload: string): Promise<IResponse<INotification>> {
     return axiosClient.post(`/users/me/friend/${payload}/answer`);
   },
+  getRecommend(): Promise<IResponseList<IUser>> {
+    return axiosClient.get("/users/recommend");
+  },
 };
 
 export default userApi;

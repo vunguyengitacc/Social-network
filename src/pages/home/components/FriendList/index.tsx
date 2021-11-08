@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { RootState } from "app/store";
-import FriendItem from "pages/home/components/FriendItem";
+import UserItem from "pages/home/components/UserItem";
 import { useSelector } from "react-redux";
 import friendListStyle from "./style";
 
@@ -14,7 +14,7 @@ export default function FriendList() {
       </Typography>
       <Box>
         {me?.friends?.map((item) => (
-          <FriendItem key={item._id} value={item} />
+          <UserItem key={item._id} value={item} />
         ))}
       </Box>
     </Box>

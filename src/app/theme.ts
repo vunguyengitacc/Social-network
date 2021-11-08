@@ -87,7 +87,7 @@ const theme = createTheme({
           backgroundColor: "white",
           padding: "0 10px 0 10px",
           borderRadius: "0",
-          boxShadow: "0 3px 10px rgb(0 0 0 / 10%), 0 3px 3px rgb(0 0 0 / 5%)",
+          boxShadow: "0 0 8px 0 rgb(0 0 0 / 12%)",
         },
       },
     },

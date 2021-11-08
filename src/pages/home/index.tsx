@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddImageDialog from "components/AddImageDialog";
 import Header from "components/Header";
-import StoryList from "components/StoriesList/StoryList";
+
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { getStories, storiesSelector } from "reduxSlice/storySlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,9 +11,13 @@ import homePageStyles from "./style";
 import FriendList from "./components/FriendList";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import theme from "app/theme";
+import StoryLoadingEffect from "components/skeletons/Story";
+import StoryList from "components/StoryList";
+import HotList from "./components/HotList";
 
 const HomePage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [seed, setSeed] = useState<number>(0);
   const stories = useSelector(storiesSelector.selectAll);
   const dispatch = useDispatch<AppDispatch>();
@@ -22,7 +26,11 @@ const HomePage = () => {
   console.log(match);
 
   useEffect(() => {
-    dispatch(getStories(seed));
+    (async () => {
+      setIsLoading(true);
+      await dispatch(getStories(seed));
+      setIsLoading(false);
+    })();
   }, [dispatch]);
 
   return (
@@ -32,6 +40,9 @@ const HomePage = () => {
         <Header />
       </Box>
       <Box className={style.surface}>
+        <Box className={style.something}>
+          <HotList />
+        </Box>
         <Box className={style.storiesSurface}>
           <Button
             variant="contained"
@@ -43,10 +54,10 @@ const HomePage = () => {
           >
             Upload Image
           </Button>
-          <StoryList stories={stories} />
+          {isLoading ? <StoryLoadingEffect /> : <StoryList stories={stories} />}
         </Box>
         {match && (
-          <Box sx={{ width: "37%", marginLeft: "3%" }}>
+          <Box className={style.friendSurface}>
             <FriendList />
           </Box>
         )}

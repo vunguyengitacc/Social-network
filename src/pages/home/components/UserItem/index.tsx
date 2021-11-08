@@ -8,7 +8,7 @@ interface IProps {
   value: IUser;
 }
 
-const FriendItem: React.FC<IProps> = ({ value }) => {
+const UserItem: React.FC<IProps> = ({ value }) => {
   const style = FriendItemStyle();
   const history = useHistory();
   return (
@@ -26,4 +26,4 @@ const FriendItem: React.FC<IProps> = ({ value }) => {
   );
 };
 
-export default FriendItem;
+export default UserItem;

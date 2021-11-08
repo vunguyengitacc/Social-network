@@ -1,6 +1,6 @@
 import { makeStyles } from "@mui/styles";
 
-const friendListStyle = makeStyles({
+const useHotListStyles = makeStyles({
   surface: {
     width: "100%",
     position: "sticky",
@@ -17,4 +17,4 @@ const friendListStyle = makeStyles({
   },
 });
 
-export default friendListStyle;
+export default useHotListStyles;

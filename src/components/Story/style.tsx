@@ -81,7 +81,7 @@ export const Wrapper = styled("div")(({ theme: Theme }) => ({
   [theme.breakpoints.up("md")]: {
     marginBottom: "50px",
   },
-  boxShadow: "0 3px 10px rgb(0 0 0 / 10%), 0 3px 3px rgb(0 0 0 / 5%)",
+  border: "1px solid #e8e8e8",
 }));
 
 export default useStoryStyles;
