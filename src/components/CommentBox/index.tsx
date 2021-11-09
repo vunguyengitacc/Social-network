@@ -16,13 +16,15 @@ const CommentBox: React.FC<IProps> = (props) => {
   const [isLoading, setIsloading] = useState<boolean>(true);
   const style = useCommentBoxStyles();
 
+  const fetchComment = async () => {
+    const { data } = await commentApi.getByStoryId(props.storyId);
+    setComments(data.comments);
+  };
+
   useEffect(() => {
-    (async () => {
-      setIsloading(true);
-      const { data } = await commentApi.getByStoryId(props.storyId);
-      setComments(data.comments);
-      setIsloading(false);
-    })();
+    setIsloading(true);
+    fetchComment().then(() => setIsloading(false));
+    // eslint-disable-next-line
   }, [props.storyId]);
 
   return (
@@ -38,7 +40,7 @@ const CommentBox: React.FC<IProps> = (props) => {
         </>
       )}
 
-      <SendCommentForm storyId={props.storyId} />
+      <SendCommentForm reload={fetchComment} storyId={props.storyId} />
     </Box>
   );
 };

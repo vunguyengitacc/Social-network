@@ -10,6 +10,7 @@ import commentApi from "api/commentApi";
 
 interface IProps {
   storyId: string;
+  reload: () => void;
 }
 
 const SendCommentForm: React.FC<IProps> = (props) => {
@@ -29,6 +30,7 @@ const SendCommentForm: React.FC<IProps> = (props) => {
         storyId: props.storyId,
       });
       form.reset();
+      props.reload();
     } catch (error) {}
   };
 

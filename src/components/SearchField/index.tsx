@@ -27,11 +27,7 @@ const SearchField = () => {
   };
 
   return (
-    <Box
-      sx={{ width: "400px" }}
-      className={`${style.withEffect} ${style.searchField}`}
-      component="div"
-    >
+    <Box className={`${style.withEffect} ${style.searchField}`} component="div">
       <TextField fullWidth onChange={submitSearch} />
       {searchResult.map((item) => (
         <Button

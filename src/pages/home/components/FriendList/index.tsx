@@ -12,7 +12,7 @@ export default function FriendList() {
       <Typography className={style.title} variant="bold6">
         Friends
       </Typography>
-      <Box>
+      <Box className={style.listUser}>
         {me?.friends?.map((item) => (
           <UserItem key={item._id} value={item} />
         ))}

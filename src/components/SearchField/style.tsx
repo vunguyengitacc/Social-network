@@ -2,7 +2,10 @@ import { makeStyles } from "@mui/styles";
 
 const useSearchFieldStyles = makeStyles({
   searchField: {
-    height: "40px",
+    height: "50px",
+    width: "400px",
+    display: "flex",
+    alignItems: "center",
   },
   withEffect: {
     animation: "$effect 1s",

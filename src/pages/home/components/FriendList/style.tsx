@@ -10,10 +10,16 @@ const friendListStyle = makeStyles({
     borderRadius: "5px",
     paddingBottom: "10px",
     border: "1px solid #e8e8e8",
+    maxHeight: "90vh",
   },
   title: {
     padding: "10px",
     color: "gray",
+  },
+  listUser: {
+    maxHeight: "85vh",
+    overflow: "hidden",
+    overflowY: "scroll",
   },
 });
 

@@ -21,7 +21,7 @@ export default function HotList() {
       <Typography className={style.title} variant="bold6">
         Recommend
       </Typography>
-      <Box>
+      <Box className={style.listUser}>
         {users.map((item) => (
           <UserItem key={item._id} value={item} />
         ))}

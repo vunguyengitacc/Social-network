@@ -11,7 +11,6 @@ const sidebarStyle = makeStyles((theme: Theme) =>
     },
     contentSurface: {
       borderRadius: "5px",
-
       border: "1px solid rgb(232, 232, 232)",
       padding: " 10px",
       backgroundColor: "white",
