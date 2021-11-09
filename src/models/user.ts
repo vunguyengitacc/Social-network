@@ -12,6 +12,7 @@ export interface IUser {
   friends: IUser[];
   friendRequestId: string[];
   friendWaitingId: string[];
+  createdAt: Date;
 }
 
 export const initialUser: IUser = {
@@ -27,4 +28,5 @@ export const initialUser: IUser = {
   friends: [],
   friendRequestId: [],
   friendWaitingId: [],
+  createdAt: new Date(),
 };

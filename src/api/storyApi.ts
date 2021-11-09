@@ -3,17 +3,19 @@ import { IStory } from "../models/story";
 import axiosClient from "./axiosClient";
 
 const storyApi = {
+  getById(storyId: string): Promise<IResponse<IStory>> {
+    return axiosClient.get(`/stories/${storyId}`);
+  },
   getStories(seed: number): Promise<IResponseList<IStory>> {
-    return axiosClient.get(`/stories/${seed}`);
+    return axiosClient.get(`/stories/list/${seed}`);
   },
   getMySories(seed: number): Promise<IResponseList<IStory>> {
     return axiosClient.get(`/stories/me/${seed}`);
   },
   getByUserId(payload: string): Promise<IResponseList<IStory>> {
-    return axiosClient.get(`/stories/${payload}`);
+    return axiosClient.get(`/stories/user/${payload}`);
   },
   addNewStories(payload: FormData): Promise<IResponse<IStory>> {
-    console.log((payload.get("file") as File).type);
     return axiosClient.post(`/stories/me`, payload);
   },
   removeStory(payload: string): Promise<IResponse<any>> {
@@ -22,7 +24,6 @@ const storyApi = {
   updateOne(payload: {
     _id: string;
     isPrivate: boolean;
-    url: string;
   }): Promise<IResponse<IStory>> {
     return axiosClient.put(`/stories/me/${payload._id}`, payload);
   },

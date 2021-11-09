@@ -1,6 +1,5 @@
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
-import StoryLoadingEffect from "components/skeletons/Story";
 import useStoryListStyles from "components/StoryList/style";
 import React, { useEffect, useState } from "react";
 import { IStory } from "../../models/story";

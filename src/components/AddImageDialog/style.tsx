@@ -14,6 +14,10 @@ const useAddImageDialogStyles = makeStyles({
     display: "flex",
     justifyContent: "flex-end",
   },
+  inputFile: {
+    display: "flex",
+    flexDirection: "column",
+  },
 });
 
 export default useAddImageDialogStyles;

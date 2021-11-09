@@ -1,4 +1,11 @@
-import { Button, IconButton, Typography, Menu, Avatar } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  Typography,
+  Menu,
+  Avatar,
+  Divider,
+} from "@mui/material";
 import Box from "@mui/material/Box";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
@@ -6,21 +13,24 @@ import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import React, { useState } from "react";
-import dateUtil from "../../utillity/dateUtils";
+import dateUtil from "utillity/date";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../app/store";
-import { reactToStory, removeStory, update } from "../../reduxSlice/storySlice";
+import { AppDispatch, RootState } from "app/store";
+import { reactToStory, removeStory, update } from "reduxSlice/storySlice";
 import LockIcon from "@mui/icons-material/Lock";
-import { IUser } from "../../models/user";
+import { IUser } from "models/user";
 import { useHistory } from "react-router";
 import useStoryStyles, { Wrapper } from "./style";
 import { unwrapResult } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
+import ImageRender from "components/ImageRender";
+import CommentIcon from "@mui/icons-material/Comment";
+import CommentBox from "components/CommentBox";
 
 interface IPropsStory {
   _id: string;
   createdAt: Date;
-  imageUrl: string;
+  imageUrl: string[];
   content: string;
   isPrivate: boolean;
   owner: IUser | undefined;
@@ -29,19 +39,12 @@ interface IPropsStory {
 }
 
 const Story: React.FC<IPropsStory> = (props) => {
-  const {
-    _id,
-    createdAt,
-    imageUrl,
-    content,
-    isPrivate,
-    owner,
-    likeById,
-    dislikeById,
-  } = props;
+  const { _id, createdAt, content, isPrivate, owner, likeById, dislikeById } =
+    props;
   const history = useHistory();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
-  const [open, setOpen] = useState<boolean>(Boolean(anchor));
+  const [openMenu, setOpenMenu] = useState<boolean>(Boolean(anchor));
+  const [openComment, setOpenComment] = useState<boolean>(false);
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   let islike = likeById.filter((i) => i === me._id).length > 0;
   let isDislike = dislikeById.filter((i) => i === me._id).length > 0;
@@ -51,17 +54,17 @@ const Story: React.FC<IPropsStory> = (props) => {
 
   const handleOpenMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(e.currentTarget);
-    setOpen(true);
+    setOpenMenu(true);
   };
 
   const handleClose = () => {
     setAnchor(null);
-    setOpen(false);
+    setOpenMenu(false);
   };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(null);
-    setOpen(false);
+    setOpenMenu(false);
     const toastId = toast.loading("Loading");
     try {
       dispatch(removeStory(_id)).then(unwrapResult);
@@ -73,12 +76,10 @@ const Story: React.FC<IPropsStory> = (props) => {
 
   const handleTogglePrivate = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(null);
-    setOpen(false);
+    setOpenMenu(false);
     const toastId = toast.loading("Loading");
     try {
-      dispatch(update({ _id, isPrivate: !isPrivate, url: imageUrl })).then(
-        unwrapResult
-      );
+      dispatch(update({ _id, isPrivate: !isPrivate })).then(unwrapResult);
       toast.success("success", { id: toastId });
     } catch (error: any) {
       toast.error(error.message, { id: toastId });
@@ -99,7 +100,7 @@ const Story: React.FC<IPropsStory> = (props) => {
     <Wrapper>
       <Box>
         <Box>
-          <Menu open={open} anchorEl={anchor} onClose={handleClose}>
+          <Menu open={openMenu} anchorEl={anchor} onClose={handleClose}>
             <Box className={style.menuSurface}>
               <Button
                 sx={{ display: "flex", justifyContent: "flex-start" }}
@@ -147,9 +148,16 @@ const Story: React.FC<IPropsStory> = (props) => {
           <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>
             {content}
           </Box>
-          <Box className={style.imageSurface}>
-            <img alt="Internet error" className={style.image} src={imageUrl} />
-          </Box>
+          {props.imageUrl.length > 0 && (
+            <Box
+              className={style.imageSurface}
+              component="div"
+              onClick={() => history.push(`/story/${props._id}`)}
+            >
+              <ImageRender value={props.imageUrl} />
+            </Box>
+          )}
+
           <Box className={style.groupTask}>
             <Button
               className={style.feelingBtn}
@@ -169,7 +177,20 @@ const Story: React.FC<IPropsStory> = (props) => {
             >
               <ThumbDownAltIcon /> {dislikeById.length || ""}
             </Button>
+            <Button
+              className={style.commentBtn}
+              onClick={() => setOpenComment(!openComment)}
+              {...{ color: `${openComment ? "primary" : "disable"}` }}
+            >
+              <CommentIcon /> <Typography>Comment</Typography>
+            </Button>
           </Box>
+          {openComment && (
+            <>
+              <Divider />
+              <CommentBox storyId={_id} />
+            </>
+          )}
         </Box>
       </Box>
     </Wrapper>

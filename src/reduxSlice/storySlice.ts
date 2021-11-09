@@ -53,7 +53,7 @@ export const removeStory = createAsyncThunk(
 
 export const update = createAsyncThunk(
   "story/update",
-  async (payload: { _id: string; url: string; isPrivate: boolean }) => {
+  async (payload: { _id: string; isPrivate: boolean }) => {
     const response = await storyApi.updateOne(payload);
     return response.data.story;
   }

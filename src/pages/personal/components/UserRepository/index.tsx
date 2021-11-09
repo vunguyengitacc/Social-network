@@ -1,13 +1,11 @@
-import { Button, Box, Grid, useMediaQuery } from "@mui/material";
+import { Box, Grid, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import { initialUser, IUser } from "models/user";
 import { AppDispatch, RootState } from "app/store";
 import userApi from "api/userApi";
 import AddImageDialog from "components/AddImageDialog";
-
 import {
   getMyStories,
   getStoriesByUserId,
@@ -18,6 +16,7 @@ import theme from "app/theme";
 import Sidebar from "../Sidebar";
 import StoryLoadingEffect from "components/skeletons/Story";
 import StoryList from "components/StoryList";
+import AddStoryForm from "components/AddStoryForm";
 
 export interface IStoryPageParams {
   user: string;
@@ -28,6 +27,7 @@ const UserRepository = () => {
   const [isMe, setIsMe] = useState<boolean>(false);
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<IUser>(initialUser);
+  // eslint-disable-next-line
   const [seed, setSeed] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const history = useHistory();
@@ -56,6 +56,7 @@ const UserRepository = () => {
       }
       await setIsLoading(false);
     })();
+    // eslint-disable-next-line
   }, [user, me, history, dispatch]);
 
   return (
@@ -84,18 +85,7 @@ const UserRepository = () => {
             sm={12}
           >
             <Box>
-              {isMe && (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ marginBottom: "20px", height: "50px" }}
-                  fullWidth
-                  startIcon={<AddCircleIcon />}
-                  onClick={() => setIsShowAdd(true)}
-                >
-                  Upload Image
-                </Button>
-              )}
+              {isMe && <AddStoryForm />}
               {isLoading === true ? (
                 <StoryLoadingEffect />
               ) : (

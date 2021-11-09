@@ -36,7 +36,7 @@ const SelectField: React.FC<SelectFieldProps> = (props) => {
   }, [choose, form, name]);
 
   return (
-    <Box>
+    <>
       <Box component="div" onClick={handleOpen}>
         {choose}
       </Box>
@@ -62,7 +62,7 @@ const SelectField: React.FC<SelectFieldProps> = (props) => {
           </FormControl>
         )}
       />
-    </Box>
+    </>
   );
 };
 

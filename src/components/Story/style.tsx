@@ -28,8 +28,13 @@ const useStoryStyles = makeStyles({
     marginTop: "20px",
   },
   feelingBtn: {
-    width: "50%",
+    width: "33%",
     height: "50px",
+  },
+  commentBtn: {
+    width: "33%",
+    height: "50px",
+    gap: "10px",
   },
   privateIcon: {
     display: "flex",

@@ -5,8 +5,10 @@ import HomeIcon from "@mui/icons-material/Home";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import { IUser } from "models/user";
 import IconText from "components/TextKeyValue/IconText";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import sidebarStyle from "./style";
 import theme from "app/theme";
+import dateUtil from "utillity/date";
 
 interface IProps {
   userInfor: IUser;
@@ -49,6 +51,13 @@ const Sidebar: React.FC<IProps> = (props) => {
             values={[props.userInfor?.phone]}
           />
         )}
+        <IconText
+          startIcon={<AccessTimeIcon />}
+          text="Join at"
+          values={[
+            dateUtil.getDateMeaning(new Date(props.userInfor?.createdAt)),
+          ]}
+        />
       </Box>
     </Box>
   );

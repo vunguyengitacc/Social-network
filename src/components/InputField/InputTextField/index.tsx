@@ -22,6 +22,7 @@ interface InputFieldProps {
   sxText?: SxProps;
   isUnshowInput?: boolean;
   focusComponent?: JSX.Element;
+  isHideError?: boolean;
 }
 
 const defaultStyle = makeStyles({
@@ -53,7 +54,7 @@ const InputTextField: React.FC<InputFieldProps> = (props) => {
           sx={props.sxWrap}
           fullWidth
           variant="outlined"
-          error={hasError}
+          error={!props.isHideError && hasError}
         >
           {props.isUnshowInput && switchForm === false && !hasError && (
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -85,7 +86,9 @@ const InputTextField: React.FC<InputFieldProps> = (props) => {
               }}
             />
           )}
-          <FormHelperText>{errors[name]?.message}</FormHelperText>
+          {!props.isHideError && (
+            <FormHelperText>{errors[name]?.message}</FormHelperText>
+          )}
         </FormControl>
       )}
     />

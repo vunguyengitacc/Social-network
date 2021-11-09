@@ -20,6 +20,24 @@ declare module "@mui/material/styles" {
   }
 }
 
+declare module "@mui/material/styles" {
+  interface Palette {
+    disable: Palette["primary"];
+  }
+
+  // allow configuration using `createTheme`
+  interface PaletteOptions {
+    disable?: PaletteOptions["primary"];
+  }
+}
+
+// Update the Button's color prop options
+declare module "@mui/material/Button" {
+  interface ButtonPropsColorOverrides {
+    disable: true;
+  }
+}
+
 declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
     bold1: true;
@@ -36,6 +54,9 @@ const theme = createTheme({
   palette: {
     primary: {
       main: "#667eea",
+    },
+    disable: {
+      main: "#9c9c9c",
     },
   },
   typography: {
