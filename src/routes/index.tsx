@@ -20,7 +20,7 @@ const RoutesComponent = () => {
       />
       <Switch>
         <AuthRoute path="/auth" component={AuthPage} />
-        <PrivateRoute path="/personal/:user" component={PersonalPage} />
+        <PrivateRoute exact path="/personal/:user" component={PersonalPage} />
         <PrivateRoute exact path="/home" component={HomePage} />
         <PrivateRoute exact path="/story/:storyId" component={StoryPage} />
         <PrivateRoute component={HomePage} />

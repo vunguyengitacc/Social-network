@@ -30,6 +30,12 @@ const useAddStoryFormStyles = makeStyles({
     flexDirection: "row",
     gap: "20px",
   },
+  button: {
+    maxWidth: "40px",
+  },
+  smallBtn: {
+    maxWidth: "20px !important",
+  },
 });
 
 export default useAddStoryFormStyles;

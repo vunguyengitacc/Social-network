@@ -67,6 +67,7 @@ const ImageRender: React.FC<IProps> = (props) => {
               case props.value.length > 5 && idx === 4:
                 return (
                   <Button
+                    key={item}
                     color="inherit"
                     sx={{
                       backgroundImage: `url(${props.value[4]})`,

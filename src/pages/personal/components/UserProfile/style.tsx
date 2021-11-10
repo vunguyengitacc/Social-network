@@ -1,5 +1,6 @@
+import { TabList } from "@mui/lab";
 import { Theme } from "@mui/material";
-import { createStyles, makeStyles } from "@mui/styles";
+import { createStyles, makeStyles, withStyles } from "@mui/styles";
 
 const userProfileStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,5 +26,18 @@ const userProfileStyles = makeStyles((theme: Theme) =>
     },
   })
 );
+
+export const StyledListTab = withStyles({
+  indicator: {
+    backgroundColor: "#e7f3ff",
+    opacity: ".6",
+    color: "red",
+    width: "100%",
+    borderRadius: "10px",
+  },
+  "& .Mui-selected": {
+    color: "black",
+  },
+})(TabList);
 
 export default userProfileStyles;

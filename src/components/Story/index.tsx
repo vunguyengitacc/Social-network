@@ -98,101 +98,95 @@ const Story: React.FC<IPropsStory> = (props) => {
 
   return (
     <Wrapper>
-      <Box>
-        <Box>
-          <Menu open={openMenu} anchorEl={anchor} onClose={handleClose}>
-            <Box className={style.menuSurface}>
-              <Button
-                sx={{ display: "flex", justifyContent: "flex-start" }}
-                startIcon={<DeleteForeverIcon />}
-                color="error"
-                onClick={handleDelete}
-              >
-                Delete this story
-              </Button>
-              <Button
-                sx={{ display: "flex", justifyContent: "flex-start" }}
-                startIcon={<VerifiedUserIcon />}
-                color="primary"
-                onClick={handleTogglePrivate}
-              >
-                {isPrivate === true ? "Set to public" : "Set to privite"}
-              </Button>
-            </Box>
-          </Menu>
-          <Box className={style.titleField}>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Avatar
-                src={owner?.avatarUri}
-                className={style.avatar}
-                onClick={() => history.push(`/personal/${owner?._id}`)}
-              />
-              <Typography className={style.date} variant="bold4">
-                {dateUtil.getFullDate(createdAt)}
-              </Typography>
-              <Typography className={style.time} variant="bold4">
-                {dateUtil.getFullHours(createdAt)}
-              </Typography>
-              {isPrivate && (
-                <Typography className={style.privateIcon}>
-                  <LockIcon />
-                </Typography>
-              )}
-            </Box>
-            {isMe && (
-              <IconButton onClick={handleOpenMenu} className={style.taskBtn}>
-                <MoreVertIcon />
-              </IconButton>
-            )}
+      <Menu open={openMenu} anchorEl={anchor} onClose={handleClose}>
+        <Box className={style.menuSurface}>
+          <Button
+            sx={{ display: "flex", justifyContent: "flex-start" }}
+            startIcon={<DeleteForeverIcon />}
+            color="error"
+            onClick={handleDelete}
+          >
+            Delete this story
+          </Button>
+          <Button
+            sx={{ display: "flex", justifyContent: "flex-start" }}
+            startIcon={<VerifiedUserIcon />}
+            color="primary"
+            onClick={handleTogglePrivate}
+          >
+            {isPrivate === true ? "Set to public" : "Set to privite"}
+          </Button>
+        </Box>
+      </Menu>
+      <Box className={style.titleField}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Avatar
+            src={owner?.avatarUri}
+            className={style.avatar}
+            onClick={() => history.push(`/personal/${owner?._id}`)}
+          />
+          <Box>
+            <Typography variant="bold4">{owner?.fullname}</Typography>
+            <Typography variant="subtitle2">
+              {dateUtil.getDateMeaning(createdAt)}
+            </Typography>
           </Box>
-          <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>
-            {content}
-          </Box>
-          {props.imageUrl.length > 0 && (
-            <Box
-              className={style.imageSurface}
-              component="div"
-              onClick={() => history.push(`/story/${props._id}`)}
-            >
-              <ImageRender value={props.imageUrl} />
-            </Box>
-          )}
-
-          <Box className={style.groupTask}>
-            <Button
-              className={style.feelingBtn}
-              sx={{
-                color: `${islike ? "#667eea" : "gray"}`,
-              }}
-              onClick={handleToogleLike}
-            >
-              <ThumbUpAltIcon /> {likeById.length || ""}
-            </Button>
-            <Button
-              className={style.feelingBtn}
-              sx={{
-                color: `${isDislike ? "#f32b2b" : "gray"}`,
-              }}
-              onClick={handleToggleDislike}
-            >
-              <ThumbDownAltIcon /> {dislikeById.length || ""}
-            </Button>
-            <Button
-              className={style.commentBtn}
-              onClick={() => setOpenComment(!openComment)}
-              {...{ color: `${openComment ? "primary" : "disable"}` }}
-            >
-              <CommentIcon /> <Typography>Comment</Typography>
-            </Button>
-          </Box>
-          {openComment && (
-            <>
-              <Divider />
-              <CommentBox storyId={_id} />
-            </>
+          {isPrivate && (
+            <Typography className={style.privateIcon}>
+              <LockIcon />
+            </Typography>
           )}
         </Box>
+        {isMe && (
+          <IconButton onClick={handleOpenMenu} className={style.taskBtn}>
+            <MoreVertIcon />
+          </IconButton>
+        )}
       </Box>
+      <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>{content}</Box>
+      {props.imageUrl.length > 0 && (
+        <Box
+          className={style.imageSurface}
+          component="div"
+          onClick={() => history.push(`/story/${props._id}`)}
+        >
+          <ImageRender value={props.imageUrl} />
+        </Box>
+      )}
+
+      <Box className={style.groupTask}>
+        <Button
+          className={style.feelingBtn}
+          sx={{
+            color: `${islike ? "#667eea" : "gray"}`,
+          }}
+          onClick={handleToogleLike}
+        >
+          <ThumbUpAltIcon /> {likeById.length || ""}
+        </Button>
+        <Button
+          className={style.feelingBtn}
+          sx={{
+            color: `${isDislike ? "#f32b2b" : "gray"}`,
+          }}
+          onClick={handleToggleDislike}
+        >
+          <ThumbDownAltIcon /> {dislikeById.length || ""}
+        </Button>
+        <Button
+          className={style.commentBtn}
+          onClick={() => setOpenComment(!openComment)}
+          {...{ color: `${openComment ? "primary" : "disable"}` }}
+        >
+          <CommentIcon /> <Typography>Comment</Typography>
+        </Button>
+      </Box>
+      {openComment && (
+        <>
+          <Divider />
+          <CommentBox storyId={_id} />
+        </>
+      )}
     </Wrapper>
   );
 };

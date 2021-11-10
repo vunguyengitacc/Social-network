@@ -32,12 +32,12 @@ const CommentBox: React.FC<IProps> = (props) => {
       {isLoading ? (
         <CommentLoadingEffect />
       ) : (
-        <>
-          <Typography>{comments?.length} comments</Typography>
+        <Box className={style.commentContainer}>
+          <Typography variant="bold4">{comments?.length} comments</Typography>
           {comments?.map((item) => (
-            <Comment value={item} />
+            <Comment key={item._id} reload={fetchComment} value={item} />
           ))}
-        </>
+        </Box>
       )}
 
       <SendCommentForm reload={fetchComment} storyId={props.storyId} />

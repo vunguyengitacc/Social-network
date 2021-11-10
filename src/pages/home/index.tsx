@@ -23,7 +23,6 @@ const HomePage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const style = homePageStyles(theme);
   const match = useMediaQuery(theme.breakpoints.up("sm"));
-  console.log(match);
 
   useEffect(() => {
     (async () => {
@@ -41,9 +40,11 @@ const HomePage = () => {
         <Header />
       </Box>
       <Box className={style.surface}>
-        <Box className={style.something}>
-          <HotList />
-        </Box>
+        {match && (
+          <Box className={style.something}>
+            <HotList />
+          </Box>
+        )}
         <Box className={style.storiesSurface}>
           <AddStoryForm />
           {isLoading ? <StoryLoadingEffect /> : <StoryList stories={stories} />}

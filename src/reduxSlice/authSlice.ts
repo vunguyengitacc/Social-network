@@ -109,9 +109,9 @@ const authSlice = createSlice({
     });
     builder.addCase(
       getMe.fulfilled,
-      (state, action: PayloadAction<IResponse<IUser>>) => {
+      (state, { payload }: PayloadAction<IResponse<IUser>>) => {
         state.isAuth = true;
-        state.currentUser = action.payload.data.user;
+        state.currentUser = payload.data.user;
       }
     );
     builder.addCase(login.pending, (state) => {});

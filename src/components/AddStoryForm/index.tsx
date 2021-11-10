@@ -1,5 +1,12 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Avatar, Box, Button, Divider, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Divider,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { AppDispatch, RootState } from "app/store";
 import InputTextField from "components/InputField/InputTextField";
 import SelectField from "components/InputField/SelectField";
@@ -16,10 +23,12 @@ import { getSizeDynamic } from "utillity/file";
 import { addStory } from "reduxSlice/storySlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
+import theme from "app/theme";
 
 const AddStoryForm = () => {
   const [files, setFiles] = useState<File[]>([]);
 
+  const match = useMediaQuery(theme.breakpoints.up("sm"));
   const me = useSelector((state: RootState) => state.auth.currentUser);
   const dispatch = useDispatch<AppDispatch>();
   const form = useForm<IFormAddImageValues>({
@@ -95,12 +104,16 @@ const AddStoryForm = () => {
         ))}
         <Divider variant="middle" />
         <Box className={style.contentSurface}>
-          <SelectField form={form} name="isPrivate">
+          <SelectField
+            form={form}
+            name="isPrivate"
+            sxShowSelect={{ maxWidth: "40px" }}
+          >
             <Button startIcon={<PublicIcon />} value={"false"}>
-              Public
+              {match && "Public"}
             </Button>
             <Button startIcon={<PrivacyTipIcon />} value={"true"} color="error">
-              Private
+              {match && "Private"}
             </Button>
           </SelectField>
           <Divider orientation="vertical" variant="middle" />
@@ -114,20 +127,22 @@ const AddStoryForm = () => {
           />
           <label htmlFor="contained-button-file">
             <Button
+              className={match ? style.button : style.smallBtn}
               startIcon={<AttachmentIcon />}
               component="span"
               variant="contained"
             >
-              Image
+              {match && "Image"}
             </Button>
           </label>
           <Button
+            className={match ? style.button : style.smallBtn}
             startIcon={<SendIcon />}
             type="submit"
             variant="contained"
             color="success"
           >
-            Send
+            {match && "Send"}
           </Button>
         </Box>
       </form>

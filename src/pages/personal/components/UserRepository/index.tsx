@@ -49,8 +49,7 @@ const UserRepository = () => {
       } else {
         const response = await userApi.getById(user);
         setUserInfor(response.data.user);
-        if (response.data.user?._id === me._id)
-          history.push("/personal/stories/me");
+        if (response.data.user?._id === me._id) history.push("/personal/me");
         setIsMe(false);
         await dispatch(getStoriesByUserId(user));
       }

@@ -1,60 +1,21 @@
 import React, { useState } from "react";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { TabContext, TabPanel } from "@mui/lab";
 import { Tab, Box, Typography, Button } from "@mui/material";
 import CustomTabPanel from "../CustomTabPanel";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
 import { IUser } from "models/user";
-import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import InputTextField from "components/InputField/InputTextField";
 import { updateMe } from "reduxSlice/authSlice";
 import InputListTextField from "components/InputField/InputListTextField";
-import { withStyles } from "@mui/styles";
-import userProfileStyles from "./style";
+import userProfileStyles, { StyledListTab } from "./style";
 import theme from "app/theme";
 import { unwrapResult } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { debounce } from "lodash";
-
-const StyledListTab = withStyles({
-  indicator: {
-    backgroundColor: "#e7f3ff",
-    opacity: ".6",
-    color: "red",
-    width: "100%",
-    borderRadius: "10px",
-  },
-  "& .Mui-selected": {
-    color: "black",
-  },
-})(TabList);
-
-const basicScheme = yup.object().shape({
-  fullname: yup
-    .string()
-    .required()
-    .max(100, "Please input at most 100 characters")
-    .min(6, "Please input at least 6 characters"),
-  address: yup
-    .string()
-    .max(100, "Please input at most 100 characters")
-    .min(6, "Please input at least 6 characters"),
-});
-
-const contactScheme = yup.object().shape({
-  phone: yup.string().matches(
-    // eslint-disable-next-line
-    /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
-    "invalid phone number"
-  ),
-});
-
-const workScheme = yup.object().shape({
-  job: yup.array().of(yup.string()).max(10),
-  education: yup.array().of(yup.string()).max(10),
-});
+import scheme from "./form";
 
 const UserProfile = () => {
   const [panel, setPanel] = useState("profile-1");
@@ -62,6 +23,7 @@ const UserProfile = () => {
   const dispatch = useDispatch<AppDispatch>();
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   const style = userProfileStyles(theme);
+  const { basicScheme, contactScheme, workScheme } = scheme;
 
   const basicForm = useForm<Pick<IUser, "fullname" | "address">>({
     mode: "onSubmit",

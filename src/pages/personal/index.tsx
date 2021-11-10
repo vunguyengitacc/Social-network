@@ -35,7 +35,7 @@ const PersonalPage = () => {
   const style = personalPageStyle();
 
   const history = useHistory();
-  const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
+  const me = useSelector((state: RootState) => state.auth.currentUser);
   const { user } = useParams<IStoryPageParams>();
   const [isFriend, setIsFriend] = useState<boolean>(
     [...(me.friendId ?? [])].filter((i) => i === userInfor?._id).length > 0

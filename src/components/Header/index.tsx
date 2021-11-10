@@ -8,6 +8,8 @@ import {
   Menu,
   MenuItem,
   Button,
+  Badge,
+  Drawer,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchField from "../SearchField";
@@ -23,6 +25,7 @@ import { INotification } from "models/notification";
 import NotificationItem from "../NotificationItem";
 import headerStyles from "./style";
 import logo from "images/Logo.png";
+import SearchBar from "components/SearchBar";
 
 const Header = () => {
   const [search, setSearch] = useState<boolean>(false);
@@ -80,14 +83,23 @@ const Header = () => {
           <SearchIcon />
         </IconButton>
         {search && (
-          <Hidden smDown>
-            <SearchField />
-          </Hidden>
+          <>
+            <Hidden mdDown>
+              <SearchField />
+            </Hidden>
+            <Hidden mdUp>
+              <Drawer open={search} onClose={() => setSearch(false)}>
+                <SearchBar />
+              </Drawer>
+            </Hidden>
+          </>
         )}
       </Box>
       <Box sx={{ marginRight: "20px" }}>
         <IconButton onClick={handleOpenMenu}>
-          <NotificationsNoneIcon />
+          <Badge badgeContent={notifications.length} color="error">
+            <NotificationsNoneIcon />
+          </Badge>
         </IconButton>
         <IconButton
           sx={{ borderRadius: "0" }}

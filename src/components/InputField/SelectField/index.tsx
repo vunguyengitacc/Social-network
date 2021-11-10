@@ -1,6 +1,6 @@
 import { Menu, MenuItem, OutlinedInput } from "@mui/material";
 import FormControl from "@mui/material/FormControl";
-import { Box } from "@mui/system";
+import { Box, SxProps } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
 
@@ -11,6 +11,7 @@ interface SelectFieldProps {
   placeholder?: string;
   autoComplete?: string;
   children: JSX.Element[];
+  sxShowSelect?: SxProps;
 }
 
 const SelectField: React.FC<SelectFieldProps> = (props) => {
@@ -37,7 +38,7 @@ const SelectField: React.FC<SelectFieldProps> = (props) => {
 
   return (
     <>
-      <Box component="div" onClick={handleOpen}>
+      <Box component="div" onClick={handleOpen} sx={props.sxShowSelect}>
         {choose}
       </Box>
       <Menu open={open} anchorEl={anchor} onClose={handleClose}>
