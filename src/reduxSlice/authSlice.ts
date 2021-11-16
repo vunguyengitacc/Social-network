@@ -81,7 +81,11 @@ export const login = createAsyncThunk(
 export const register = createAsyncThunk(
   "auth/register",
   async (payload: IRegisterFormValues, thunkAPI) => {
-    const response = await authApi.register(payload);
+    const response = await authApi.register({
+      fullname: payload.fullname,
+      password: payload.password,
+      username: payload.username,
+    });
     localStorage.setItem("access_token", response.data.access_token);
     thunkAPI.dispatch(getMe());
   }

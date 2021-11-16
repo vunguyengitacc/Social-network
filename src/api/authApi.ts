@@ -11,7 +11,9 @@ const authApi = {
   login(payload: ILoginFormValues): Promise<IResponse<any>> {
     return axiosClient.post("/auth/login", payload);
   },
-  register(payload: IRegisterFormValues): Promise<IResponse<any>> {
+  register(
+    payload: Pick<IRegisterFormValues, "fullname" | "password" | "username">
+  ): Promise<IResponse<any>> {
     return axiosClient.post("/auth/register", payload);
   },
 };

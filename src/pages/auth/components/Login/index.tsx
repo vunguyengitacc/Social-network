@@ -1,5 +1,4 @@
 import Box from "@mui/material/Box";
-import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import React from "react";
@@ -13,22 +12,7 @@ import { AppDispatch } from "app/store";
 import { login } from "reduxSlice/authSlice";
 import toast from "react-hot-toast";
 import { useHistory } from "react-router";
-
-const schema = yup
-  .object()
-  .shape({
-    username: yup
-      .string()
-      .required("Please enter username.")
-      .min(6, "Please enter at least 6 characters.")
-      .max(35, "Please enter at most 35 characters"),
-    password: yup
-      .string()
-      .required("Please enter your password")
-      .min(6, "Please enter at least 6 characters.")
-      .max(30, "Please enter at most 30 characters"),
-  })
-  .required();
+import schema from "./form";
 
 export interface ILoginFormValues {
   username: string;
