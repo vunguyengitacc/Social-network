@@ -46,7 +46,7 @@ const InputPassworldField: React.FC<InputPasswordFieldProp> = (props) => {
                 </IconButton>
               </InputAdornment>
             }
-          ></OutlinedInput>
+          />
           <FormHelperText>{errors[name]?.message}</FormHelperText>
         </FormControl>
       )}

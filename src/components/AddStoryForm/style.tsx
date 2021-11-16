@@ -9,9 +9,8 @@ const useAddStoryFormStyles = makeStyles({
   },
   contentSurface: {
     display: "flex",
-    alignItems: "center",
-    height: "75px",
-    padding: "0 2% 0 2%",
+    // alignItems: "center",
+    padding: "20px 2% 20px 2%",
     gap: "2%",
   },
   avatar: {},

@@ -20,7 +20,7 @@ const useStoryContentStyles = makeStyles({
     alignItems: "center",
     gap: "10px",
   },
-  storyMsg: { margin: "20px 0 20px 0" },
+  storyMsg: { margin: "20px 0 20px 0", textAlign: "left" },
 });
 
 export default useStoryContentStyles;

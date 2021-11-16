@@ -29,6 +29,7 @@ import ImageRender from "components/ImageRender";
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentBox from "components/CommentBox";
 import theme from "app/theme";
+import { Editor, EditorState, convertFromRaw } from "draft-js";
 
 interface IPropsStory {
   _id: string;
@@ -48,6 +49,10 @@ const Story: React.FC<IPropsStory> = (props) => {
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [openMenu, setOpenMenu] = useState<boolean>(Boolean(anchor));
   const [openComment, setOpenComment] = useState<boolean>(false);
+  const [richContent] = useState<EditorState>(
+    EditorState.createWithContent(convertFromRaw(JSON.parse(content)))
+  );
+
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   let islike = likeById.filter((i) => i === me._id).length > 0;
   let isDislike = dislikeById.filter((i) => i === me._id).length > 0;
@@ -147,7 +152,9 @@ const Story: React.FC<IPropsStory> = (props) => {
           </IconButton>
         )}
       </Box>
-      <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>{content}</Box>
+      <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>
+        <Editor readOnly editorState={richContent} onChange={() => {}} />
+      </Box>
       {props.imageUrl.length > 0 && (
         <Box
           className={style.imageSurface}

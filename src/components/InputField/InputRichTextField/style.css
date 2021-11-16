@@ -1,0 +1,13 @@
+.editField > .DraftEditor-root {
+  border: 2px solid rgb(155, 155, 155);
+  border-radius: 15px;
+  padding: 10px;
+}
+
+.editField > .DraftEditor-root:hover {
+  border: 2px solid black;
+}
+
+.editField > .DraftEditor-root:focus-within {
+  border: 2px solid #667eea;
+}

@@ -8,7 +8,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { AppDispatch, RootState } from "app/store";
-import InputTextField from "components/InputField/InputTextField";
 import SelectField from "components/InputField/SelectField";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -24,6 +23,7 @@ import { addStory } from "reduxSlice/storySlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import theme from "app/theme";
+import InputRichTextField from "components/InputField/InputRichTextField";
 
 const AddStoryForm = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -85,14 +85,21 @@ const AddStoryForm = () => {
       <form onSubmit={form.handleSubmit(submitForm)}>
         <Box className={style.contentSurface}>
           <Avatar className={style.avatar} src={me.avatarUri} />
-          <InputTextField
-            isHideError={true}
-            placeholder="Enter your content message"
-            form={form}
+          <InputRichTextField
             name="content"
+            placeholder="Enter your content..."
+            form={form}
           />
         </Box>
 
+        {files.length > 0 && (
+          <>
+            <Divider variant="middle" />
+            <Typography variant="bold4" marginLeft="15px">
+              ListFile
+            </Typography>
+          </>
+        )}
         {files.map((item, index) => (
           <Box key={index} className={style.inputFile}>
             <Box className={style.inputFileValue}>
