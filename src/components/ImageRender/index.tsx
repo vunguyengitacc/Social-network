@@ -15,7 +15,11 @@ function srcset(
 ): React.ImgHTMLAttributes<HTMLImageElement> {
   return {
     src: image,
-    style: { height: `${cols * size}px`, width: `${rows * size}px` },
+    style: {
+      height: `${cols * size}px`,
+      width: `${rows * size}px`,
+      maxWidth: "100%",
+    },
   };
 }
 

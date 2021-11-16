@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { socketClient } from "app/socket";
-import { AppDispatch } from "app/store";
+import { AppDispatch, RootState } from "app/store";
 import useStoryListStyles from "components/StoryList/style";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +15,7 @@ import Story from "../Story";
 const StoryList: React.FC = (props) => {
   const [isExist, setIsExist] = useState<boolean>(false);
   const stories = useSelector(storiesSelector.selectAll);
+  const me = useSelector((state: RootState) => state.auth.currentUser);
   const dispatch = useDispatch<AppDispatch>();
 
   const style = useStoryListStyles();
@@ -25,7 +26,7 @@ const StoryList: React.FC = (props) => {
 
   useEffect(() => {
     socketClient.on("story/reaction", (data) => {
-      dispatch(updateStory(data.story));
+      if (data.userId !== me._id) dispatch(updateStory(data.story));
     });
     socketClient.on("story/delete", (data) => {
       dispatch(removeStoryFromState(data.storyId));

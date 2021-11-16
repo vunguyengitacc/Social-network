@@ -69,7 +69,7 @@ const UserRepository = () => {
   }, [user]);
 
   return (
-    <Box minHeight="100vh">
+    <Box>
       {isMe && <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />}
       <Box display="flex" className={style.surface}>
         <Grid
@@ -83,9 +83,13 @@ const UserRepository = () => {
           <Grid paddingTop="3vh" item className={style.grid} lg={8} sm={12}>
             <Box>
               {isMe && <AddStoryForm />}
-              {isLoading === true ? <StoryLoadingEffect /> : <StoryList />}
+              {isLoading === true ? (
+                <StoryLoadingEffect amount={3} />
+              ) : (
+                <StoryList />
+              )}
               <Box color="transparent" ref={contentEl}>
-                here
+                <StoryLoadingEffect amount={1} />
               </Box>
             </Box>
           </Grid>

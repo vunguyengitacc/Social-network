@@ -6,7 +6,9 @@ const useStoryListStyles = makeStyles({
     padding: "10px",
     borderRadius: "10px",
     display: "flex",
-    justifyContent: "space-around",
+    margin: "10px",
+    justifyContent: "center",
+    marginTop: "20px",
   },
 });
 

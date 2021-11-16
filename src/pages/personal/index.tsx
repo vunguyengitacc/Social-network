@@ -148,7 +148,7 @@ const PersonalPage = () => {
           <Box
             className={style.taskSurface}
             flexDirection={matchMd ? "row" : "column-reverse"}
-            marginTop={matchMd ? "0" : "20px"}
+            marginTop={matchMd ? "0" : "50px"}
             gap="20px"
           >
             <StyledListTab onChange={handleChange} aria-label="">

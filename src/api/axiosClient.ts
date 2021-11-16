@@ -5,7 +5,7 @@ import queryString from "query-string";
 const axiosClient = axios.create({
   baseURL:
     process.env.NODE_ENV === "production"
-      ? process.env.PUBLIC_URL_API
+      ? process.env.REACT_APP_PUBLIC_URL_API
       : "http://localhost:5000/api",
   headers: {
     "content-type": "application/json",

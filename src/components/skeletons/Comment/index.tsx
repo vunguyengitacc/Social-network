@@ -1,12 +1,18 @@
 import React from "react";
 import CommentSkeleton from "./item";
 
-export default function CommentLoadingEffect() {
+interface IProps {
+  amount: number;
+}
+
+const CommentLoadingEffect: React.FC<IProps> = ({ amount }) => {
   return (
     <>
-      <CommentSkeleton />
-      <CommentSkeleton />
-      <CommentSkeleton />
+      {[...Array(amount)].map((i) => (
+        <CommentSkeleton key={i} />
+      ))}
     </>
   );
-}
+};
+
+export default CommentLoadingEffect;

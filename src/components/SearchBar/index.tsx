@@ -40,13 +40,16 @@ const SearchBar = () => {
         <SearchIcon />
         <Typography sx={{ height: "40px" }}>Search</Typography>
       </Box>
-      <TextField fullWidth onChange={submitSearch} />
+      <TextField
+        placeholder="type something here"
+        fullWidth
+        onChange={submitSearch}
+      />
       <List className={style.searchField}>
         {searchResult.map((item) => (
-          <ListItem>
+          <ListItem key={item._id}>
             <Button
               className={style.searchItem}
-              key={item._id}
               onClick={() => history.push(`/personal/${item._id}`)}
             >
               <Avatar alt="" src={item.avatarUri} />

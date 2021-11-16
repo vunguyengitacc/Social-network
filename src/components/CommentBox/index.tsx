@@ -44,7 +44,7 @@ const CommentBox: React.FC<IProps> = (props) => {
   return (
     <Box className={style.surface}>
       {isLoading ? (
-        <CommentLoadingEffect />
+        <CommentLoadingEffect amount={3} />
       ) : (
         <Box className={style.commentContainer}>
           <Typography variant="bold4">{comments?.length} comments</Typography>

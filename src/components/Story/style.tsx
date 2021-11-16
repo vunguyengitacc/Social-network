@@ -70,6 +70,7 @@ export const Wrapper = styled("div")(({ theme: Theme }) => ({
   minHeight: "100px",
   borderRadius: "10px",
   marginBottom: "20px",
+  boxShadow: "0 1px 2px rgb(0,0,0, 0.2)",
   border: "1px solid #e8e8e8",
 }));
 

@@ -17,7 +17,6 @@ export default function StoryPage() {
     (async () => {
       const { data } = await storyApi.getById(storyId);
       setStory(data.story);
-      console.log(data);
     })();
   }, [storyId]);
   return story ? (

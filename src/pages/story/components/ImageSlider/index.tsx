@@ -18,7 +18,6 @@ const ImageSlider: React.FC<IProps> = (props) => {
   const style = useImageSliderStyles();
 
   const setNextPicture = () => {
-    console.log(index + 1);
     setIndex(index + 1);
   };
 
@@ -44,7 +43,11 @@ const ImageSlider: React.FC<IProps> = (props) => {
         <Button className={style.button} onClick={setBackPicture}>
           <ArrowBackIosIcon />
         </Button>
-        <img alt="" src={props.value.imageUrl[index]} />
+        <img
+          alt=""
+          src={props.value.imageUrl[index]}
+          style={{ maxWidth: "80%" }}
+        />
         <Button className={style.button} onClick={setNextPicture}>
           <ArrowForwardIosIcon />
         </Button>

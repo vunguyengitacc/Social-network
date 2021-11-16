@@ -9,7 +9,7 @@ import {
   MenuItem,
   Button,
   Badge,
-  Drawer,
+  SwipeableDrawer,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import SearchField from "../SearchField";
@@ -98,13 +98,13 @@ const Header = () => {
           <IconButton onClick={() => setOpenSearch(true)}>
             <SearchIcon />
           </IconButton>
-          <Drawer
-            variant="temporary"
+          <SwipeableDrawer
             open={openSearch}
+            onOpen={() => setOpenSearch(true)}
             onClose={() => setOpenSearch(false)}
           >
             <SearchBar />
-          </Drawer>
+          </SwipeableDrawer>
         </Hidden>
       </Box>
       <Box sx={{ marginRight: "20px" }}>

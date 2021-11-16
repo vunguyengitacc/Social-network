@@ -4,7 +4,7 @@ const useImageSliderStyles = makeStyles({
   imageSurface: {
     width: "100%",
     height: "100vh",
-    backgroundColor: "black",
+    backgroundColor: "#303030",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",

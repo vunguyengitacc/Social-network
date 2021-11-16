@@ -112,6 +112,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          borderRadius: "10px !important",
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -184,6 +191,10 @@ const theme = createTheme({
         paperAnchorBottom: {
           borderTopRightRadius: "20px",
           borderTopLeftRadius: "20px",
+        },
+        paperAnchorLeft: {
+          borderTopRightRadius: "15px",
+          borderBottomRightRadius: "15px",
         },
       },
     },

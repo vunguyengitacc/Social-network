@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import AddImageDialog from "components/AddImageDialog";
 import Header from "components/Header";
 import { getStories } from "reduxSlice/storySlice";
 import { useDispatch } from "react-redux";
@@ -16,7 +15,6 @@ import AddStoryForm from "components/AddStoryForm";
 import useVisible from "hooks/useVisible";
 
 const HomePage = () => {
-  const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // eslint-disable-next-line
   const [seed, setSeed] = useState<number>(0);
@@ -46,7 +44,6 @@ const HomePage = () => {
 
   return (
     <>
-      <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />
       <Box>
         <Header />
       </Box>
@@ -58,9 +55,9 @@ const HomePage = () => {
         )}
         <Box className={style.storiesSurface}>
           <AddStoryForm />
-          {isLoading ? <StoryLoadingEffect /> : <StoryList />}
+          {isLoading ? <StoryLoadingEffect amount={3} /> : <StoryList />}
           <Box color="transparent" component="div" ref={contentEl}>
-            Load more
+            <StoryLoadingEffect amount={1} />
           </Box>
         </Box>
         {match && (

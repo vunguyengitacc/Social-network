@@ -81,7 +81,7 @@ const AddStoryForm = () => {
 
   const style = useAddStoryFormStyles();
   return (
-    <Box className={style.surface}>
+    <Box className={style.surface} boxShadow="0 1px 2px rgb(0,0,0, 0.2)">
       <form onSubmit={form.handleSubmit(submitForm)}>
         <Box className={style.contentSurface}>
           <Avatar className={style.avatar} src={me.avatarUri} />
