@@ -18,7 +18,6 @@ import toast from "react-hot-toast";
 
 interface IProps {
   value: IComment;
-  reload: () => void;
 }
 
 const Comment: React.FC<IProps> = (props) => {
@@ -47,7 +46,6 @@ const Comment: React.FC<IProps> = (props) => {
     try {
       await commentApi.deleteById(value._id);
       toast.success("Success", { id: toastId });
-      props.reload();
     } catch (error: any) {
       toast.error(error.message, { id: toastId });
     }

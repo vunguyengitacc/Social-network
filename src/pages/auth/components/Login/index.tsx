@@ -7,6 +7,12 @@ import { Button } from "@mui/material";
 import InputPassworldField from "components/InputField/InputPasswordField";
 import InputTextField from "components/InputField/InputTextField";
 import useLoginStyles from "./style";
+import { useDispatch } from "react-redux";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { AppDispatch } from "app/store";
+import { login } from "reduxSlice/authSlice";
+import toast from "react-hot-toast";
+import { useHistory } from "react-router";
 
 const schema = yup
   .object()
@@ -29,12 +35,10 @@ export interface ILoginFormValues {
   password: string;
 }
 
-interface ILoginProp {
-  onSubmit: (data: ILoginFormValues) => void;
-}
-
-const LoginForm: React.FC<ILoginProp> = ({ onSubmit }) => {
+const LoginForm: React.FC = (props) => {
   const style = useLoginStyles();
+  const dispatch = useDispatch<AppDispatch>();
+  const history = useHistory();
 
   const form = useForm<any>({
     mode: "onSubmit",
@@ -46,12 +50,23 @@ const LoginForm: React.FC<ILoginProp> = ({ onSubmit }) => {
     resolver: yupResolver(schema),
   });
 
+  const submitLogin = async (data: ILoginFormValues) => {
+    const toastId = toast.loading("Loading");
+    try {
+      await dispatch(login(data)).then(unwrapResult);
+      toast.success("Login successully", { id: toastId });
+      history.push("/home");
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
+    }
+  };
+
   const loginWithFacebook = async () => {
     window.open("http://localhost:5000/api/auth/facebook", "_self");
   };
   return (
     <Box className={style.form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={form.handleSubmit(submitLogin)}>
         <InputTextField
           name="username"
           placeholder="Please enter your username"

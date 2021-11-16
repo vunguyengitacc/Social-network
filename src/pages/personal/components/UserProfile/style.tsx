@@ -9,8 +9,8 @@ const userProfileStyles = makeStyles((theme: Theme) =>
         margin: "3vh 0 3vh 0",
       },
       [theme.breakpoints.up("sm")]: {
-        margin: "3vh 15vw 3vh 15vw",
-        width: "70vw",
+        margin: "3vh 10vw 3vh 10vw",
+        width: "80vw",
       },
       padding: "10px",
       backgroundColor: "white",

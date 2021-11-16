@@ -5,6 +5,8 @@ import {
   Menu,
   Avatar,
   Divider,
+  SwipeableDrawer,
+  useMediaQuery,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -20,12 +22,13 @@ import { reactToStory, removeStory, update } from "reduxSlice/storySlice";
 import LockIcon from "@mui/icons-material/Lock";
 import { IUser } from "models/user";
 import { useHistory } from "react-router";
-import useStoryStyles, { Wrapper } from "./style";
+import useStoryStyles, { Puller, Wrapper } from "./style";
 import { unwrapResult } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import ImageRender from "components/ImageRender";
 import CommentIcon from "@mui/icons-material/Comment";
 import CommentBox from "components/CommentBox";
+import theme from "app/theme";
 
 interface IPropsStory {
   _id: string;
@@ -49,6 +52,7 @@ const Story: React.FC<IPropsStory> = (props) => {
   let islike = likeById.filter((i) => i === me._id).length > 0;
   let isDislike = dislikeById.filter((i) => i === me._id).length > 0;
   let isMe = owner?._id !== me._id ? false : true;
+  const mdMatch = useMediaQuery(theme.breakpoints.up("md"));
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -102,19 +106,19 @@ const Story: React.FC<IPropsStory> = (props) => {
         <Box className={style.menuSurface}>
           <Button
             sx={{ display: "flex", justifyContent: "flex-start" }}
+            startIcon={<VerifiedUserIcon />}
+            color="primary"
+            onClick={handleTogglePrivate}
+          >
+            {isPrivate === true ? "Set to public" : "Set to private"}
+          </Button>
+          <Button
+            sx={{ display: "flex", justifyContent: "flex-start" }}
             startIcon={<DeleteForeverIcon />}
             color="error"
             onClick={handleDelete}
           >
             Delete this story
-          </Button>
-          <Button
-            sx={{ display: "flex", justifyContent: "flex-start" }}
-            startIcon={<VerifiedUserIcon />}
-            color="primary"
-            onClick={handleTogglePrivate}
-          >
-            {isPrivate === true ? "Set to public" : "Set to privite"}
           </Button>
         </Box>
       </Menu>
@@ -178,14 +182,31 @@ const Story: React.FC<IPropsStory> = (props) => {
           onClick={() => setOpenComment(!openComment)}
           {...{ color: `${openComment ? "primary" : "disable"}` }}
         >
-          <CommentIcon /> <Typography>Comment</Typography>
+          <CommentIcon />
+          {mdMatch && <Typography>Comment</Typography>}
         </Button>
       </Box>
-      {openComment && (
+      {mdMatch && openComment && (
         <>
           <Divider />
           <CommentBox storyId={_id} />
         </>
+      )}
+      {!mdMatch && (
+        <SwipeableDrawer
+          anchor="bottom"
+          open={openComment}
+          onOpen={() => setOpenComment(true)}
+          onClose={() => setOpenComment(false)}
+          sx={{
+            borderTopLeftRadius: "20px",
+          }}
+        >
+          <>
+            <Puller />
+            <CommentBox storyId={_id} />
+          </>
+        </SwipeableDrawer>
       )}
     </Wrapper>
   );

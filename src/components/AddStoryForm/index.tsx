@@ -52,6 +52,8 @@ const AddStoryForm = () => {
           formData.append("file", item);
         });
         dispatch(addStory(formData)).then(unwrapResult);
+        form.reset();
+        setFiles([]);
       } else {
         form.reset();
         setFiles([]);
@@ -128,20 +130,20 @@ const AddStoryForm = () => {
           <label htmlFor="contained-button-file">
             <Button
               className={match ? style.button : style.smallBtn}
-              startIcon={<AttachmentIcon />}
               component="span"
               variant="contained"
             >
+              <AttachmentIcon />
               {match && "Image"}
             </Button>
           </label>
           <Button
             className={match ? style.button : style.smallBtn}
-            startIcon={<SendIcon />}
             type="submit"
             variant="contained"
             color="success"
           >
+            <SendIcon />
             {match && "Send"}
           </Button>
         </Box>

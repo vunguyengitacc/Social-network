@@ -1,5 +1,15 @@
 import { makeStyles, styled } from "@mui/styles";
-import theme from "app/theme";
+import { Box } from "@mui/material";
+
+export const Puller = styled(Box)({
+  width: 30,
+  height: 6,
+  borderRadius: 3,
+  position: "absolute",
+  top: 8,
+  left: "calc(50% - 15px)",
+  backgroundColor: "#c9c5c5",
+});
 
 const useStoryStyles = makeStyles({
   taskBtn: {
@@ -42,27 +52,6 @@ const useStoryStyles = makeStyles({
     justifyContent: "center !important",
     marginLeft: "20px !important",
   },
-  date: {
-    display: "flex",
-    lineHeight: "40px",
-    backgroundImage: "linear-gradient(#89f7fe, #66a6ff)",
-    fontWeight: "bolder",
-    textAlign: "center",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    borderRadius: "20px",
-    marginRight: "20px !important",
-  },
-  time: {
-    display: "flex",
-    lineHeight: "40px",
-    backgroundImage: "linear-gradient(#D38312, #A83279)",
-    fontWeight: "bolder",
-    textAlign: "center",
-    paddingLeft: "20px",
-    paddingRight: "20px",
-    borderRadius: "20px",
-  },
   avatar: {
     marginRight: "20px",
     "&:hover": {
@@ -80,12 +69,7 @@ export const Wrapper = styled("div")(({ theme: Theme }) => ({
   backgroundColor: "white",
   minHeight: "100px",
   borderRadius: "10px",
-  [theme.breakpoints.down("md")]: {
-    marginBottom: "30px",
-  },
-  [theme.breakpoints.up("md")]: {
-    marginBottom: "50px",
-  },
+  marginBottom: "20px",
   border: "1px solid #e8e8e8",
 }));
 

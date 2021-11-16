@@ -43,7 +43,7 @@ export const removeFriend = createAsyncThunk(
 export const updateAvatar = createAsyncThunk(
   "story/updateAvatar",
   async (payload: File | null | undefined) => {
-    if (payload && payload.type.match(/(png|jpg|jpge)/)) {
+    if (payload && payload.type.match(/(png|jpg|jpeg)/)) {
       let data = new FormData();
       data.append("file", payload);
       const response = await userApi.updateAvatar(data);
@@ -57,7 +57,7 @@ export const updateAvatar = createAsyncThunk(
 export const updateBackground = createAsyncThunk(
   "story/updateBackground",
   async (payload: File | null | undefined) => {
-    if (payload && payload.type.match(/(png|jpg|jpge)/)) {
+    if (payload && payload.type.match(/(png|jpg|jpeg)/)) {
       let data = new FormData();
       data.append("file", payload);
       console.log(payload);
@@ -74,7 +74,7 @@ export const login = createAsyncThunk(
   async (payload: ILoginFormValues, thunkAPI) => {
     const response = await authApi.login(payload);
     localStorage.setItem("access_token", response.data.access_token);
-    thunkAPI.dispatch(getMe());
+    await thunkAPI.dispatch(getMe());
   }
 );
 
@@ -99,6 +99,9 @@ const authSlice = createSlice({
       state.currentUser = initialState.currentUser;
       state.isAuth = false;
       localStorage.removeItem("access_token");
+    },
+    updateMeHard: (state, { payload }: PayloadAction<IUser>) => {
+      state.currentUser = payload;
     },
   },
   extraReducers: (builder) => {
@@ -159,7 +162,6 @@ const authSlice = createSlice({
     builder.addCase(
       addFriend.fulfilled,
       (state, actions: PayloadAction<IUser>) => {
-        console.log(actions.payload);
         state.currentUser = actions.payload;
       }
     );
@@ -168,7 +170,6 @@ const authSlice = createSlice({
     builder.addCase(
       removeFriend.fulfilled,
       (state, actions: PayloadAction<IUser>) => {
-        console.log(actions.payload);
         state.currentUser = actions.payload;
       }
     );
@@ -177,6 +178,6 @@ const authSlice = createSlice({
 
 const { actions, reducer: authReducer } = authSlice;
 
-export const { logout } = actions;
+export const { logout, updateMeHard } = actions;
 
 export default authReducer;

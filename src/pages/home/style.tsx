@@ -6,8 +6,8 @@ const homePageStyles = makeStyles((theme: Theme) =>
     surface: {
       marginTop: "60px",
       display: "flex",
-      [theme.breakpoints.down("sm")]: {},
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.down("md")]: {},
+      [theme.breakpoints.up("md")]: {
         padding: "0 40px 0 40px",
       },
     },
@@ -15,10 +15,10 @@ const homePageStyles = makeStyles((theme: Theme) =>
       width: "20%",
     },
     storiesSurface: {
-      [theme.breakpoints.down("sm")]: {
+      [theme.breakpoints.down("md")]: {
         width: "100%",
       },
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up("md")]: {
         width: "56%",
         margin: "0 2% 0 2%",
       },

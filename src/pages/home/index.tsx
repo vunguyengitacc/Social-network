@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddImageDialog from "components/AddImageDialog";
 import Header from "components/Header";
-import { getStories, storiesSelector } from "reduxSlice/storySlice";
-import { useDispatch, useSelector } from "react-redux";
+import { getStories } from "reduxSlice/storySlice";
+import { useDispatch } from "react-redux";
 import { AppDispatch } from "app/store";
 import homePageStyles from "./style";
 import FriendList from "./components/FriendList";
@@ -13,21 +13,32 @@ import StoryLoadingEffect from "components/skeletons/Story";
 import StoryList from "components/StoryList";
 import HotList from "./components/HotList";
 import AddStoryForm from "components/AddStoryForm";
+import useVisible from "hooks/useVisible";
 
 const HomePage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   // eslint-disable-next-line
   const [seed, setSeed] = useState<number>(0);
-  const stories = useSelector(storiesSelector.selectAll);
   const dispatch = useDispatch<AppDispatch>();
   const style = homePageStyles(theme);
-  const match = useMediaQuery(theme.breakpoints.up("sm"));
+  const match = useMediaQuery(theme.breakpoints.up("md"));
+  const contentEl = useRef<Element>(null);
+  const inViewPort = useVisible(contentEl, "0px");
+
+  useEffect(() => {
+    if (inViewPort && seed > 0) {
+      dispatch(getStories(seed));
+      setSeed(seed + 1);
+    }
+    // eslint-disable-next-line
+  }, [inViewPort]);
 
   useEffect(() => {
     (async () => {
       setIsLoading(true);
       await dispatch(getStories(seed));
+      setSeed(seed + 1);
       setIsLoading(false);
     })();
     // eslint-disable-next-line
@@ -47,7 +58,10 @@ const HomePage = () => {
         )}
         <Box className={style.storiesSurface}>
           <AddStoryForm />
-          {isLoading ? <StoryLoadingEffect /> : <StoryList stories={stories} />}
+          {isLoading ? <StoryLoadingEffect /> : <StoryList />}
+          <Box color="transparent" component="div" ref={contentEl}>
+            Load more
+          </Box>
         </Box>
         {match && (
           <Box className={style.friendSurface}>

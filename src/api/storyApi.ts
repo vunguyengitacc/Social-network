@@ -12,8 +12,8 @@ const storyApi = {
   getMySories(seed: number): Promise<IResponseList<IStory>> {
     return axiosClient.get(`/stories/me/${seed}`);
   },
-  getByUserId(payload: string): Promise<IResponseList<IStory>> {
-    return axiosClient.get(`/stories/user/${payload}`);
+  getByUserId(payload: string, seed: number): Promise<IResponseList<IStory>> {
+    return axiosClient.get(`/stories/user/${payload}/${seed}`);
   },
   addNewStories(payload: FormData): Promise<IResponse<IStory>> {
     return axiosClient.post(`/stories/me`, payload);

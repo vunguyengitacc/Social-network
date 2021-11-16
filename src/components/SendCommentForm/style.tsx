@@ -6,6 +6,7 @@ const useSendCommentFormStyles = makeStyles({
     flexDirection: "row",
     alignItems: "center",
     height: "100px",
+    width: "100%",
   },
   sendBtn: {
     minWidth: "50px",

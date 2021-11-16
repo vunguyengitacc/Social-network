@@ -5,5 +5,6 @@ export interface IComment {
   _id: string;
   owner: IUser;
   story: IStory;
+  storyId: string;
   content: string;
 }

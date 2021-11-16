@@ -5,8 +5,8 @@ const userFriendsStyle = makeStyles((theme: Theme) =>
   createStyles({
     surface: {
       [theme.breakpoints.up("sm")]: {
-        width: "70vw",
-        margin: "3vh 15vw 0 15vw",
+        width: "80vw",
+        margin: "3vh 10vw 0 10vw",
       },
       [theme.breakpoints.down("sm")]: {
         margin: "3vh 0 0 0",
@@ -18,6 +18,14 @@ const userFriendsStyle = makeStyles((theme: Theme) =>
     },
     title: {
       margin: "10px",
+    },
+    defaultCard: {
+      backgroundColor: "#e5e5e5",
+      padding: "10px",
+      borderRadius: "10px",
+      display: "flex",
+      justifyContent: "center",
+      marginTop: "20px",
     },
   })
 );

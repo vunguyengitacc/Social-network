@@ -2,7 +2,10 @@ import * as yup from "yup";
 export const scheme = yup
   .object()
   .shape({
-    content: yup.string().max(100, "Please enter at mosts 100 characters"),
+    content: yup
+      .string()
+      .min(1, "Please enter at least 1 character")
+      .max(100, "Please enter at most 100 characters"),
   })
   .required();
 

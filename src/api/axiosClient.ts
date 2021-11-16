@@ -21,7 +21,7 @@ axiosClient.interceptors.request.use(
     }
     return rConfig;
   },
-  (err) => Promise.reject(err.response || err.message)
+  (error) => Promise.reject(error.response || error.message)
 );
 
 axiosClient.interceptors.response.use(
@@ -29,7 +29,9 @@ axiosClient.interceptors.response.use(
     if (response && response.data) return response.data;
     return response;
   },
-  (err) => Promise.reject(err.response || err.message)
+  (error) => {
+    return Promise.reject(error.response.data.error || error.message);
+  }
 );
 
 export default axiosClient;

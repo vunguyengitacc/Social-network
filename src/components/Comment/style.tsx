@@ -11,6 +11,7 @@ const useCommentStyles = makeStyles({
     backgroundColor: "#f1f2f6",
     padding: "10px",
     borderRadius: "10px",
+    maxWidth: "50%",
   },
 });
 

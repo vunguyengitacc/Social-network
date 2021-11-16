@@ -1,4 +1,12 @@
-import { Avatar, Box, Divider, Paper, Typography, Button } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Divider,
+  Paper,
+  Typography,
+  Button,
+  useMediaQuery,
+} from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import Tab from "@mui/material/Tab";
 import TabPanel from "@mui/lab/TabPanel";
@@ -14,7 +22,6 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import PersonRemoveAlt1Icon from "@mui/icons-material/PersonRemoveAlt1";
 import {
   addFriend,
-  getMe,
   removeFriend,
   updateAvatar,
   updateBackground,
@@ -25,6 +32,7 @@ import UserProfile from "./components/UserProfile";
 import UserRepository, { IStoryPageParams } from "./components/UserRepository";
 import toast from "react-hot-toast";
 import { unwrapResult } from "@reduxjs/toolkit";
+import theme from "app/theme";
 
 const PersonalPage = () => {
   const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
@@ -32,8 +40,8 @@ const PersonalPage = () => {
   const [userInfor, setUserInfor] = useState<IUser>();
   const [value, setValue] = React.useState("1");
   const dispatch = useDispatch<AppDispatch>();
-  const style = personalPageStyle();
-
+  const style = personalPageStyle(theme);
+  const matchMd = useMediaQuery(theme.breakpoints.up("md"));
   const history = useHistory();
   const me = useSelector((state: RootState) => state.auth.currentUser);
   const { user } = useParams<IStoryPageParams>();
@@ -63,12 +71,7 @@ const PersonalPage = () => {
       }
     })();
     // eslint-disable-next-line
-  }, [user, me, history]);
-
-  useEffect(() => {
-    dispatch(getMe());
-    // eslint-disable-next-line
-  }, [user]);
+  }, [user, me]);
 
   useEffect(() => {
     setIsFriend(
@@ -80,13 +83,10 @@ const PersonalPage = () => {
     );
   }, [me, userInfor]);
 
-  const toggleFriend = () => {
-    (async () => {
-      if (userInfor === undefined) return;
-      if (isFriend || isRequest) dispatch(removeFriend(userInfor?._id));
-      else if (!isFriend && !isRequest) dispatch(addFriend(userInfor._id));
-      dispatch(getMe());
-    })();
+  const toggleFriend = async () => {
+    if (userInfor === undefined) return;
+    if (isFriend || isRequest) dispatch(removeFriend(userInfor?._id));
+    else if (!isFriend && !isRequest) dispatch(addFriend(userInfor._id));
   };
 
   const changeAvatar = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -118,7 +118,7 @@ const PersonalPage = () => {
         {isMe && <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />}
         <Header />
         <Paper className={style.userHeaderSurface}>
-          <Box height="50vh">
+          <Box height="50vh" width="100%">
             <img
               className={style.image}
               src={userInfor?.backgroundUrl}
@@ -141,32 +141,31 @@ const PersonalPage = () => {
                 {userInfor?.fullname}
               </Typography>
             </Box>
-
-            {isMe && (
-              <Box>
-                <Button
-                  variant="contained"
-                  className={style.btnChangeBackground}
-                >
-                  <label htmlFor="backgroundFile">Change Background</label>
-                </Button>
-                <input
-                  onChange={changeBackground}
-                  type="file"
-                  style={{ display: "none" }}
-                  id="backgroundFile"
-                />
-              </Box>
-            )}
           </Box>
 
           <Divider sx={{ width: "80vw" }} variant="middle" />
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
-          <Box className={style.taskSurface}>
+          <Box
+            className={style.taskSurface}
+            flexDirection={matchMd ? "row" : "column-reverse"}
+            marginTop={matchMd ? "0" : "20px"}
+            gap="20px"
+          >
             <StyledListTab onChange={handleChange} aria-label="">
-              <Tab label="Stories" value="1" />
-              <Tab label="Friends" value="2" />
-              {isMe && <Tab label="Profile" value="3" />}
+              <Tab
+                label={<Typography variant="bold4">Stories</Typography>}
+                value="1"
+              />
+              <Tab
+                label={<Typography variant="bold4">Friends</Typography>}
+                value="2"
+              />
+              {isMe && (
+                <Tab
+                  label={<Typography variant="bold4">Profiles</Typography>}
+                  value="3"
+                />
+              )}
             </StyledListTab>
             {!isMe && (
               <Box>
@@ -187,7 +186,7 @@ const PersonalPage = () => {
                     onClick={toggleFriend}
                     startIcon={<PersonRemoveAlt1Icon />}
                   >
-                    Wating for accept
+                    Waiting for accept
                   </Button>
                 )}
                 {!isRequest && !isFriend && (
@@ -200,6 +199,19 @@ const PersonalPage = () => {
                   </Button>
                 )}
               </Box>
+            )}
+            {isMe && (
+              <>
+                <Button variant="contained">
+                  <label htmlFor="backgroundFile">Change Background</label>
+                </Button>
+                <input
+                  onChange={changeBackground}
+                  type="file"
+                  style={{ display: "none" }}
+                  id="backgroundFile"
+                />
+              </>
             )}
           </Box>
         </Paper>

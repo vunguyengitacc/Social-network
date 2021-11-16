@@ -16,10 +16,13 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import { debounce } from "lodash";
 import scheme from "./form";
+import BorderAllIcon from "@mui/icons-material/BorderAll";
+import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
+import WorkOutlineIcon from "@mui/icons-material/WorkOutline";
+import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 
 const UserProfile = () => {
   const [panel, setPanel] = useState("profile-1");
-
   const dispatch = useDispatch<AppDispatch>();
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
   const style = userProfileStyles(theme);
@@ -57,37 +60,68 @@ const UserProfile = () => {
 
   const debounceCall = debounce(
     (data: Partial<IUser>) => updateInfor(data),
-    1000
+    2000
   );
 
-  const updateInfor = (data: Partial<IUser>) => {
+  const updateInfor = async (data: Partial<IUser>) => {
     const toastId = toast.loading("Loading");
     try {
-      dispatch(updateMe(data)).then(unwrapResult);
+      await dispatch(updateMe(data)).then(unwrapResult);
       toast.success("Success", { id: toastId });
     } catch (error: any) {
       toast.error(error.message, { id: toastId });
     }
   };
 
+  const handleSubmit = React.useCallback((data: Partial<IUser>) => {
+    debounceCall(data);
+    // eslint-disable-next-line
+  }, []);
+
   return (
     <React.Fragment>
       <TabContext value={panel}>
         <Box className={style.surface}>
-          <StyledListTab
-            orientation="vertical"
-            sx={{ width: "35%" }}
-            onChange={swicthPanel}
-          >
-            <Tab label={<CustomTabPanel text="General" />} value="profile-1" />
-            <Tab label={<CustomTabPanel text="Basic" />} value="profile-2" />
+          <StyledListTab orientation="vertical" onChange={swicthPanel}>
             <Tab
-              label={<CustomTabPanel text="Job and education" />}
+              sx={{ alignItems: "flex-start" }}
+              label={
+                <CustomTabPanel
+                  startIcon={<AccountBalanceIcon />}
+                  text="General"
+                />
+              }
+              value="profile-1"
+            />
+            <Tab
+              sx={{ alignItems: "flex-start" }}
+              label={
+                <CustomTabPanel startIcon={<BorderAllIcon />} text="Basic" />
+              }
+              value="profile-2"
+            />
+            <Tab
+              sx={{ alignItems: "flex-start" }}
+              label={
+                <CustomTabPanel
+                  startIcon={<WorkOutlineIcon />}
+                  text="Job and education"
+                />
+              }
               value="profile-3"
             />
-            <Tab label={<CustomTabPanel text="Contact" />} value="profile-4" />
+            <Tab
+              sx={{ alignItems: "flex-start" }}
+              label={
+                <CustomTabPanel
+                  startIcon={<PhoneIphoneIcon />}
+                  text="Contact"
+                />
+              }
+              value="profile-4"
+            />
           </StyledListTab>
-          <Box sx={{ width: "65%" }}>
+          <Box sx={{ width: "-webkit-fill-available" }}>
             <TabPanel value="profile-1">
               <Box>
                 <Typography
@@ -116,7 +150,7 @@ const UserProfile = () => {
               )}
             </TabPanel>
             <TabPanel value="profile-2">
-              <form onChange={basicForm.handleSubmit(debounceCall)}>
+              <form onChange={basicForm.handleSubmit(handleSubmit)}>
                 <Box>
                   <Typography
                     sx={{ margin: " 0 10px 10px 10px " }}
@@ -146,7 +180,7 @@ const UserProfile = () => {
               </form>
             </TabPanel>
             <TabPanel value="profile-3">
-              <form onSubmit={workAndEduForm.handleSubmit(debounceCall)}>
+              <form onSubmit={workAndEduForm.handleSubmit(handleSubmit)}>
                 <Box>
                   <Typography
                     sx={{ margin: " 0 10px 10px 10px " }}
@@ -186,7 +220,7 @@ const UserProfile = () => {
               </form>
             </TabPanel>
             <TabPanel value="profile-4">
-              <form onChange={contactForm.handleSubmit(debounceCall)}>
+              <form onChange={contactForm.handleSubmit(handleSubmit)}>
                 <Typography
                   sx={{ margin: " 0 10px 10px 10px " }}
                   variant="bold6"

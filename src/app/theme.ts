@@ -167,7 +167,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           height: "40px",
-          borderRadius: "0",
+          borderRadius: "10px",
         },
       },
     },
@@ -176,6 +176,14 @@ const theme = createTheme({
         root: {
           height: "40px",
           borderRadius: "0",
+        },
+      },
+    },
+    MuiDrawer: {
+      styleOverrides: {
+        paperAnchorBottom: {
+          borderTopRightRadius: "20px",
+          borderTopLeftRadius: "20px",
         },
       },
     },

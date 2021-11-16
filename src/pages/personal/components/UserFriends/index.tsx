@@ -19,13 +19,21 @@ const UserFriends: React.FC<IProps> = (props) => {
       <Box className={style.title}>
         <Typography variant="bold6">Friends</Typography>
       </Box>
-      <Grid container spacing={1}>
-        {props.userInfor?.friends?.map((item) => (
-          <Grid key={item._id} item xs={12} sm={6}>
-            <FriendItem value={item} />
-          </Grid>
-        ))}
-      </Grid>
+      {props.userInfor?.friends.length === 0 ? (
+        <Box className={style.defaultCard}>
+          <Typography variant="bold4" color="#959595">
+            Don't have any friend
+          </Typography>
+        </Box>
+      ) : (
+        <Grid container spacing={1}>
+          {props.userInfor?.friends?.map((item) => (
+            <Grid key={item._id} item xs={12} sm={6}>
+              <FriendItem value={item} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
     </Box>
   );
 };

@@ -1,5 +1,4 @@
 import StoryPage from "pages/story";
-import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Switch } from "react-router-dom";
 import AuthPage from "../pages/auth";
 import HomePage from "../pages/home";
@@ -10,14 +9,6 @@ import PrivateRoute from "./PrivateRoute";
 const RoutesComponent = () => {
   return (
     <BrowserRouter>
-      <Toaster
-        position="bottom-left"
-        reverseOrder={false}
-        gutter={5}
-        toastOptions={{
-          duration: 5000,
-        }}
-      />
       <Switch>
         <AuthRoute path="/auth" component={AuthPage} />
         <PrivateRoute exact path="/personal/:user" component={PersonalPage} />

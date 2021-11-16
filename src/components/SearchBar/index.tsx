@@ -13,6 +13,7 @@ import { useHistory } from "react-router";
 import { debounce, truncate } from "lodash";
 import userApi from "api/userApi";
 import useSearchBarStyles from "./style";
+import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBar = () => {
   const [searchResult, setSearchResult] = useState<IUser[]>([]);
@@ -34,8 +35,11 @@ const SearchBar = () => {
     debounceCall(term);
   };
   return (
-    <Box>
-      <Typography sx={{ height: "40px" }}>Search</Typography>
+    <>
+      <Box display="flex" width="100%" alignItems="center" gap="10px">
+        <SearchIcon />
+        <Typography sx={{ height: "40px" }}>Search</Typography>
+      </Box>
       <TextField fullWidth onChange={submitSearch} />
       <List className={style.searchField}>
         {searchResult.map((item) => (
@@ -51,7 +55,7 @@ const SearchBar = () => {
           </ListItem>
         ))}
       </List>
-    </Box>
+    </>
   );
 };
 

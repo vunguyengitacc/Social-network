@@ -1,12 +1,8 @@
 import { Button, Typography, Hidden } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "app/store";
-import { login, register } from "reduxSlice/authSlice";
-import LoginForm, { ILoginFormValues } from "../Login";
+import LoginForm from "../Login";
 import RegisterForm from "../Register";
-import { IRegisterFormValues } from "../Register/form";
 import useAuthBasicStyles from "./style";
 import logo from "images/Logo.png";
 import theme from "app/theme";
@@ -14,17 +10,9 @@ import theme from "app/theme";
 const AuthBasic = () => {
   const style = useAuthBasicStyles(theme);
   const [isLogin, setIsLogin] = useState<boolean>(true);
-  const dispatch = useDispatch<AppDispatch>();
 
   const toggleLogin = () => {
     setIsLogin(!isLogin);
-  };
-
-  const submitRegister = (data: IRegisterFormValues) => {
-    dispatch(register(data));
-  };
-  const submitLogin = (data: ILoginFormValues) => {
-    dispatch(login(data));
   };
 
   return (
@@ -41,13 +29,7 @@ const AuthBasic = () => {
               {isLogin ? `LOGIN` : `REGISTER`}
             </Typography>
           </Box>
-          <Box>
-            {isLogin ? (
-              <LoginForm onSubmit={submitLogin} />
-            ) : (
-              <RegisterForm onSubmit={submitRegister} />
-            )}
-          </Box>
+          <Box>{isLogin ? <LoginForm /> : <RegisterForm />}</Box>
           <Box className={style.switchField}>
             {isLogin ? (
               <Button className={style.fullWidthButton} onClick={toggleLogin}>

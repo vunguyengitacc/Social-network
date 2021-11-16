@@ -1,16 +1,21 @@
-import { makeStyles } from "@mui/styles";
+import { Theme } from "@mui/material";
+import { createStyles, makeStyles } from "@mui/styles";
 
-const useCommentBoxStyles = makeStyles({
-  surface: {
-    width: "100%",
-    minHeight: "50px",
-    padding: "2.5%",
-  },
-  commentContainer: {
-    maxHeight: "80vh",
-    overflowY: "scroll",
-    overflow: "hidden",
-  },
-});
+const useCommentBoxStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    surface: {
+      minHeight: "50px",
+      padding: "2.5%",
+      [theme.breakpoints.down("md")]: {
+        width: "95%",
+      },
+    },
+    commentContainer: {
+      maxHeight: "80vh",
+      overflowY: "scroll",
+      overflow: "hidden",
+    },
+  })
+);
 
 export default useCommentBoxStyles;

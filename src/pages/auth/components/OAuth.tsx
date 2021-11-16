@@ -11,7 +11,6 @@ const OAuth = () => {
   const { access_token } = useParams<IParamsOAuth>();
   const history = useHistory();
 
-  console.log("alo");
   useEffect(() => {
     localStorage.setItem("access_token", access_token);
     dispatch(getMe());

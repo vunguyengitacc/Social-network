@@ -1,27 +1,41 @@
 import { Typography } from "@mui/material";
 import Box from "@mui/material/Box";
+import { socketClient } from "app/socket";
+import { AppDispatch } from "app/store";
 import useStoryListStyles from "components/StoryList/style";
 import React, { useEffect, useState } from "react";
-import { IStory } from "../../models/story";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  removeStoryFromState,
+  storiesSelector,
+  updateStory,
+} from "reduxSlice/storySlice";
 import Story from "../Story";
 
-interface IProps {
-  stories: IStory[];
-}
-
-const StoryList: React.FC<IProps> = (props) => {
+const StoryList: React.FC = (props) => {
   const [isExist, setIsExist] = useState<boolean>(false);
+  const stories = useSelector(storiesSelector.selectAll);
+  const dispatch = useDispatch<AppDispatch>();
 
   const style = useStoryListStyles();
 
   useEffect(() => {
-    setIsExist(props.stories.length > 0);
-  }, [props.stories]);
+    setIsExist(stories.length > 0);
+  }, [stories]);
+
+  useEffect(() => {
+    socketClient.on("story/reaction", (data) => {
+      dispatch(updateStory(data.story));
+    });
+    socketClient.on("story/delete", (data) => {
+      dispatch(removeStoryFromState(data.storyId));
+    });
+  });
 
   return (
     <Box>
       {isExist ? (
-        props.stories.map((item) => {
+        stories.map((item) => {
           let date = new Date(item.createdAt);
           return (
             <Story

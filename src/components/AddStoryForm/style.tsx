@@ -31,7 +31,7 @@ const useAddStoryFormStyles = makeStyles({
     gap: "20px",
   },
   button: {
-    maxWidth: "40px",
+    maxWidth: "90px",
   },
   smallBtn: {
     maxWidth: "20px !important",

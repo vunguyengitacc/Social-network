@@ -26,14 +26,15 @@ import NotificationItem from "../NotificationItem";
 import headerStyles from "./style";
 import logo from "images/Logo.png";
 import SearchBar from "components/SearchBar";
+import { socketClient } from "app/socket";
 
 const Header = () => {
-  const [search, setSearch] = useState<boolean>(false);
   const dispatch = useDispatch<AppDispatch>();
   const style = headerStyles();
   const me = useSelector((state: RootState) => state.auth.currentUser);
   const [openNotification, setOpenNotification] = useState<boolean>(false);
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+  const [openSearch, setOpenSearch] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<INotification[]>([]);
 
   useEffect(() => {
@@ -56,6 +57,17 @@ const Header = () => {
     await setOpenNotification(true);
   };
 
+  useEffect(() => {
+    socketClient.on("notification/add", (data) => {
+      if (data.notification.from._id !== me._id)
+        setNotifications([...notifications, data.notification]);
+    });
+    socketClient.on("notification/delete", (data) => {
+      let notificationTemp = notifications.filter((i) => i._id !== data.id);
+      setNotifications(notificationTemp);
+    });
+  });
+
   const history = useHistory();
 
   return (
@@ -68,7 +80,7 @@ const Header = () => {
         )}
         {notifications.map((item) => (
           <MenuItem key={item._id}>
-            <NotificationItem reset={fetchNotification} notification={item} />
+            <NotificationItem notification={item} />
           </MenuItem>
         ))}
       </Menu>
@@ -79,21 +91,21 @@ const Header = () => {
         >
           <img style={{ width: "50px", height: "50px" }} src={logo} alt="" />
         </Button>
-        <IconButton onClick={() => setSearch(!search)}>
-          <SearchIcon />
-        </IconButton>
-        {search && (
-          <>
-            <Hidden mdDown>
-              <SearchField />
-            </Hidden>
-            <Hidden mdUp>
-              <Drawer open={search} onClose={() => setSearch(false)}>
-                <SearchBar />
-              </Drawer>
-            </Hidden>
-          </>
-        )}
+        <Hidden mdDown>
+          <SearchField />
+        </Hidden>
+        <Hidden mdUp>
+          <IconButton onClick={() => setOpenSearch(true)}>
+            <SearchIcon />
+          </IconButton>
+          <Drawer
+            variant="temporary"
+            open={openSearch}
+            onClose={() => setOpenSearch(false)}
+          >
+            <SearchBar />
+          </Drawer>
+        </Hidden>
       </Box>
       <Box sx={{ marginRight: "20px" }}>
         <IconButton onClick={handleOpenMenu}>

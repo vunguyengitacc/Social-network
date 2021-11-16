@@ -44,7 +44,6 @@ const SendCommentForm: React.FC<IProps> = (props) => {
         }}
         sxWrap={{
           paddingRight: "2.5%",
-          width: "85%",
         }}
         placeholder="type your comment here"
       />

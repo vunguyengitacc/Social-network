@@ -4,19 +4,6 @@ const useSearchFieldStyles = makeStyles({
   searchField: {
     height: "50px",
     width: "400px",
-    display: "flex",
-    alignItems: "center",
-  },
-  withEffect: {
-    animation: "$effect 1s",
-  },
-  "@keyframes effect": {
-    "0%": {
-      width: "0px",
-    },
-    "100%": {
-      width: "400px",
-    },
   },
   searchItem: {
     zIndex: 99,

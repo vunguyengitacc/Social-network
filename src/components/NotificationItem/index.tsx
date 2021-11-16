@@ -1,28 +1,19 @@
 import { Avatar, Button, Box, Typography } from "@mui/material";
 import React from "react";
-import { useDispatch } from "react-redux";
-import userApi from "../../api/userApi";
-import { AppDispatch } from "../../app/store";
-import { INotification } from "../../models/notification";
-import { getMe } from "../../reduxSlice/authSlice";
+import userApi from "api/userApi";
+import { INotification } from "models/notification";
 
 interface IProps {
   notification: INotification;
-  reset: () => void;
 }
 
-const NotificationItem: React.FC<IProps> = ({ notification, reset }) => {
-  const dispatch = useDispatch<AppDispatch>();
+const NotificationItem: React.FC<IProps> = ({ notification }) => {
   const handleDeny = async () => {
     await userApi.denyRequest(notification.from._id);
-    await dispatch(getMe());
-    await reset();
   };
 
   const handleAccept = async () => {
     await userApi.acceptRequest(notification.from._id);
-    await dispatch(getMe());
-    await reset();
   };
 
   return (

@@ -13,9 +13,15 @@ export default function FriendList() {
         Friends
       </Typography>
       <Box className={style.listUser}>
-        {me?.friends?.map((item) => (
-          <UserItem key={item._id} value={item} />
-        ))}
+        {me.friends.length === 0 ? (
+          <Box className={style.defaultCard}>
+            <Typography variant="bold4" color="#959595">
+              Don't have any friend
+            </Typography>
+          </Box>
+        ) : (
+          me?.friends?.map((item) => <UserItem key={item._id} value={item} />)
+        )}
       </Box>
     </Box>
   );

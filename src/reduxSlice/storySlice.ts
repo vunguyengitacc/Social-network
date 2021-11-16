@@ -19,7 +19,7 @@ export const getStories = createAsyncThunk(
   "story/getStories",
   async (seed: number) => {
     const response = await storyApi.getStories(seed);
-    return response.data.stories;
+    return { stories: response.data.stories, seed };
   }
 );
 
@@ -27,7 +27,7 @@ export const getMyStories = createAsyncThunk(
   "story/getMyStories",
   async (seed: number) => {
     const response = await storyApi.getMySories(seed);
-    return response.data.stories;
+    return { stories: response.data.stories, seed };
   }
 );
 
@@ -61,9 +61,9 @@ export const update = createAsyncThunk(
 
 export const getStoriesByUserId = createAsyncThunk(
   "story/getStoriesByUserId",
-  async (payload: string) => {
-    const response = await storyApi.getByUserId(payload);
-    return response.data.stories;
+  async (payload: { id: string; seed?: number }) => {
+    const response = await storyApi.getByUserId(payload.id, payload.seed || 0);
+    return { stories: response.data.stories, seed: payload.seed || 0 };
   }
 );
 
@@ -87,33 +87,58 @@ const initialState = storyAdapter.getInitialState();
 const storySlice = createSlice({
   name: "stories",
   initialState,
-  reducers: {},
+  reducers: {
+    updateStory: (state, { payload }: PayloadAction<IStory>) => {
+      storyAdapter.updateOne(state, {
+        id: payload._id,
+        changes: payload,
+      });
+    },
+    removeStoryFromState: (state, { payload }: PayloadAction<string>) => {
+      storyAdapter.removeOne(state, payload);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getStories.pending, (state) => {});
     builder.addCase(getStories.rejected, (state) => {});
     builder.addCase(
       getStories.fulfilled,
-      (state, { payload }: PayloadAction<IStory[]>) => {
-        storyAdapter.removeAll(state);
-        storyAdapter.setAll(state, payload);
+      (
+        state,
+        {
+          payload,
+        }: PayloadAction<ReturnType<() => { stories: IStory[]; seed: number }>>
+      ) => {
+        if (payload.seed === 0) storyAdapter.removeAll(state);
+        storyAdapter.addMany(state, payload.stories);
       }
     );
     builder.addCase(getMyStories.pending, (state) => {});
     builder.addCase(getMyStories.rejected, (state) => {});
     builder.addCase(
       getMyStories.fulfilled,
-      (state, actions: PayloadAction<IStory[]>) => {
-        storyAdapter.removeAll(state);
-        storyAdapter.setAll(state, actions.payload);
+      (
+        state,
+        {
+          payload,
+        }: PayloadAction<ReturnType<() => { stories: IStory[]; seed: number }>>
+      ) => {
+        if (payload.seed === 0) storyAdapter.removeAll(state);
+        storyAdapter.addMany(state, payload.stories);
       }
     );
     builder.addCase(getStoriesByUserId.pending, (state) => {});
     builder.addCase(getStoriesByUserId.rejected, (state) => {});
     builder.addCase(
       getStoriesByUserId.fulfilled,
-      (state, actions: PayloadAction<IStory[]>) => {
-        storyAdapter.removeAll(state);
-        storyAdapter.setAll(state, actions.payload);
+      (
+        state,
+        {
+          payload,
+        }: PayloadAction<ReturnType<() => { stories: IStory[]; seed: number }>>
+      ) => {
+        if (payload.seed === 0) storyAdapter.removeAll(state);
+        storyAdapter.addMany(state, payload.stories);
       }
     );
     builder.addCase(addStory.pending, (state) => {});
@@ -129,7 +154,7 @@ const storySlice = createSlice({
     builder.addCase(
       removeStory.fulfilled,
       (state, actions: PayloadAction<string>) => {
-        storyAdapter.removeOne(state, actions.payload);
+        console.log("Delete is done");
       }
     );
     builder.addCase(update.pending, (state) => {});
@@ -147,10 +172,10 @@ const storySlice = createSlice({
     builder.addCase(reactToStory.rejected, (state) => {});
     builder.addCase(
       reactToStory.fulfilled,
-      (state, actions: PayloadAction<IStory>) => {
+      (state, { payload }: PayloadAction<IStory>) => {
         storyAdapter.updateOne(state, {
-          id: actions.payload._id,
-          changes: actions.payload,
+          id: payload._id,
+          changes: payload,
         });
       }
     );
@@ -160,6 +185,6 @@ const storySlice = createSlice({
 const { actions, reducer: storyReducer } = storySlice;
 
 // eslint-disable-next-line
-export const {} = actions;
+export const { updateStory, removeStoryFromState } = actions;
 
 export default storyReducer;
