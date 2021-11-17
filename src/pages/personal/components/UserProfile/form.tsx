@@ -3,7 +3,7 @@ const basicScheme = yup.object().shape({
   fullname: yup
     .string()
     .required()
-    .max(100, "Please input at most 100 characters")
+    .max(50, "Please input at most 100 characters")
     .min(6, "Please input at least 6 characters"),
   address: yup
     .string()

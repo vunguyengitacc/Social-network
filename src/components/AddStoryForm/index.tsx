@@ -24,6 +24,7 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 import theme from "app/theme";
 import InputRichTextField from "components/InputField/InputRichTextField";
+import { convertFromRaw, EditorState } from "draft-js";
 
 const AddStoryForm = () => {
   const [files, setFiles] = useState<File[]>([]);
@@ -43,8 +44,14 @@ const AddStoryForm = () => {
 
   const submitForm: SubmitHandler<IFormAddImageValues> = async (data) => {
     const formData = new FormData();
+    const toastId = toast.loading("Loading");
     try {
       if (files) {
+        let editorState = EditorState.createWithContent(
+          convertFromRaw(JSON.parse(data.content))
+        );
+        if (!editorState.getCurrentContent().hasText() && files.length === 0)
+          throw Error("The story can't be empty");
         formData.append("content", data.content);
         formData.append("isPrivate", String(data.isPrivate));
         // eslint-disable-next-line
@@ -52,13 +59,16 @@ const AddStoryForm = () => {
           formData.append("file", item);
         });
         dispatch(addStory(formData)).then(unwrapResult);
+        toast.success("Success", { id: toastId });
         form.reset();
         setFiles([]);
       } else {
         form.reset();
         setFiles([]);
       }
-    } catch (error: any) {}
+    } catch (error: any) {
+      toast.error(error.message, { id: toastId });
+    }
   };
 
   useEffect(() => {

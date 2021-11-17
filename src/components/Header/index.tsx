@@ -103,7 +103,7 @@ const Header = () => {
             onOpen={() => setOpenSearch(true)}
             onClose={() => setOpenSearch(false)}
           >
-            <SearchBar />
+            <SearchBar onClose={() => setOpenSearch(false)} />
           </SwipeableDrawer>
         </Hidden>
       </Box>

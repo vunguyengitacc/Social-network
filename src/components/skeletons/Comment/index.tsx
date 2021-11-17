@@ -8,8 +8,8 @@ interface IProps {
 const CommentLoadingEffect: React.FC<IProps> = ({ amount }) => {
   return (
     <>
-      {[...Array(amount)].map((i) => (
-        <CommentSkeleton key={i} />
+      {[...Array(amount)].map((i, id) => (
+        <CommentSkeleton key={id} />
       ))}
     </>
   );

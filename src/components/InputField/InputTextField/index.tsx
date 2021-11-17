@@ -80,6 +80,7 @@ const InputTextField: React.FC<InputFieldProps> = (props) => {
               onChange={(e) => {
                 form.setValue(name, e.currentTarget.value);
               }}
+              startAdornment={props.startIcon}
               autoFocus
               onBlur={() => {
                 if (props.isUnshowInput === true) setSwitchForm(false);

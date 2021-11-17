@@ -2,11 +2,16 @@ import { makeStyles } from "@mui/styles";
 
 const useSearchBarStyles = makeStyles({
   searchField: {
+    marginTop: "10px !important",
     width: "75vw",
+    overflow: "hidden",
+    overflowY: "scroll",
     display: "flex",
     flexDirection: "column",
+    direction: "rtl",
   },
   searchItem: {
+    direction: "ltr",
     zIndex: 99,
     display: "flex",
     gap: "12px",

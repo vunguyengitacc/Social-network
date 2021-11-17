@@ -31,18 +31,6 @@ export const getMyStories = createAsyncThunk(
   }
 );
 
-export const reactToStory = createAsyncThunk(
-  "story/reactToStory",
-  async (payload: { storyId: string; like?: boolean; dislike?: boolean }) => {
-    const response = await storyApi.reactToStory({
-      _id: payload.storyId,
-      like: payload.like,
-      dislike: payload.dislike,
-    });
-    return response.data.story;
-  }
-);
-
 export const removeStory = createAsyncThunk(
   "story/remove",
   async (payload: string) => {
@@ -165,17 +153,6 @@ const storySlice = createSlice({
         storyAdapter.updateOne(state, {
           id: actions.payload._id,
           changes: actions.payload,
-        });
-      }
-    );
-    builder.addCase(reactToStory.pending, (state) => {});
-    builder.addCase(reactToStory.rejected, (state) => {});
-    builder.addCase(
-      reactToStory.fulfilled,
-      (state, { payload }: PayloadAction<IStory>) => {
-        storyAdapter.updateOne(state, {
-          id: payload._id,
-          changes: payload,
         });
       }
     );

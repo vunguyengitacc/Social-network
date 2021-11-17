@@ -5,7 +5,6 @@ import { useHistory, useParams } from "react-router";
 import { initialUser, IUser } from "models/user";
 import { AppDispatch, RootState } from "app/store";
 import userApi from "api/userApi";
-import AddImageDialog from "components/AddImageDialog";
 import { getMyStories, getStoriesByUserId } from "reduxSlice/storySlice";
 import userRepositoryStyles from "./style";
 import theme from "app/theme";
@@ -22,7 +21,6 @@ export interface IStoryPageParams {
 
 const UserRepository = () => {
   const [isMe, setIsMe] = useState<boolean>(false);
-  const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<IUser>(initialUser);
   // eslint-disable-next-line
   const [seed, setSeed] = useState<number>(0);
@@ -69,32 +67,29 @@ const UserRepository = () => {
   }, [user]);
 
   return (
-    <Box>
-      {isMe && <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />}
-      <Box display="flex" className={style.surface}>
-        <Grid
-          container={match}
-          spacing={match === true ? 4 : undefined}
-          sx={{ width: "100vw" }}
-        >
-          <Grid paddingTop="3vh" item className={style.grid} sm={12} lg={4}>
-            <Sidebar userInfor={userInfor} />
-          </Grid>
-          <Grid paddingTop="3vh" item className={style.grid} lg={8} sm={12}>
-            <Box>
-              {isMe && <AddStoryForm />}
-              {isLoading === true ? (
-                <StoryLoadingEffect amount={3} />
-              ) : (
-                <StoryList />
-              )}
-              <Box color="transparent" ref={contentEl}>
-                <StoryLoadingEffect amount={1} />
-              </Box>
-            </Box>
-          </Grid>
+    <Box display="flex" className={style.surface}>
+      <Grid
+        container={match}
+        spacing={match === true ? 4 : undefined}
+        sx={{ width: "100vw" }}
+      >
+        <Grid paddingTop="3vh" item className={style.grid} sm={12} lg={4}>
+          <Sidebar userInfor={userInfor} />
         </Grid>
-      </Box>
+        <Grid paddingTop="3vh" item className={style.grid} lg={8} sm={12}>
+          <Box>
+            {isMe && <AddStoryForm />}
+            {isLoading === true ? (
+              <StoryLoadingEffect amount={3} />
+            ) : (
+              <StoryList />
+            )}
+            <Box color="transparent" ref={contentEl}>
+              <StoryLoadingEffect amount={1} />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

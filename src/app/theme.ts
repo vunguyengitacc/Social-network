@@ -186,6 +186,11 @@ const theme = createTheme({
         },
       },
     },
+    MuiAvatarGroup: {
+      styleOverrides: {
+        root: {},
+      },
+    },
     MuiDrawer: {
       styleOverrides: {
         paperAnchorBottom: {

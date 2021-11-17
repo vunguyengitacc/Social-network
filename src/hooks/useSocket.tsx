@@ -3,6 +3,7 @@ import { AppDispatch, RootState } from "app/store";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateMeHard } from "reduxSlice/authSlice";
+import { updateStory } from "reduxSlice/storySlice";
 
 export default function useSocket() {
   const dispatch = useDispatch<AppDispatch>();
@@ -23,6 +24,10 @@ export default function useSocket() {
     socketClient.on("friend/request/add", (data) => {
       if (data.user._id === me._id) dispatch(updateMeHard(data.user));
       else if (data.to._id === me._id) dispatch(updateMeHard(data.to));
+    });
+    socketClient.on("image/uploaded", (data) => {
+      dispatch(updateStory(data.story));
+      console.log("upload");
     });
     socketClient.on("friend/request/deny", (data) => {
       if (data.user._id === me._id) dispatch(updateMeHard(data.user));

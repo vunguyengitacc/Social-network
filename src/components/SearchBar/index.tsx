@@ -1,9 +1,9 @@
 import {
   Avatar,
-  Box,
   Button,
   List,
   ListItem,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,8 +14,14 @@ import { debounce, truncate } from "lodash";
 import userApi from "api/userApi";
 import useSearchBarStyles from "./style";
 import SearchIcon from "@mui/icons-material/Search";
+import logo from "images/Logo.png";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
-const SearchBar = () => {
+interface IProps {
+  onClose: () => void;
+}
+
+const SearchBar: React.FC<IProps> = ({ onClose }) => {
   const [searchResult, setSearchResult] = useState<IUser[]>([]);
 
   const style = useSearchBarStyles();
@@ -36,14 +42,26 @@ const SearchBar = () => {
   };
   return (
     <>
-      <Box display="flex" width="100%" alignItems="center" gap="10px">
-        <SearchIcon />
-        <Typography sx={{ height: "40px" }}>Search</Typography>
-      </Box>
+      <Stack
+        height="50px"
+        direction="row"
+        justifyContent="space-between"
+        width="100%"
+      >
+        <img src={logo} alt="" height="100%" />
+        <Button sx={{ width: "40px" }} onClick={() => onClose()}>
+          <ArrowBackIosIcon />
+          <ArrowBackIosIcon />
+          <ArrowBackIosIcon />
+        </Button>
+      </Stack>
       <TextField
         placeholder="type something here"
         fullWidth
         onChange={submitSearch}
+        InputProps={{
+          startAdornment: <SearchIcon sx={{ marginRight: "10px" }} />,
+        }}
       />
       <List className={style.searchField}>
         {searchResult.map((item) => (
@@ -53,7 +71,9 @@ const SearchBar = () => {
               onClick={() => history.push(`/personal/${item._id}`)}
             >
               <Avatar alt="" src={item.avatarUri} />
-              <Typography>{truncate(item.fullname, { length: 30 })}</Typography>
+              <Typography color="gray">
+                {truncate(item.fullname, { length: 30 })}
+              </Typography>
             </Button>
           </ListItem>
         ))}

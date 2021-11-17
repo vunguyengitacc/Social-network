@@ -15,7 +15,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router";
 import userApi from "api/userApi";
 import { AppDispatch, RootState } from "app/store";
-import AddImageDialog from "components/AddImageDialog";
 import Header from "components/Header";
 import { IUser } from "models/user";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
@@ -35,7 +34,6 @@ import { unwrapResult } from "@reduxjs/toolkit";
 import theme from "app/theme";
 
 const PersonalPage = () => {
-  const [isShowAdd, setIsShowAdd] = useState<boolean>(false);
   const [isMe, setIsMe] = useState<boolean>(false);
   const [userInfor, setUserInfor] = useState<IUser>();
   const [value, setValue] = React.useState("1");
@@ -115,7 +113,6 @@ const PersonalPage = () => {
   return (
     <React.Fragment>
       <TabContext value={value}>
-        {isMe && <AddImageDialog setOpen={setIsShowAdd} open={isShowAdd} />}
         <Header />
         <Paper className={style.userHeaderSurface}>
           <Box height="50vh" width="100%">

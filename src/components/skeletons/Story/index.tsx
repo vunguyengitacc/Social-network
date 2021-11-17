@@ -8,8 +8,8 @@ interface IProps {
 const StoryLoadingEffect: React.FC<IProps> = ({ amount }) => {
   return (
     <>
-      {[...Array(amount)].map((i) => (
-        <StorySkeleton key={i} />
+      {[...Array(amount)].map((item, index) => (
+        <StorySkeleton key={index} />
       ))}
     </>
   );

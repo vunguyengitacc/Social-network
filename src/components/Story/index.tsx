@@ -7,18 +7,20 @@ import {
   Divider,
   SwipeableDrawer,
   useMediaQuery,
+  CircularProgress,
+  Tooltip,
+  Stack,
+  AvatarGroup,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
-import ThumbDownAltIcon from "@mui/icons-material/ThumbDownAlt";
 import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import dateUtil from "utillity/date";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "app/store";
-import { reactToStory, removeStory, update } from "reduxSlice/storySlice";
+import { removeStory, update } from "reduxSlice/storySlice";
 import LockIcon from "@mui/icons-material/Lock";
 import { IUser } from "models/user";
 import { useHistory } from "react-router";
@@ -30,6 +32,15 @@ import CommentIcon from "@mui/icons-material/Comment";
 import CommentBox from "components/CommentBox";
 import theme from "app/theme";
 import { Editor, EditorState, convertFromRaw } from "draft-js";
+import Reaction from "components/Reaction";
+import reactionApi from "api/reactionApi";
+import { IGroup, IReaction } from "models/reaction";
+import {
+  getStaticByValue,
+  getTextByValue,
+  getTextColorByValue,
+} from "utillity/reaction";
+import { socketClient } from "app/socket";
 
 interface IPropsStory {
   _id: string;
@@ -38,24 +49,39 @@ interface IPropsStory {
   content: string;
   isPrivate: boolean;
   owner: IUser | undefined;
-  likeById: string[];
-  dislikeById: string[];
+  includeImage?: boolean;
 }
 
 const Story: React.FC<IPropsStory> = (props) => {
-  const { _id, createdAt, content, isPrivate, owner, likeById, dislikeById } =
-    props;
+  const { _id, createdAt, content, isPrivate, owner } = props;
   const history = useHistory();
   const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [openMenu, setOpenMenu] = useState<boolean>(Boolean(anchor));
   const [openComment, setOpenComment] = useState<boolean>(false);
+  const [overall, setOverall] = useState<IGroup[]>([]);
+  const [reaction, setReaction] = useState<IReaction | null>(null);
   const [richContent] = useState<EditorState>(
     EditorState.createWithContent(convertFromRaw(JSON.parse(content)))
   );
-
   const me = useSelector((state: RootState) => state.auth.currentUser) as IUser;
-  let islike = likeById.filter((i) => i === me._id).length > 0;
-  let isDislike = dislikeById.filter((i) => i === me._id).length > 0;
+
+  useEffect(() => {
+    socketClient.on("reaction/touch", (data) => {
+      if (data.reaction.storyId !== _id || data.reaction.userId !== me._id)
+        return;
+      else setReaction(data.reaction);
+    });
+  });
+
+  useEffect(() => {
+    reactionApi.getOverall(_id).then((res) => {
+      setOverall(res.data.reactions);
+    });
+    reactionApi.getMyReaction(_id).then((res) => {
+      setReaction(res.data.reaction);
+    });
+  }, [_id]);
+
   let isMe = owner?._id !== me._id ? false : true;
   const mdMatch = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -83,6 +109,17 @@ const Story: React.FC<IPropsStory> = (props) => {
     }
   };
 
+  const handleRemoveReaction = () => {
+    if (reaction === null) {
+      reactionApi
+        .reactToStory({ storyId: _id, type: 1 })
+        .then((res) => setReaction(res.data.reaction));
+    } else {
+      reactionApi.deleteOne(_id);
+      setReaction(null);
+    }
+  };
+
   const handleTogglePrivate = (e: React.MouseEvent<HTMLButtonElement>) => {
     setAnchor(null);
     setOpenMenu(false);
@@ -96,14 +133,6 @@ const Story: React.FC<IPropsStory> = (props) => {
   };
 
   const style = useStoryStyles();
-
-  const handleToogleLike = () => {
-    dispatch(reactToStory({ like: !islike, storyId: _id }));
-  };
-
-  const handleToggleDislike = () => {
-    dispatch(reactToStory({ storyId: _id, dislike: !isDislike }));
-  };
 
   return (
     <Wrapper>
@@ -152,9 +181,12 @@ const Story: React.FC<IPropsStory> = (props) => {
           </IconButton>
         )}
       </Box>
-      <Box sx={{ display: "flex", margin: "0 2.5% 2.5% 2.5% " }}>
+      <Box display="flex" margin="0 2.5% 2.5% 2.5%" textAlign="left">
         <Editor readOnly editorState={richContent} onChange={() => {}} />
       </Box>
+      {props.imageUrl.length === 0 && props.includeImage && (
+        <CircularProgress />
+      )}
       {props.imageUrl.length > 0 && (
         <Box
           className={style.imageSurface}
@@ -164,34 +196,48 @@ const Story: React.FC<IPropsStory> = (props) => {
           <ImageRender value={props.imageUrl} />
         </Box>
       )}
-
       <Box className={style.groupTask}>
-        <Button
-          className={style.feelingBtn}
-          sx={{
-            color: `${islike ? "#667eea" : "gray"}`,
-          }}
-          onClick={handleToogleLike}
-        >
-          <ThumbUpAltIcon /> {likeById.length || ""}
-        </Button>
-        <Button
-          className={style.feelingBtn}
-          sx={{
-            color: `${isDislike ? "#f32b2b" : "gray"}`,
-          }}
-          onClick={handleToggleDislike}
-        >
-          <ThumbDownAltIcon /> {dislikeById.length || ""}
-        </Button>
-        <Button
-          className={style.commentBtn}
-          onClick={() => setOpenComment(!openComment)}
-          {...{ color: `${openComment ? "primary" : "disable"}` }}
-        >
-          <CommentIcon />
-          {mdMatch && <Typography>Comment</Typography>}
-        </Button>
+        <Stack direction="row" justifyContent="flex-start" alignItems="center">
+          <AvatarGroup max={3}>
+            {overall?.map((i) => (
+              <Avatar
+                key={i._id}
+                sx={{ width: "25px", height: "25px" }}
+                src={getStaticByValue(Number(i._id))}
+              />
+            ))}
+          </AvatarGroup>
+          <Typography variant="bold3">
+            {overall?.map((item) => item.count).reduce((a, b) => a + b, 0)}{" "}
+            reactions
+          </Typography>
+        </Stack>
+        <Divider />
+        <Stack direction="row" justifyContent="space-between">
+          <Tooltip arrow title={<Reaction storyId={_id} />}>
+            <Button className={style.feelingBtn} onClick={handleRemoveReaction}>
+              <img
+                src={getStaticByValue(reaction?.reactType ?? 0)}
+                alt=""
+                height="35px"
+              />
+              <Typography
+                variant="bold4"
+                color={getTextColorByValue(reaction?.reactType ?? 0)}
+              >
+                {getTextByValue(reaction?.reactType ?? 0)}
+              </Typography>
+            </Button>
+          </Tooltip>
+          <Button
+            className={style.commentBtn}
+            onClick={() => setOpenComment(!openComment)}
+            {...{ color: `${openComment ? "primary" : "disable"}` }}
+          >
+            <CommentIcon />
+            {mdMatch && <Typography>Comment</Typography>}
+          </Button>
+        </Stack>
       </Box>
       {mdMatch && openComment && (
         <>

@@ -36,10 +36,14 @@ const useStoryStyles = makeStyles({
   },
   groupTask: {
     marginTop: "20px",
+    display: "flex",
+    flexDirection: "column",
   },
   feelingBtn: {
     width: "33%",
     height: "50px",
+    justifyContent: "flex-start !important",
+    gap: "10px",
   },
   commentBtn: {
     width: "33%",
